@@ -42,11 +42,18 @@ Submission of Group **#82** from class WFJ (_WFJ/MUV1_):\
 
 ## [🥚] How to Play
 
-*_How to run the program:_
-   - On the terminal, go to the egg_roll release folder
-   - Two methods to play:\
-     a. Recommended, through the Main Menu: `python3.12 egg_roll.py`\
-     b. Direct-to-level, skips Main Menu: `python3.12 egg_roll.py valid_location/level_file.in`
+1. _Terminal_
+
+   - Go to the egg_roll release folder
+   - Two methods to play levels:\
+     a. **Recommended**, through the Main Menu: `python3.12 egg_roll.py`\
+     b. Direct-to-level, with a level file: `python3.12 egg_roll.py valid_location/level_file.in`
+
+2. _Main Menu_
+   - lorem ipsum
+
+3. _Level Interface_
+   - lorem ipsum
 
 
 ## [🎯] Mechanics

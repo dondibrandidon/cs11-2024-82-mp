@@ -318,6 +318,8 @@ def game_state(level_file):
         elif ''.join(player).lower() == 'undo':
             #UNDO SCENARIO
             if len(undo_levels) > 1:
+                past_moves.append('⎌')
+
                 undo_temp_grid = str(undo_levels.pop()).split('\n')
                 undo_points.pop()
                 current_level = undo_levels[-1].copy()
