@@ -1,7 +1,6 @@
 import pytest
 import os
-
-from egg_roll import Level, game_state
+import egg_roll
 
 global debug, text_based
 debug, text_based = False, False
@@ -9,19 +8,25 @@ debug, text_based = False, False
 '''
 Expected Syntax:
 
-test_level = Level(grid, limits)
-test_level_map = test_level.grid
-test_level_moves = test_level.limit
-test_level_rows = test_level.rows
-test_level_cols = test_level.cols
-test_level_print = str(test_level)
+test_level = egg_roll.Level(grid, limits)
 
-file_name = valid_level_file.xx
+if character in "fFbBrRlL":
+    new_grid, temporary_points, animation, is_over = current_level.tilt(character)
+
+file_name = valid_location/level_file.in
 with open(file_name, encoding='utf-8') as level_file:
-    level_file_Level, list_of_moves_made, total_points = game_state(level_file)
+    level_file_Level, list_of_moves_made, total_points = egg_roll.game_state(level_file)
 '''
+
+def this_is_true():
+    assert True
+
+def this_is_false():
+    assert False
+
+this_is_true()
+this_is_false()
 
 #UNIT TESTS HERE
 test_cases = os.listdir("./unit_testing")
-
-assert 1 == 1
+print(test_cases)

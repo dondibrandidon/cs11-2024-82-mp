@@ -10,7 +10,7 @@ class Level:
     '''
     def __init__(self, grid, limit):
         self.grid = list(list(char for char in row if char != '\n') for row in grid)
-        self.limit = limit
+        self.limit = 0 if limit == "inf" else limit
         self.rows = len(self.grid)
         self.cols = len(self.grid[0])
 
@@ -32,6 +32,7 @@ class Level:
         This is the main player interaction.
         '''
 
+        #text-based check (defaults to emoji version)
         try:
             if text_based:
                 EGG_KEY = '0'
@@ -208,7 +209,11 @@ def game_state(level_file):
     num_of_rows = int(level_file.readline())
 
     #This decrements with each succesful tilt of the player
-    moves_left = int(level_file.readline())
+    moves_left = level_file.readline()
+    if moves_left != "inf\n":
+        moves_left = int(moves_left)
+    else:
+        moves_left = "inf"
 
     grid = tuple(list(level_file.readline()) for i in range(num_of_rows))
 
@@ -237,7 +242,7 @@ def game_state(level_file):
     undo_points = [points]
 
     #Start of gameplay
-    while moves_left >= 0:
+    while moves_left == "inf" or moves_left >= 0:
 
         if debug:
             print("# START OF UNDO CHECK")
@@ -281,14 +286,19 @@ def game_state(level_file):
 
         print("Energy left: ", end='')
         try:
-            if moves_left == 1:
+            if moves_left == "inf":
+                print(colored("∞", "red"))
+            elif moves_left == 1:
                 print(colored(moves_left, "red"))
             elif moves_left <= current_level.limit//2:
                 print(colored(moves_left, "yellow"))
             else:
                 print(colored(moves_left, "green"))
         except NameError:
-            print(moves_left)
+            if moves_left == "inf":
+                print("∞")
+            else:
+                print(moves_left)
 
         print(f"Points collected: {points}")
 
@@ -307,13 +317,48 @@ def game_state(level_file):
 
         elif ''.join(player).lower() == 'undo':
             #UNDO SCENARIO
-            try:
-                undo_levels.pop()
+            if len(undo_levels) > 1:
+                undo_temp_grid = str(undo_levels.pop()).split('\n')
                 undo_points.pop()
-                current_level = undo_levels[-1]
+                current_level = undo_levels[-1].copy()
                 points = undo_points[-1]
-                moves_left -= 1
-            except IndexError:
+                try:
+                    moves_left -= 1
+                except:
+                    pass
+
+                #Undo animation happens here
+                try:
+                    if text_based:
+                        MAGIC_KEY = 'X'
+                    else:
+                        raise Exception()
+                except:
+                    MAGIC_KEY = '✨'
+                
+                for i in range(current_level.rows+1):
+                    if debug:
+                        print(f"i: {i}")
+                    
+                    try:
+                        clear_screen(debug)
+                    except NameError:
+                        print("# clear_screen(debug)")
+                
+                    print("<Undoing...>")
+                    print()
+
+                    for _ in range(i):
+                        print(MAGIC_KEY*current_level.cols)
+                    for j in range(i, current_level.rows):
+                        if debug:
+                            print(f"j: {j}")
+
+                        print(undo_temp_grid[j])
+
+                    time.sleep(0.5)
+
+            else:
                 print("You can't go back any further...")
                 time.sleep(2)
                 continue
@@ -326,7 +371,7 @@ def game_state(level_file):
                     print(f"# Input to process: {char}")
 
                 if char in "fFbBrRlL":
-                    #This is where the tilt happens
+                    #THIS WHERE THE TILT RETURNS VALUES
                     current_level.grid, temp_points, wowaka, game_end = current_level.tilt(char)
 
                     #Logging of move to past_moves list
@@ -366,7 +411,10 @@ def game_state(level_file):
                     if debug:
                         print(f"temp_points: {temp_points}")
                     points += temp_points
-                    moves_left -= 1
+                    try:
+                        moves_left -= 1
+                    except:
+                        pass
                     
                     try:
                         clear_screen(debug)
@@ -378,13 +426,13 @@ def game_state(level_file):
                     undo_points.append(points)
 
                     #Game state check (per individual move)
-                    if game_end or moves_left <= 0:
+                    if game_end or (moves_left != "inf" and moves_left <= 0):
                         break
                 else:
                     pass
 
         #Game state check (per player input)
-        if game_end or moves_left <= 0:
+        if game_end or (moves_left != "inf" and moves_left <= 0):
             break
     
     #Start of GAME END STATE here
@@ -492,8 +540,8 @@ def menu():
                     " _|_|_|_/                        _|_|_|_\\            _|    _|",
                     " _|          _|_|\\     _|_|\\     _|     _|   ▓▓▒░░   _|    _|",
                     " _|_|_|    _/    _|  _/    _|    _|_|_|_/   ▓▓▒▒▒▒░  _|    _|",
-                    " _|        _\\    _|  _\\    _|    _|    _\\   ▓▓▓▒▒▒░  _|    _|",
-                    " _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   ▓▓▓▒░   _|_\\  _|_\\",
+                    " _|        _\\    _|  _\\    _|    _|    _\\   █▓▓▒▒▒░  _|    _|",
+                    " _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   █▓▓▒░   _|_\\  _|_\\",
                     "                  |         |",
                     "             _|_|/     _|_|/",
                     "",
@@ -501,7 +549,7 @@ def menu():
                     sep='\n')
                 print()
 
-                print("Level Selection: ")
+                print("<Level Selection>")
                 for i in range(1, len(level_list)+1):
                     print(f"{i}. {level_list[i-1]}")
                 print()
@@ -566,4 +614,6 @@ except ImportError:
     if debug:
         print("# termcolor NOT loaded")
     pass
-menu()
+
+if __name__ == '__main__':
+    menu()
