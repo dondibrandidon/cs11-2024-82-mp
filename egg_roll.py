@@ -617,5 +617,6 @@ except ImportError:
         print("# termcolor NOT loaded")
     pass
 
+#This is to prevent menu from running when imported for unit testing
 if __name__ == '__main__':
     menu()
