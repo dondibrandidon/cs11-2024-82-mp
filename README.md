@@ -8,6 +8,7 @@ Submission of Group **#82** from class WFJ (_WFJ/MUV1_):\
 - [[📂] Files](#📂-files)
 - [[⏳] To Be Added](#⏳-to-be-added)
 - [[🥚] How to Play](#🥚-how-to-play)
+- [[🎯] Mechanics](#🎯-mechanics)
 - [[🤓] Implementation](#🤓-implementation)
 - [[🧪] Unit Testing](#🧪-unit-testing)
 - [[💞] Bonus Features](#💞-bonus-features)
@@ -20,7 +21,6 @@ Submission of Group **#82** from class WFJ (_WFJ/MUV1_):\
 - `.\unit_tester.py` - **unit testing program**
 - `.\unit_testing\` - stores all testing files for _egg_roll_ functionalities
   - `.\unit_testing\test_case.in` (sample test case file)
-- `.\deprecated\` - past _egg_roll_ versions
 
 
 ## [⏳] To Be Added
@@ -33,24 +33,23 @@ Submission of Group **#82** from class WFJ (_WFJ/MUV1_):\
    - yung susubmit nating level
    - if we think maganda, dapat submit before **Nov 26**
 
-3. **More exit options everywhere**
-   - especially in `game_state()`
-
-4. **Keep track of highscore?**
+3. **Keep track of highscore?**
    - Write to external `.txt` file
    - Input Name, Score, Level_file, number of attempts?
-
-5. **Sound effects?**
-   - Use playsound
-   - Egg rolling, egg cooking, egg nestling
-
-6. **(More ambitious) Actual UI/UX?**
-   - bruh
 
 	***Proper `README.md` file**
 
 
 ## [🥚] How to Play
+
+*_How to run the program:_
+   - On the terminal, go to the egg_roll release folder
+   - Two methods to play:\
+     a. Recommended, through the Main Menu: `python3.12 egg_roll.py`\
+     b. Direct-to-level, skips Main Menu: `python3.12 egg_roll.py valid_location/level_file.in`
+
+
+## [🎯] Mechanics
 
 Lorem ipsum
 
