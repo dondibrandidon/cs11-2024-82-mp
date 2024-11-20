@@ -18,7 +18,15 @@ with open(file_name, encoding='utf-8') as level_file:
     level_file_Level, list_of_moves_made, total_points = egg_roll.game_state(level_file)
 '''
 
+def this_is_true():
+    assert True
+
+def this_is_false():
+    assert False
+
+this_is_true()
+this_is_false()
+
 #UNIT TESTS HERE
 test_cases = os.listdir("./unit_testing")
-
-assert 1 == 1
+print(test_cases)
