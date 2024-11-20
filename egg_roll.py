@@ -3,20 +3,6 @@ import subprocess
 import sys
 import time
 
-def clear_screen(debug):
-    '''
-    Clears the terminal screen, if any, while debug is False
-    '''
-    if not debug:
-        if sys.stdout.isatty():
-            clear_cmd = 'cls' if os.name == 'nt' else 'clear'
-            try:
-                subprocess.run([clear_cmd])
-            except:
-                os.system(clear_cmd)
-    else:
-        print("# clear_screen() called")
-
 class Level:
     '''
     This is the main playing field that the user will see.
@@ -37,6 +23,9 @@ class Level:
         
     def __str__(self):
         return '\n'.join(tuple(''.join(row) for row in self.grid))
+
+    def copy(self):
+        return Level(self.grid, self.limit)
 
     def tilt(self, degree):
         '''
@@ -63,6 +52,9 @@ class Level:
 
         #This will be used to monitor points made or lost due to this tilt action
         points = 0
+
+        #This will be used to animate the egg rolling, first frame is contingency for stuck eggs
+        tweens = [str(self)]
 
         '''
         Tiles for reference:
@@ -171,19 +163,12 @@ class Level:
                         self.grid[i][j-1] = EGG_KEY
                 else:
                     raise ValueError(f"Level.tilt() received: {degree}")
-
             if not roll_eggs:
                 #If there are no more moving eggs
                 break
             else:
-                #This is how the "animation" of the eggs rolling happens
-                try:
-                    clear_screen(debug)
-                    print(self)
-                    time.sleep(0.5)
-                except NameError:
-                    if debug:
-                        print("# no tilt animation happened")
+                #This appends the last state of the level
+                tweens.append(str(self))
 
         #This "re-sorts" roll_eggs turned wall_eggs back to self.eggs
         if degree in 'lLfF':
@@ -193,16 +178,33 @@ class Level:
 
         #The boolean here returns game_end
         if not self.eggs:
-            return self.grid, points, True
+            return self.grid, points, tweens, True
         else:
-            return self.grid, points, False
+            return self.grid, points, tweens, False
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+def clear_screen(debug):
+    '''
+    Clears the terminal screen, if any, while debug is False
+    '''
+    if not debug:
+        #This newline is important, if clear_screen is called after a print with end=''
+        print()
+        if sys.stdout.isatty():
+            clear_cmd = 'cls' if os.name == 'nt' else 'clear'
+            try:
+                subprocess.run([clear_cmd])
+            except:
+                os.system(clear_cmd)
+    else:
+        print("# clear_screen() called")
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 def game_state(level_file):
     '''
     This is a SINGLE instance of level_file gameplay.
-    The repeat prompt happens in the main() call, to make it neater.
+    The repeat prompt happens in the menu() call, to make it neater.
     '''
-
     num_of_rows = int(level_file.readline())
 
     #This decrements with each succesful tilt of the player
@@ -215,6 +217,9 @@ def game_state(level_file):
     
     #This logs past moves the player has made
     past_moves = []
+
+    #This converts arrow symbol to string
+    move_name = {'↑':"forward", '↓':"backward", '→':"rightward", '←':"leftward"}
     
     #The player starts with zero points
     points = 0
@@ -225,38 +230,56 @@ def game_state(level_file):
     #This tracks whether the game is finished
     game_end = False
 
+    #This stores last level states as a Level
+    undo_levels = [current_level.copy()]
+
+    #This stores last scores (to be used with undo_levels)
+    undo_points = [points]
+
     #Start of gameplay
     while moves_left >= 0:
-        #>>>>> START of gameplayterminal UI/UX
+
+        if debug:
+            print("# START OF UNDO CHECK")
+            for i in range(len(undo_levels)):
+                print(undo_points[i])
+                print(undo_levels[i])
+                print()
+            print("# END OF UNDO CHECK")
+
+        #>>>>> START of gameplay terminal UI/UX
         try:
             clear_screen(debug)
         except NameError:
             print("# clear_screen(debug)")
 
-        #The [9:] removes "./levels/"
-        print("[Currently playing: ", end='')
+        print("<Currently playing from level file: ", end='')
         try:
-            print(colored(str(level_file.name)[9:], attrs=["reverse"]), end='')
+            print(colored(f"{level_file.name}", attrs=["reverse"]), end='')
         except NameError:
-            print((level_file.name)[9:], end='')
-        print(']')
+            print((level_file.name), end='')
+        print('>')
+
         print()
 
+        #This displays the grid to the player
         print(current_level)
         print()
 
         print("Controls:",
-            "> [f] or [F] to tilt the board Forward",
+            "> [f] or [F] to tilt the board forward",
             "> [b] or [B] to tilt the board backward",
             "> [r] or [R] to tilt the board rightward",
             "> [l] or [L] to tilt the board leftward",
-            "> [Exit] to quit this level",
+            "",
+            "> [\"Undo\"] to use energy to undo last move",
+            "> [\"Exit\"] to quit this level",
             sep="\n")
         print()
 
         print(f"Moves made so far: {', '.join(past_moves)}") if past_moves else print(f"Moves made so far: None")
 
-        print("No. of turns left: ", end='')
+        print("Energy left: ", end='')
         try:
             if moves_left == 1:
                 print(colored(moves_left, "red"))
@@ -275,50 +298,90 @@ def game_state(level_file):
             player = tuple(char for char in input("Next move/s: "))
         #END of gameplay terminal UI/UX <<<<<
 
+#-----------------------------------------------------------------#
         #Start of input processing
-
-        #Exit scenario
-        if ''.join(player[:4]).lower() == 'exit':
+        if ''.join(player).lower() == 'exit':
+            #EXIT SCENARIO
             game_end = True
             break
-        
-        #Non-exit scenario
-        for char in player:
-            if debug:
-                print(f"# Input to process: {char}")
 
-            if char in "fFbBrRlL":
-                #Level.tilt() call here
-                current_level.grid, temp_points, game_end = current_level.tilt(char)
-                if debug:
-                    print(f"temp_points: {temp_points}")
-                points += temp_points
+        elif ''.join(player).lower() == 'undo':
+            #UNDO SCENARIO
+            try:
+                undo_levels.pop()
+                undo_points.pop()
+                current_level = undo_levels[-1]
+                points = undo_points[-1]
                 moves_left -= 1
+            except IndexError:
+                print("You can't go back any further...")
+                time.sleep(2)
+                continue
 
-                #Logging of move processed to past_moves
-                if char in 'fF':
-                    #Tilt Forward
-                    past_moves.append('↑')
-                elif char in 'bB':
-                    #Tilt Backward
-                    past_moves.append('↓')
-                elif char in 'rR':
-                    #Tilt Rightward
-                    past_moves.append('→')
-                elif char in 'lL':
-                    #Tilt Leftward
-                    past_moves.append('←')
-                
-                try:
-                    clear_screen(debug)
-                except NameError:
-                    print("# clear_screen(debug)")
+        else:
+            #INPUT SCENARIO
+            for char in player:
 
-                #Game state check (per individual move)
-                if game_end or moves_left <= 0:
-                    break
-            else:
-                pass
+                if debug:
+                    print(f"# Input to process: {char}")
+
+                if char in "fFbBrRlL":
+                    #This is where the tilt happens
+                    current_level.grid, temp_points, wowaka, game_end = current_level.tilt(char)
+
+                    #Logging of move to past_moves list
+                    if char in 'fF':
+                        #Tilt Forward
+                        past_moves.append('↑')
+                    elif char in 'bB':
+                        #Tilt Backward
+                        past_moves.append('↓')
+                    elif char in 'rR':
+                        #Tilt Rightward
+                        past_moves.append('→')
+                    elif char in 'lL':
+                        #Tilt Leftward
+                        past_moves.append('←')
+
+                    #This checks if any eggs rolled (if none display same frame else remove buffer frame)
+                    if len(wowaka) > 1:
+                        wowaka = wowaka[1:]
+
+                    #Rolling animation happens here
+                    for frame in wowaka:
+                        try:
+                            try:
+                                clear_screen(debug)
+                            except NameError:
+                                print("# clear_screen(debug)")
+
+                            print(f"<Tilting {move_name[past_moves[-1]]}...>")
+                            print()
+                            print(frame)
+                            time.sleep(0.5)
+                        except:
+                            if debug:
+                                print("# Animation failed")
+
+                    if debug:
+                        print(f"temp_points: {temp_points}")
+                    points += temp_points
+                    moves_left -= 1
+                    
+                    try:
+                        clear_screen(debug)
+                    except NameError:
+                        print("# clear_screen(debug)")
+
+                    #Undo processing here
+                    undo_levels.append(current_level.copy())
+                    undo_points.append(points)
+
+                    #Game state check (per individual move)
+                    if game_end or moves_left <= 0:
+                        break
+                else:
+                    pass
 
         #Game state check (per player input)
         if game_end or moves_left <= 0:
@@ -329,15 +392,17 @@ def game_state(level_file):
     try:
         #Short last game state lag to not make end too abrupt
         clear_screen(debug)
+        print("[!!!]")
+        print()
         print(str(current_level))
         time.sleep(0.5)
-
-        #Game Over Screen here
         clear_screen(debug)
     except NameError:
-        print("# Game over screen")
-
-    print("[Game Over]")
+        if debug:
+            print("# Game over screen")
+    
+    #Game Over Screen here
+    print("<Game Over>")
     print()
 
     print(str(current_level))
@@ -361,49 +426,81 @@ def game_state(level_file):
     return current_level, past_moves, points
     #End of game_state()
 
-def main():
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+def menu():
     '''
-    This is the game MAIN MENU.
+    This is the game's MAIN MENU.
     '''
     while True:
-        #Initial title screen
-        clear_screen(debug)
-        print("[Welcome to EGG ROLL!]")
-        print()
-
-        #This lists ALL of the contents of the ./levels folder valid for egg_roll or not
-        level_list = os.listdir("./levels")
-        
-        if debug:
-            print("# level_list initialized")
+        try:
+            #This lists ALL of the contents of the ./levels folder valid for egg_roll or not
+            level_list = os.listdir("./levels")
+            if debug:
+                print("# level_list initialized")
+        except FileNotFoundError:
+            print('Sorry but please run the application from the egg_roll folder!')
+            print()
+            return
 
         #Gameplay initialization
         if not level_list and len(sys.argv) < 2:
             #End program if no level_file can be loaded
+            print("<Welcome to EGG ROLL!>")
+            print()
             print('No level files available...')
-            print('Please restart the game with a valid level_file argument or populated ./levels folder')
+            print('Please restart the game with a valid file location argument or populated ./levels folder')
+            print()
             return None
 
         elif len(sys.argv) == 2:
             #This program prioritizes level_file argument over Level Selection
             while True:
                 with open(sys.argv[1], encoding='utf-8') as level_file:
-                    game_state(level_file)
+                    try:
+                        game_state(level_file)
+                    except FileNotFoundError:
+                        #End program if argument level_file invalid
 
+                        try:
+                            clear_screen(debug)
+                        except NameError:
+                            print("# clear_screen(debug)")
+
+                        print("<Welcome to EGG ROLL!>")
+                        print()
+                        print("File argument invalid! Please open game with valid file location...")
+                        print()
+                        return
                     repeat = input("Type [Yes] to replay level, else go back to main menu: ")
                     if repeat.lower == 'yes':
                         continue
                     else:
                         break
                 break
+
         else:
             while True:
-                clear_screen(debug)
+
                 try:
-                    print(colored("[Welcome to EGG ROLL!]", attrs=["reverse"]))
+                    clear_screen(debug)
                 except NameError:
-                    print("[Welcome to EGG ROLL!]")
+                    print("# clear_screen(debug)")
+
+                print(
+                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+                    "",
+                    " _|_|_|_/                        _|_|_|_\\            _|    _|",
+                    " _|          _|_|\\     _|_|\\     _|     _|   ▓▓▒░░   _|    _|",
+                    " _|_|_|    _/    _|  _/    _|    _|_|_|_/   ▓▓▒▒▒▒░  _|    _|",
+                    " _|        _\\    _|  _\\    _|    _|    _\\   ▓▓▓▒▒▒░  _|    _|",
+                    " _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   ▓▓▓▒░   _|_\\  _|_\\",
+                    "                  |         |",
+                    "             _|_|/     _|_|/",
+                    "",
+                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+                    sep='\n')
                 print()
+
                 print("Level Selection: ")
                 for i in range(1, len(level_list)+1):
                     print(f"{i}. {level_list[i-1]}")
@@ -411,9 +508,9 @@ def main():
                 
                 print("Type [Quit] to exit program or")
                 try:
-                    choice = input(colored("enter a valid level_file.ex:", attrs=["reverse"]) + " ")
+                    choice = input(colored("Enter a valid level_file.in:", attrs=["reverse"]) + " ")
                 except NameError:
-                    choice = input("enter a valid level_file.ex: ")
+                    choice = input("Enter a valid level_file.in: ")
 
                 if choice.lower() == "quit":
                     break
@@ -431,24 +528,30 @@ def main():
                         if repeat.lower() == 'yes':
                             continue
                         else:
-                            clear_screen(debug)
+                            try:
+                                clear_screen(debug)
+                            except NameError:
+                                print("# clear_screen(debug)")
                             break
                     break
         
         while True:
-            repeat = input("Really quit EGG ROLL [Yes]? ")
-            if repeat.lower() == "yes":
-                print("Thank you for playing egg_roll.py by Martin Mendoza (2024-10322) & Brandon Sayo (2024-05352)!")
+            quit = input("Really quit EGG ROLL [Yes]? ")
+            if quit.lower() == "yes":
+                print()
+                print("<Thank you for playing egg_roll.py by Martin Mendoza (2024-10322) & Brandon Sayo (2024-05352)!>")
+                print()
                 return None
             else:
                 pass
             break
         continue
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #Program initialization
 
 global debug, text_based
-debug = True #This toggles insider info print and disables clear_screen calls
+debug = False #This toggles insider info print and disables clear_screen calls
 text_based = False #This disables emojis and utilizes ASCII instead (WARNING!: REQUIRES ASCII-BASED LEVEL_FILE)
 
 if debug:
@@ -463,5 +566,4 @@ except ImportError:
     if debug:
         print("# termcolor NOT loaded")
     pass
-
-main()
+menu()
