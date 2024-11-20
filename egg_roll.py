@@ -32,6 +32,7 @@ class Level:
         This is the main player interaction.
         '''
 
+        #text-based check (defaults to emoji version)
         try:
             if text_based:
                 EGG_KEY = '0'
@@ -326,7 +327,7 @@ def game_state(level_file):
                     print(f"# Input to process: {char}")
 
                 if char in "fFbBrRlL":
-                    #This is where the tilt happens
+                    #THIS WHERE THE TILT RETURNS VALUES
                     current_level.grid, temp_points, wowaka, game_end = current_level.tilt(char)
 
                     #Logging of move to past_moves list
@@ -492,8 +493,8 @@ def menu():
                     " _|_|_|_/                        _|_|_|_\\            _|    _|",
                     " _|          _|_|\\     _|_|\\     _|     _|   ▓▓▒░░   _|    _|",
                     " _|_|_|    _/    _|  _/    _|    _|_|_|_/   ▓▓▒▒▒▒░  _|    _|",
-                    " _|        _\\    _|  _\\    _|    _|    _\\   ▓▓▓▒▒▒░  _|    _|",
-                    " _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   ▓▓▓▒░   _|_\\  _|_\\",
+                    " _|        _\\    _|  _\\    _|    _|    _\\   █▓▓▒▒▒░  _|    _|",
+                    " _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   █▓▓▒░   _|_\\  _|_\\",
                     "                  |         |",
                     "             _|_|/     _|_|/",
                     "",
@@ -566,4 +567,6 @@ except ImportError:
     if debug:
         print("# termcolor NOT loaded")
     pass
-menu()
+
+if __name__ == '__main__':
+    menu()
