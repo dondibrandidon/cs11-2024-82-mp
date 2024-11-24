@@ -27,7 +27,7 @@ class Level:
     def copy(self):
         return Level(self.grid, self.limit)
 
-    def tilt(self, degree):
+    def tilt(self, degree, energy):
         '''
         This is the main player interaction.
         '''
@@ -96,7 +96,7 @@ class Level:
                         roll_eggs.remove((i, j))
                         self.grid[i][j] = GRASS_KEY
                         self.grid[i-1][j] = FULL_KEY
-                        points += 10
+                        points += 10 + energy
                     else:
                         roll_eggs.remove((i, j))
                         self.grid[i][j] = GRASS_KEY
@@ -116,7 +116,7 @@ class Level:
                         roll_eggs.remove((i, j))
                         self.grid[i][j] = GRASS_KEY
                         self.grid[i+1][j] = FULL_KEY
-                        points += 10
+                        points += 10 + energy
                     else:
                         roll_eggs.remove((i, j))
                         self.grid[i][j] = GRASS_KEY
@@ -136,7 +136,7 @@ class Level:
                         roll_eggs.remove((i, j))
                         self.grid[i][j] = GRASS_KEY
                         self.grid[i][j+1] = FULL_KEY
-                        points += 10
+                        points += 10 + energy
                     else:
                         roll_eggs.remove((i, j))
                         self.grid[i][j] = GRASS_KEY
@@ -156,7 +156,7 @@ class Level:
                         roll_eggs.remove((i, j))
                         self.grid[i][j] = GRASS_KEY
                         self.grid[i][j-1] = FULL_KEY
-                        points += 10
+                        points += 10 + energy
                     else:
                         roll_eggs.remove((i, j))
                         self.grid[i][j] = GRASS_KEY
@@ -373,8 +373,11 @@ def game_state(level_file):
                     print(f"# Input to process: {char}")
 
                 if char in "fFbBrRlL":
+
+                    moves_left -= 1
+
                     #THIS WHERE THE TILT RETURNS VALUES
-                    current_level.grid, temp_points, wowaka, game_end = current_level.tilt(char)
+                    current_level.grid, temp_points, wowaka, game_end = current_level.tilt(char, moves_left)
 
                     #Logging of move to past_moves list
                     if char in 'fF':
@@ -413,10 +416,6 @@ def game_state(level_file):
                     if debug:
                         print(f"temp_points: {temp_points}")
                     points += temp_points
-                    try:
-                        moves_left -= 1
-                    except:
-                        pass
                     
                     try:
                         clear_screen(debug)
