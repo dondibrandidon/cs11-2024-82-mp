@@ -28,5 +28,24 @@ this_is_true()
 this_is_false()
 
 #UNIT TESTS HERE
-test_cases = os.listdir("./unit_testing")
-print(test_cases)
+test_cases_dir = "./unit_testing"
+test_cases = os.listdir(test_cases_dir)
+
+@pytest.mark.parametrize("test_file", test_cases)
+def test_edge_case(test_file):
+    
+    file_path = os.path.join(test_cases_dir, test_file)
+
+    with open(file_path, encoding='utf-8') as level_file:
+        try:
+            level, moves, points = egg_roll.game_state(level_file)
+        except Exception as e:
+            pytest.fail(f"Test {test_file} failed with error: {e}")
+
+        # Example assertions (modify these based on expected results for each file)
+        assert isinstance(level, egg_roll.Level), f"Level instance not returned for {test_file}"
+        assert isinstance(moves, list), f"Moves not returned as a list for {test_file}"
+        assert isinstance(points, int), f"Points not returned as an integer for {test_file}"
+
+# Output the test case files (for debugging purposes)
+print(f"Loaded test cases: {test_cases}")
