@@ -70,10 +70,10 @@ class Level:
         #This tracks eggs that might still move
         if degree in 'fFlL':
             #During forward and leftward tilts, the grid is processed uppermost then leftmost first to prevent two eggs going into same spot
-            roll_eggs = self.eggs
+            roll_eggs = sorted(self.eggs)
         elif degree in 'bBrR':
             #During backward and rightward tilts, the grid is processed lowermost then rightmost first to prevent two eggs going into same spot
-            roll_eggs = list(self.eggs)[::-1]
+            roll_eggs = sorted(self.eggs)[::-1]
 
         #This tracks eggs that have stopped moving
         wall_eggs = []
@@ -173,9 +173,9 @@ class Level:
 
         #This "re-sorts" roll_eggs turned wall_eggs back to self.eggs
         if degree in 'lLfF':
-                self.eggs = wall_eggs
+                self.eggs = sorted(wall_eggs)
         elif degree in 'rRbB':
-                self.eggs = wall_eggs[::-1]
+                self.eggs = sorted(wall_eggs)[::-1]
 
         #The boolean here returns game_end
         if not self.eggs:
@@ -270,7 +270,7 @@ def game_state(level_file):
         #This displays the grid to the player
         print(current_level)
         print()
-
+        
         print("Controls:",
             "> [f] or [F] to tilt the board forward",
             "> [b] or [B] to tilt the board backward",
@@ -358,7 +358,7 @@ def game_state(level_file):
 
                         print(undo_temp_grid[j])
 
-                    time.sleep(0.5)
+                    time.sleep(1/current_level.rows)
 
             else:
                 print("You can't go back any further...")
