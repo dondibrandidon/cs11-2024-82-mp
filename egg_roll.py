@@ -374,7 +374,10 @@ def game_state(level_file):
 
                 if char in "fFbBrRlL":
 
-                    moves_left -= 1
+                    try:
+                        moves_left -= 1
+                    except:
+                        pass
 
                     #THIS WHERE THE TILT RETURNS VALUES
                     current_level.grid, temp_points, wowaka, game_end = current_level.tilt(char, moves_left)
@@ -408,7 +411,7 @@ def game_state(level_file):
                             print(f"<Tilting {move_name[past_moves[-1]]}...>")
                             print()
                             print(frame)
-                            time.sleep(0.5)
+                            time.sleep(0.3)
                         except:
                             if debug:
                                 print("# Animation failed")
