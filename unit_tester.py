@@ -21,7 +21,7 @@ with open(file_name, encoding='utf-8') as level_file:
 
 # Start of tests
 
-# Expected file format for _test_Level_Tilt ("./unit_testing/for-Level_Tilt/file.in"):
+# Expected file format for _test_Level_Tilt ("./unit_testing/test_Level_Tilt/file.in"):
 '''
 level_rows: int
 moves_left: int
@@ -37,13 +37,13 @@ row_level_rows
 expected_points: int
 expected_no_eggs: bool
 '''
-#@pytest.mark.parametrize("test_file", [file for file in os.listdir("./unit_testing/for-Level_Tilt")])
+#@pytest.mark.parametrize("test_file", [file for file in os.listdir("./unit_testing/_test_Level_Tilt")])
 def _test_Level_Tilt(test_file):
-    file_path = os.path("./unit_testing/for-game_state/" + test_file)
+    file_path = os.path("./unit_testing/_test_Level_Tilt/" + test_file)
     assert True
 
 
-# Expected file format for _test_game_state ("./unit_testing/for-game_state/file.in"):
+# Expected file format for _test_game_state ("./unit_testing/_test_game_state/file.in"):
 '''
 level_rows: int
 moves_left: int
@@ -59,9 +59,9 @@ row_level_rows
 expected_move_list: list[str]
 expected_total_points: int
 '''
-#@pytest.mark.parametrize("test_file", [file for file in os.listdir("./unit_testing/for-game_state")])
+#@pytest.mark.parametrize("test_file", [file for file in os.listdir("./unit_testing/_test_game_state")])
 def _test_game_state(test_file):
-    file_path = os.path("./unit_testing/for-game_state/" + test_file)
+    file_path = os.path("./unit_testing/_test_game_state/" + test_file)
 
     #This overrides input() to load expected inputs instead
     sys.stdin = io.StringIO("")
