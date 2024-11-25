@@ -50,9 +50,8 @@ Submission of Group **#82** (_daegu_original_) from class WFJ (_WFJ/MUV1_):\
 
 You are the mayor of ChickenCity tasked to give all of the city's egg a safe home for a safe future...
 
-**~ Beware These Tiles ~**
 1. 🥚 / `0` [Eggs]
-   - "_Ang Itloogan ay ang pag-asa ng ating bayan_" (lit. 'Eggs are the hope of our nation' by Jose Rizal)
+   - "_Ang Itloogan ay ang pag-asa ng ating bayan_" (lit. 'Eggs are the hope of our nation' - Jose Rizal)
    - Eggs are the future of our species, cherish them, protect them, and bring them to an empty nest.
    - A smart mayor can save most of the eggs, but the pragmatic mayor can sacrifice one egg to save the rest.
 2. 🟩 / `.` [Grass]
@@ -66,7 +65,7 @@ You are the mayor of ChickenCity tasked to give all of the city's egg a safe hom
 4. 🍳 / `P` [Pans]
    - "_You can't cook an omelette without breaking a few eggs..._" (by unknown)
    - The _Ferricarbus panluto_, known colloquially as the "pan", is the natural predator of the egg.
-   - Although pans have no locomotive ability, pans have an insatiable appetite that can consume as much eggs as it can be fed. Because of this, pans thrive in grass-filled biomes where unsuspecting eggs, in their excitement, might accidentally directly roll into the gaping mouth of an awaiting pan. After which, the pan starts to secret a special type of oil that prevents the egg from escaping, as well as, conducts the heat eminating from the pan in order to digest the trapped egg.
+   - Although pans have no locomotive ability, pans have an insatiable appetite that can consume as much eggs as it can be fed. Because of this, pans thrive in grass-filled biomes where unsuspecting eggs, in their excitement, might accidentally directly roll into the gaping mouth of an awaiting pan. After which, the pan starts to secrete a special type of oil that prevents the egg from escaping, as well as, conducts the heat eminating from the pan in order to digest the trapped egg.
    - Metallic weapons called "Metal Utensils" where created to help defend against pans, although a single unit is still too expensive to be widespread in the public.
 5. 🪹 / `O` [Empty Nests]
    - "_You haven't had a good night's rest, until you've tried these M.T. Nests!_" (from old candidacy campaign)
