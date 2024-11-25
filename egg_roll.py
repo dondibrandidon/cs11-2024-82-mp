@@ -54,6 +54,12 @@ class Level:
         #This will be used to monitor points made or lost due to this tilt action
         points = 0
 
+        #This will be used to add points when an egg reaches an empty nest
+        try:
+            energy = 0 + energy
+        except:
+            energy = 0
+
         #This will be used to animate the egg rolling, first frame is contingency for stuck eggs
         tweens = [str(self)]
 
@@ -374,11 +380,6 @@ def game_state(level_file):
 
                 if char in "fFbBrRlL":
 
-                    try:
-                        moves_left -= 1
-                    except:
-                        pass
-
                     #THIS WHERE THE TILT RETURNS VALUES
                     current_level.grid, temp_points, wowaka, game_end = current_level.tilt(char, moves_left)
 
@@ -419,6 +420,11 @@ def game_state(level_file):
                     if debug:
                         print(f"temp_points: {temp_points}")
                     points += temp_points
+
+                    try:
+                        moves_left -= 1
+                    except:
+                        pass
                     
                     try:
                         clear_screen(debug)
