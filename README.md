@@ -1,79 +1,98 @@
-# **[_#82_] CS11 Machine Problem**
-Submission of Group **#82** (_daegu_original_) from class WFJ (_WFJ/MUV1_):\
-&nbsp;&nbsp;&nbsp;&nbsp;(_2024-10322_) **Mendoza, Martin C. M.**\
-&nbsp;&nbsp;&nbsp;&nbsp;(_2024-05352_) **Sayo, Brandon E.** 
+# **[*#82*] CS11 Machine Problem**
+Submission of Group **#82** (*daegu_original*) from class WFJ/MUV1:\
+&nbsp;&nbsp;&nbsp;&nbsp;(2024-10322) **Mendoza, Martin C. M.**\
+&nbsp;&nbsp;&nbsp;&nbsp;(2024-05352) **Sayo, Brandon E.** 
+
 
 ## [📃] Table of Contents
 <!-- no toc -->
-- [[📂] Files](#📂-files)
-- [[🥚] How to Play](#🥚-how-to-play)
-- [[🎯] Mechanics](#🎯-mechanics)
-- [[🤓] Implementation](#🤓-implementation)
-- [[🧪] Unit Testing](#🧪-unit-testing)
-- [[💞] Bonus Features](#💞-bonus-features)
+1. [[📂] Files](#📂-files)
+2. [[🥚] How to Play](#🥚-how-to-play)
+3. [[🎯] Mechanics](#🎯-mechanics)
+4. [[🤓] Implementation](#🤓-implementation)
+5. [[🧪] Unit Testing](#🧪-unit-testing)
+6. [[💞] Bonus Features](#💞-bonus-features)
+
 
 ## [📂] Files
 
-- `.\egg_roll.py` - **main program for playing _egg_roll_**
-- `.\levels\` - stores all gameplay levels for _egg_roll_ level select
+
+- `egg_roll.py` - **main program for playing _egg_roll_**
+
+- `.\levels\*` - stores all gameplay levels for _egg_roll_ level select
   - `.\levels\level_file.in` (sample level file)
-- `.\unit_tester.py` - **unit testing program**
-- `.\unit_testing\` - stores all testing files for _egg_roll_ functionalities
+
+- `unit_tester.py` - **unit testing program**
+- `.\unit_testing\*` - stores all testing files for _egg_roll_ functionalities
   - `.\unit_testing\_test_Level_Tilt\test_case.in` (sample test case file for Level.tilt())
   - `.\unit_testing\_test_game_state\test_case.in` (sample test case file for game_state())
+</ul>
 
 
 ## [🥚] How to Play
 
-1. _Terminal_
-
+1. Via *Terminal*
    - Go to the egg_roll release folder.
    - Two methods to play levels:\
      a. **Recommended**, through the Main Menu: `python3.12 egg_roll.py`\
      b. Direct-to-level, with a level file: `python3.12 egg_roll.py valid_location/level_file.in`
 
-2. _Main Menu_
+2. Via _Main Menu_
    - To play, input an available level's full `file_name.in` from the selection.
    - To quit the game, type `quit` then `yes`.
 
-3. _Level Interface_
-   - To move the eggs in the board, type a sequence of any valid characters:
+3. Via _Level Interface_
+   - To move the eggs on the board, type a sequence of any valid characters:
      - `F` / `f` to tilt the board forwards    (moving the eggs up)
      - `B` / `b` to tilt the board backwards   (moving the eggs down)
      - `L` / `l` to tilt the board leftwards   (moving the eggs left)
      - `R` / `r` to tilt the board rightwards  (moving the eggs right)
-   - To undo your last move at the cost of energy, type `undo`.
-   - To exit the level, type `exit`.
+   - To undo your last move at the cost of energy, type the word `undo`.
+   - To exit the level, type the word `exit`.
 
 
 ## [🎯] Mechanics
 
-You are the mayor of ChickenCity tasked to give all of the city's egg a safe home for a safe future...
+You are the mayor of ChickenCity tasked to give all of the city's egg a safe home...
 
-1. 🥚 / `0` [Eggs]
-   - "_Ang Itloogan ay ang pag-asa ng ating bayan_" (lit. 'Eggs are the hope of our nation' - Jose Rizal)
+1. **Eggs** [🥚 / `0`]
+   > "*Ang Itloogan ay ang pag-asa ng ating bayan*" - Jose Rizal (lit. 'Eggs are the hope of our nation')
    - Eggs are the future of our species, cherish them, protect them, and bring them to an empty nest.
-   - A smart mayor can save most of the eggs, but the pragmatic mayor can sacrifice one egg to save the rest.
-2. 🟩 / `.` [Grass]
-   - "_The Green Green Grass of Home_" (Hit Single of Tom "Yum" Jones)
+   - Remember that the smart mayor can save most of the eggs, but the pragmatic mayor can sacrifice one egg to save the all the eggs.
+
+2. **Grass** [🟩 / `.`]
+   > "*The Green Green Grass of Home*" (hit single of Tom "Yum" Jones)
    - One of the few spaces that can be bring about just as much of a comfort as a nest.
-   - Though, eggs on grass get so excited that they continue rolling until they are physically stopped.
-3. 🧱 / `#` [Walls]
-   - "_Walls_"
-   - Walls stop eggs.
+   - Though, eggs on grass get so excited that they continue rolling until they are physically stopped...
+  
+3. **Walls** [🧱 / `#`]
+   > "*Walls*"
+   - Walls stop rolling eggs.
    - Walls contain our reality from the void of the beyond.
-4. 🍳 / `P` [Pans]
-   - "_You can't cook an omelette without breaking a few eggs..._" (by unknown)
-   - The _Ferricarbus panluto_, known colloquially as the "pan", is the natural predator of the egg.
-   - Although pans have no locomotive ability, pans have an insatiable appetite that can consume as much eggs as it can be fed. Because of this, pans thrive in grass-filled biomes where unsuspecting eggs, in their excitement, might accidentally directly roll into the gaping mouth of an awaiting pan. After which, the pan starts to secrete a special type of oil that prevents the egg from escaping, as well as, conducts the heat eminating from the pan in order to digest the trapped egg.
-   - Metallic weapons called "Metal Utensils" where created to help defend against pans, although a single unit is still too expensive to be widespread in the public.
-5. 🪹 / `O` [Empty Nests]
-   - "_You haven't had a good night's rest, until you've tried these M.T. Nests!_" (from old candidacy campaign)
-   - "Maturation Turkish Nests" (M.T. Nests) was a project originally initiated by the 3rd mayor of ChickenCity, Stanley Aubudon, after negotiation with a nest production company from Turkey. This provided eggs from all around ChickenCity with incredibly cheap but sustainable housing that also decreased hatching time ten-fold. The program was so successful that other cities across the plane have adopted the same project. Nowadays, these nests have become so ubiqutous that the common folk has come to simply know them as "empty nests."
-6. 🪺 / `@` [Full Nests]
-   - "_DO YOUR PART! Don't share M.T. Nests with other eggs._" (from old health poster)
+
+4. **Pans** [🍳 / `P`]
+   > "*You can't cook an omelette without breaking a few eggs...*" (by unknown)
+   - Prevent eggs from rolling into these pans.
+   - Excerpt from *Chickipedia*:
+      > The _Ferricarbus panluto_, known colloquially as the "pan", is the natural predator of the egg. [...]
+      > ### Behavior
+      > ---
+      > Although pans have no locomotive ability, pans have an insatiable appetite that can consume as much eggs as it can be fed. Because of this, pans thrive in grass-filled biomes where unsuspecting eggs, in their excitement, might accidentally directly roll into the gaping mouth of an awaiting pan. After which, the pan starts to secrete a special type of oil that prevents the egg from escaping, as well as, conducts the heat eminating from the pan in order to digest the trapped egg.[...]
+      > ### Relationship with bird-kind ###
+      > ---
+      > Metallic weapons called "Metal Utensils" where created to help defend against pans, although a single unit is still too expensive to be widespread in the public. [...]
+
+5. **Empty Nests** [🪹 / `O`]
+   > "*You haven't had a good night's rest, until you've tried these M.T. Nests!*" (from old candidacy campaign)
+   - The dream resting place of any egg.
+   - Excerpt from *Chickipedia*:
+      > [The distribution of] "Maturation Turkish Nests" (M.T. Nests) was a project originally initiated by the 3rd mayor of ChickenCity, Stanley Aubudon, after negotiation with a nest production company from Turkey. This provided eggs from all around ChickenCity with incredibly cheap but sustainable housing that also decreased hatching time ten-fold. The program was so successful that other cities across the plane have adopted the same project. Nowadays, these nests have become so ubiqutous that the common folk has come to simply know them as "empty nests."
+
+6. **Full Nests** [🪺 / `@`]
+   > "*DO YOUR PART! Don't share M.T. Nests with other eggs.*" (from old health poster)
    - These are fully occupied empty nests.
-   - Originally, M.T. Nests could actually hold up to a dozen eggs at a time. This helped make nest maintenance easier and cheaper as it was split among 12 tenants. Although after a _bird flu_ epidemic that put the entire plane on quarantine, the Lord Chicken, passed a law that required nest manufacturers to allow for only one egg to fit per nest. Even after the end of the pandemic, progress in the field of Nestic Engineering actually made single-type M.T. Nests a lot more affordable to the common nest-owner.
+   - Excerpt from *Chickipedia*:
+      > Originally, M.T. Nests could actually hold up to a dozen eggs at a time. This helped make nest maintenance easier and cheaper as it was split among 12 tenants. Although after a _bird flu_ epidemic that put the entire plane on quarantine, the Lord Chicken, passed a law that required nest manufacturers to allow for only one egg to fit per nest. Even after the end of the pandemic, progress in the field of Nestic Engineering actually made single-type M.T. Nests a lot more affordable to the common nest-owner.
 
 
 ## [🤓] Implementation
