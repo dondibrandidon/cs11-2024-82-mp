@@ -26,7 +26,6 @@ Submission of Group **#82** (*daegu_original*) from class WFJ/MUV1:\
 - `.\unit_testing\*` - stores all testing files for _egg_roll_ functionalities
   - `.\unit_testing\_test_Level_Tilt\test_case.in` (sample test case file for Level.tilt())
   - `.\unit_testing\_test_game_state\test_case.in` (sample test case file for game_state())
-</ul>
 
 
 ## [🥚] How to Play
@@ -34,7 +33,7 @@ Submission of Group **#82** (*daegu_original*) from class WFJ/MUV1:\
 1. Via *Terminal*
    - Go to the egg_roll release folder.
    - Two methods to play levels:\
-     a. **Recommended**, through the Main Menu: `python3.12 egg_roll.py`\
+     a. **Recommended**, through the Main Menu: `python3.12 menu.py`\
      b. Direct-to-level, with a level file: `python3.12 egg_roll.py valid_location/level_file.in`
 
 2. Via _Main Menu_
