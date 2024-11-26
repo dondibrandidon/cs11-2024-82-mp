@@ -34,7 +34,7 @@ class Level:
 
         #text-based check (defaults to emoji version)
         try:
-            if text_based:
+            if TEXT_BASED:
                 EGG_KEY = '0'
                 GRASS_KEY = '.'
                 WALL_KEY = '#'
@@ -86,7 +86,7 @@ class Level:
 
         while True:
             for (i, j) in tuple(roll_eggs):
-                if debug:
+                if DEBUG:
                     print(f"# roll_eggs: {roll_eggs}, wall_eggs: {wall_eggs}")#, super_eggs: {super_eggs}")
                     print('#' + str(self) + '#')
                 if degree in 'fF':
@@ -190,11 +190,11 @@ class Level:
             return self.grid, points, tweens, False
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-def clear_screen(debug):
+def clear_screen(DEBUG):
     '''
-    Clears the terminal screen, if any, while debug is False
+    Clears the terminal screen, if any, while DEBUG is False
     '''
-    if not debug:
+    if not DEBUG:
         #This newline is important, if clear_screen is called after a print with end=''
         print()
         if sys.stdout.isatty():
@@ -250,7 +250,7 @@ def game_state(level_file):
     #Start of gameplay
     while moves_left == "inf" or moves_left >= 0:
 
-        if debug:
+        if DEBUG:
             print("# START OF UNDO CHECK")
             for i in range(len(undo_levels)):
                 print(undo_points[i])
@@ -260,9 +260,9 @@ def game_state(level_file):
 
         #>>>>> START of gameplay terminal UI/UX
         try:
-            clear_screen(debug)
+            clear_screen(DEBUG)
         except NameError:
-            print("# clear_screen(debug)")
+            print("# clear_screen(DEBUG)")
 
         print("<Currently playing from level file: ", end='')
         try:
@@ -345,13 +345,13 @@ def game_state(level_file):
                     MAGIC_KEY = '✨'
                 
                 for i in range(current_level.rows+1):
-                    if debug:
+                    if DEBUG:
                         print(f"i: {i}")
                     
                     try:
-                        clear_screen(debug)
+                        clear_screen(DEBUG)
                     except NameError:
-                        print("# clear_screen(debug)")
+                        print("# clear_screen(DEBUG)")
                 
                     print("<Undoing...>")
                     print()
@@ -359,7 +359,7 @@ def game_state(level_file):
                     for _ in range(i):
                         print(MAGIC_KEY*current_level.cols)
                     for j in range(i, current_level.rows):
-                        if debug:
+                        if DEBUG:
                             print(f"j: {j}")
 
                         print(undo_temp_grid[j])
@@ -375,7 +375,7 @@ def game_state(level_file):
             #INPUT SCENARIO
             for char in player:
 
-                if debug:
+                if DEBUG:
                     print(f"# Input to process: {char}")
 
                 if char in "fFbBrRlL":
@@ -405,19 +405,19 @@ def game_state(level_file):
                     for frame in wowaka:
                         try:
                             try:
-                                clear_screen(debug)
+                                clear_screen(DEBUG)
                             except NameError:
-                                print("# clear_screen(debug)")
+                                print("# clear_screen(DEBUG)")
 
                             print(f"<Tilting {move_name[past_moves[-1]]}...>")
                             print()
                             print(frame)
                             time.sleep(0.3)
                         except:
-                            if debug:
+                            if DEBUG:
                                 print("# Animation failed")
 
-                    if debug:
+                    if DEBUG:
                         print(f"temp_points: {temp_points}")
                     points += temp_points
 
@@ -427,9 +427,9 @@ def game_state(level_file):
                         pass
                     
                     try:
-                        clear_screen(debug)
+                        clear_screen(DEBUG)
                     except NameError:
-                        print("# clear_screen(debug)")
+                        print("# clear_screen(DEBUG)")
 
                     #Undo processing here
                     undo_levels.append(current_level.copy())
@@ -449,14 +449,14 @@ def game_state(level_file):
 
     try:
         #Short last game state lag to not make end too abrupt
-        clear_screen(debug)
+        clear_screen(DEBUG)
         print("[!!!]")
         print()
         print(str(current_level))
         time.sleep(0.5)
-        clear_screen(debug)
+        clear_screen(DEBUG)
     except NameError:
-        if debug:
+        if DEBUG:
             print("# Game over screen")
     
     #Game Over Screen here
@@ -497,9 +497,9 @@ def argument_handling():
                 except FileNotFoundError:
                     #End program if argument level_file invalid
                     try:
-                        clear_screen(debug)
+                        clear_screen(DEBUG)
                     except NameError:
-                        print("# clear_screen(debug)")
+                        print("# clear_screen(DEBUG)")
                     print("File argument invalid! Please open game with valid file location...")
                     print()
                     return
@@ -518,20 +518,20 @@ def argument_handling():
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #Program initialization
 
-global debug, text_based
-debug = False #This toggles insider info print and disables clear_screen calls
-text_based = False #This disables emojis and utilizes ASCII instead (WARNING!: REQUIRES ASCII-BASED LEVEL_FILE)
+global DEBUG, TEST_BASED
+DEBUG = False #This toggles insider info print and disables clear_screen calls
+TEXT_BASED = False #This disables emojis and utilizes ASCII instead (WARNING!: REQUIRES ASCII-BASED LEVEL_FILE)
 
-if debug:
+if DEBUG:
     print("~~~~~~~~~~~~~~~~~")
     print("# EGG ROLL STARTED: DEBUG IS ON")
 
 try:
     from termcolor import colored, cprint
-    if debug:
+    if DEBUG:
         print("# termcolor loaded")
 except ImportError:
-    if debug:
+    if DEBUG:
         print("# termcolor NOT loaded")
     pass
 

@@ -12,7 +12,7 @@ def menu():
         try:
             #This lists ALL of the contents of the ./levels folder valid for egg_roll or not
             level_list = os.listdir("./levels")
-            if debug:
+            if DEBUG:
                 print("# level_list initialized")
         except FileNotFoundError:
             print('Sorry but please run the application from the egg_roll folder!')
@@ -20,7 +20,7 @@ def menu():
             return
 
         #Gameplay initialization
-        if not level_list and len(sys.argv) < 2:
+        if not level_list:
             #End program if no level_file can be loaded
             print("<Welcome to EGG ROLL!>")
             print()
@@ -29,38 +29,12 @@ def menu():
             print()
             return None
 
-        elif len(sys.argv) == 2:
-            #This program prioritizes level_file argument over Level Selection
-            with open(sys.argv[1], encoding='utf-8') as level_file:
-                while True:
-                    try:
-                        game_state(level_file)
-                    except FileNotFoundError:
-                        #End program if argument level_file invalid
-
-                        try:
-                            clear_screen(debug)
-                        except NameError:
-                            print("# clear_screen(debug)")
-
-                        print("<Welcome to EGG ROLL!>")
-                        print()
-                        print("File argument invalid! Please open game with valid file location...")
-                        print()
-                        return
-                    repeat = input("Type [Yes] to replay level, else go back to main menu: ")
-                    if repeat.lower() == 'yes':
-                        continue
-                    else:
-                        break
-
         else:
             while True:
-
                 try:
-                    clear_screen(debug)
+                    clear_screen(DEBUG)
                 except NameError:
-                    print("# clear_screen(debug)")
+                    print("# clear_screen(DEBUG)")
 
                 print(
                     "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
@@ -105,9 +79,9 @@ def menu():
                             continue
                         else:
                             try:
-                                clear_screen(debug)
+                                clear_screen(DEBUG)
                             except NameError:
-                                print("# clear_screen(debug)")
+                                print("# clear_screen(DEBUG)")
                             break
                     break
         
@@ -126,20 +100,19 @@ def menu():
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #Program initialization
 
-global debug, text_based
-debug = False #This toggles insider info print and disables clear_screen calls
-text_based = False #This disables emojis and utilizes ASCII instead (WARNING!: REQUIRES ASCII-BASED LEVEL_FILE)
+global DEBUG
+DEBUG = False #This toggles insider info print and disables clear_screen calls
 
-if debug:
+if DEBUG:
     print("~~~~~~~~~~~~~~~~~")
     print("# MAIN MENU STARTED: DEBUG IS ON")
 
 try:
     from termcolor import colored, cprint
-    if debug:
+    if DEBUG:
         print("# termcolor loaded")
 except ImportError:
-    if debug:
+    if DEBUG:
         print("# termcolor NOT loaded")
     pass
 
