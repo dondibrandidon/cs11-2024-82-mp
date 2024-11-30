@@ -337,7 +337,7 @@ def game_state(level_file):
 
                 #Undo animation happens here
                 try:
-                    if text_based:
+                    if TEXT_BASED:
                         MAGIC_KEY = 'X'
                     else:
                         raise Exception()

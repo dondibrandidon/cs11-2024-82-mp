@@ -11,7 +11,7 @@ def menu():
     while True:
         try:
             #This lists ALL of the contents of the ./levels folder valid for egg_roll or not
-            level_list = os.listdir("./levels")
+            level_list = os.listdir("." + os.sep + "levels")
             if DEBUG:
                 print("# level_list initialized")
         except FileNotFoundError:
@@ -72,7 +72,7 @@ def menu():
                     pass
                 
                 while True:
-                    with open("./levels/" + choice, encoding='utf-8') as level_file:
+                    with open("." + os.sep + "levels" + os.sep + choice, encoding='utf-8') as level_file:
                         game_state(level_file)
                         repeat = input("Type [Yes] to replay level, else go back to main menu: ")
                         if repeat.lower() == 'yes':
