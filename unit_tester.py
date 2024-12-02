@@ -51,9 +51,12 @@ def _test_Level_Tilt(test_file):
 
         new_grid, increment_points, animation, no_eggs = test_level.tilt(character_input, moves_left)
 
-        assert fin_grid == new_grid
-        assert expected_points == increment_points
-        assert expected_no_eggs == no_eggs
+        try:
+            assert fin_grid == new_grid
+            assert expected_points == increment_points
+            assert expected_no_eggs == no_eggs
+        except:
+            raise AssertionError(test_file)
 
 
 # Expected file format for _test_game_state (".|unit_testing|_test_game_state|file.in"):
@@ -83,9 +86,12 @@ def _test_game_state(test_file):
         expected_move_list = str(level_file.readline()).strip('\n')
         expected_total_points = int(level_file.readline())
 
-        assert fin_grid == final_state.grid
-        assert expected_move_list == ''.join(moves_made)
-        assert expected_total_points == total_points
+        try:
+            assert fin_grid == final_state.grid
+            assert expected_move_list == ''.join(moves_made)
+            assert expected_total_points == total_points
+        except:
+            raise AssertionError(test_file)
 
 
 #-------------------------------------------START OF TESTING------------------------------------------------
