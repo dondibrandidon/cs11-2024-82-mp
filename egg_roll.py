@@ -80,6 +80,8 @@ class Level:
         elif degree in 'bBrR':
             #During backward and rightward tilts, the grid is processed lowermost then rightmost first to prevent two eggs going into same spot
             roll_eggs = sorted(self.eggs)[::-1]
+        else:
+            raise ValueError(f"Level.tilt() received: {degree}")
 
         #This tracks eggs that have stopped moving
         wall_eggs = []
@@ -207,7 +209,7 @@ def clear_screen(DEBUG):
         print("# clear_screen() called")
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-def game_state(level_file):
+def game_state(level_file, factor=1):
     '''
     This is a SINGLE instance of level_file gameplay.
     The repeat prompt happens in the menu() call, to make it neater.
@@ -364,11 +366,11 @@ def game_state(level_file):
 
                         print(undo_temp_grid[j])
 
-                    time.sleep(1/current_level.rows)
+                    time.sleep((1/current_level.rows) * factor)
 
             else:
                 print("You can't go back any further...")
-                time.sleep(2)
+                time.sleep(2 * factor)
                 continue
 
         else:
@@ -412,7 +414,7 @@ def game_state(level_file):
                             print(f"<Tilting {move_name[past_moves[-1]]}...>")
                             print()
                             print(frame)
-                            time.sleep(0.3)
+                            time.sleep(0.3 * factor)
                         except:
                             if DEBUG:
                                 print("# Animation failed")
@@ -453,7 +455,7 @@ def game_state(level_file):
         print("[!!!]")
         print()
         print(str(current_level))
-        time.sleep(0.5)
+        time.sleep(0.5 * factor)
         clear_screen(DEBUG)
     except NameError:
         if DEBUG:
@@ -519,7 +521,7 @@ def argument_handling():
 #Program initialization
 
 global DEBUG, TEST_BASED
-DEBUG = False #This toggles insider info print and disables clear_screen calls
+DEBUG = True #This toggles insider info print and disables clear_screen calls
 TEXT_BASED = False #This disables emojis and utilizes ASCII instead (WARNING!: REQUIRES ASCII-BASED LEVEL_FILE)
 
 if DEBUG:
