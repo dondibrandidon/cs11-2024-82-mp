@@ -34,8 +34,8 @@ row_level_rows
 expected_points: int
 expected_no_eggs: bool (int: 0 or 1)
 '''
-#@pytest.mark.parametrize("test_file", [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_Level_Tilt")])
-def _test_Level_Tilt(test_file):
+@pytest.mark.parametrize("test_file", [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_Level_Tilt")])
+def test_Level_Tilt(test_file):
     with open("." + os.sep + "unit_testing" + os.sep + "_test_Level_Tilt" + os.sep + test_file, encoding='utf-8') as level_file:
         level_rows = int(level_file.readline())
         moves_left = int(level_file.readline())
@@ -51,12 +51,9 @@ def _test_Level_Tilt(test_file):
 
         new_grid, increment_points, animation, no_eggs = test_level.tilt(character_input, moves_left)
 
-        try:
-            assert fin_grid == new_grid
-            assert expected_points == increment_points
-            assert expected_no_eggs == no_eggs
-        except:
-            raise AssertionError(test_file)
+        assert fin_grid == new_grid
+        assert expected_points == increment_points
+        assert expected_no_eggs == no_eggs
 
 
 # Expected file format for _test_game_state (".|unit_testing|_test_game_state|file.in"):
@@ -75,8 +72,8 @@ row_level_rows
 expected_move_list: list[str]
 expected_total_points: int
 '''
-#@pytest.mark.parametrize("test_file", [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_game_state")])
-def _test_game_state(test_file):
+@pytest.mark.parametrize("test_file", [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_game_state")])
+def test_game_state(test_file):
     level_path = "." + os.sep + "unit_testing" + os.sep + "_test_game_state" + os.sep + test_file
     with open(level_path, encoding='utf-8') as level_file:
         sys.stdin = io.StringIO(level_file.readline())
@@ -86,12 +83,9 @@ def _test_game_state(test_file):
         expected_move_list = str(level_file.readline()).strip('\n')
         expected_total_points = int(level_file.readline())
 
-        try:
-            assert fin_grid == final_state.grid
-            assert expected_move_list == ''.join(moves_made)
-            assert expected_total_points == total_points
-        except:
-            raise AssertionError(test_file)
+        assert fin_grid == final_state.grid
+        assert expected_move_list == ''.join(moves_made)
+        assert expected_total_points == total_points
 
 
 #-------------------------------------------START OF TESTING------------------------------------------------
@@ -100,10 +94,10 @@ def main():
     sys.stdout = io.StringIO() #THIS DISABLES PRINTS
 
     for test_file in [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_Level_Tilt")]:
-        _test_Level_Tilt(test_file)
+        test_Level_Tilt(test_file)
 
     for test_file in [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_game_state")]:
-        _test_game_state(test_file)
+        test_game_state(test_file)
 
 if __name__ == '__main__':
     main()
