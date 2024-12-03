@@ -18,13 +18,13 @@ Submission of Group **#82** (*daegu_original*) from class WFJ/MUV1:\
 ## [📂] Files
 
 
-- `egg_roll.py` - **main program for playing _egg_roll_**
+- `egg_roll.py` - **main program for playing egg_roll_**
 
-- `.|levels|*` - stores all gameplay levels for _egg_roll_ level select
-  - `.|levels|level_file.in` (sample level file)
+- `.|levels|*` - stores all `.in` gameplay levels for egg_roll_ level select
+  - `.|levels|level_file.in` (sample valid level file)
 
 - `unit_tester.py` - **unit testing program**
-- `.|unit_testing|*` - stores all testing files for _egg_roll_ functionalities
+- `.|unit_testing|*` - stores all testing files for egg_roll_ functionalities
   - `.|unit_testing|_test_Level_Tilt|test_case.in`\
       (sample test case file for Level.tilt())
   - `.|unit_testing|_test_game_state|test_case.in`\

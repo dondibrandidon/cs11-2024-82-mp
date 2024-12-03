@@ -521,7 +521,7 @@ def argument_handling():
 #Program initialization
 
 global DEBUG, TEST_BASED
-DEBUG = True #This toggles insider info print and disables clear_screen calls
+DEBUG = False #This toggles insider info print and disables clear_screen calls
 TEXT_BASED = False #This disables emojis and utilizes ASCII instead (WARNING!: REQUIRES ASCII-BASED LEVEL_FILE)
 
 if DEBUG:

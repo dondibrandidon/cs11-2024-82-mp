@@ -1,8 +1,80 @@
 import os
 import sys
 import time
+import datetime
 
 from egg_roll import Level, clear_screen, game_state
+
+'''
+#The format of a highscore file is as follows:
+player_score1: int
+player_score_datetime1: datetime.datetime
+player_score_name1: str
+...
+player_score5: int
+player_score_datetime5: datetime.datetime
+player_score_name5: str
+# Only top five (5) players are kept by order of highest score, oldest datetime, alphabetic
+'''
+def generate_highscore_files(levels):
+    for level in levels:
+        if os.path.isfile(f".{os.sep}levels{os.sep}_score_{level[:-3]}.txt"):
+            pass
+        else:
+            if DEBUG:
+                print(f"highscore file made for {level}")
+            with open(f".{os.sep}levels{os.sep}_score_{level[:-3]}.txt", 'a') as score_file:
+                hold_names = ("Stanley Aubudon", "Nein Gizzard", "Jefferyi Aves", "Philip Ketupa", "Yangyeom Yangyeom")
+                for name in hold_names:
+                    score_file.write(f"{name}\n")
+                    score_file.write("0\n")
+                    score_file.write(f"{datetime.datetime.today()}\n")
+
+def highscore_handling(level_file, score):
+    with open(f".{os.sep}levels{os.sep}_score_{str(level_file)[:-3]}.txt") as score_file:
+        player_name = input("> And you were Mayor ")
+        
+        try:
+            clear_screen(DEBUG)
+        except NameError:
+            print("# clear_screen(DEBUG)")
+
+        score_hold = [(player_name, score, datetime.datetime.today())]
+        for _ in range(5):
+            score_hold.append((str(score_file.readline())[:-1], int(score_file.readline()), datetime.datetime.strptime(str(score_file.readline())[:-1], '%Y-%m-%d %H:%M:%S.%f')))
+        
+        if DEBUG:
+            print(f"BEFORE: {score_hold}")
+        score_hold.sort(key = lambda x: (- int(x[1]), x[2], x[0]))
+        score_hold.pop()
+        if DEBUG:
+            print(f"AFTER: {score_hold}")
+
+        longest_display = max(len(str(max(score_hold, key = lambda x: x[1])[1])), 6)
+        longest_name = max(len(str(max(score_hold, key = lambda x: x[0])[0])), 18)
+
+        if DEBUG:
+            print(longest_display)
+        
+        
+        print(f"~ ChickenCity *HALL OF FAME* for {level_file} ~")
+        print()
+        time.sleep(1)
+
+        print("SCORES" + " "*(longest_display-6) + " | CHICKENCITY MAYORS" + " "*(longest_name-18) + " | TIME")
+        time.sleep(0.5)
+
+        for (name, score, date) in score_hold:
+            print(f"{score}{' '*(longest_display-len(str(score)))} | Mayor {name}{' '*(longest_name-len(str(name))-6)} | {date.strftime('%d %b %Y %H:%S')}")
+            time.sleep(0.5)
+        
+        time.sleep(0.5)
+
+    with open(f".{os.sep}levels{os.sep}_score_{str(level_file)[:-3]}.txt", 'w') as score_file:
+        for (name, score, date) in score_hold:
+            score_file.write(f"{name}\n")
+            score_file.write(f"{score}\n")
+            score_file.write(f"{date}\n")
 
 def menu():
     '''
@@ -11,7 +83,9 @@ def menu():
     while True:
         try:
             #This lists ALL of the contents of the ./levels folder valid for egg_roll or not
-            level_list = os.listdir("." + os.sep + "levels")
+            level_list = tuple(file for file in os.listdir(f".{os.sep}levels") if file[-3:] == ".in")
+            generate_highscore_files(level_list)
+
             if DEBUG:
                 print("# level_list initialized")
         except FileNotFoundError:
@@ -25,7 +99,7 @@ def menu():
             print("<Welcome to EGG ROLL!>")
             print()
             print('No level files available...')
-            print('Please restart the game with a valid file location argument or populated ./levels folder')
+            print('Please restart the game with a valid file location argument or populated .|levels folder')
             print()
             return None
 
@@ -72,16 +146,23 @@ def menu():
                     pass
                 
                 while True:
-                    with open("." + os.sep + "levels" + os.sep + choice, encoding='utf-8') as level_file:
-                        game_state(level_file)
-                        repeat = input("Type [Yes] to replay level, else go back to main menu: ")
+                    with open(f".{os.sep}levels{os.sep}{choice}", encoding='utf-8') as level_file:
+                        level_end_state, moves_made, score = game_state(level_file)
+
+                        repeat = input("Type [Yes] to try the level again, else log your highscore and go back to main menu: ")
                         if repeat.lower() == 'yes':
                             continue
                         else:
+                            print()
+                            highscore_handling(choice, score)
+                            print()
+                            input("Press [ENTER] to continue...")
+
                             try:
                                 clear_screen(DEBUG)
                             except NameError:
                                 print("# clear_screen(DEBUG)")
+                    
                             break
                     break
         
