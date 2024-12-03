@@ -37,7 +37,8 @@ Submission of Group **#82** (*daegu_original*) from class WFJ/MUV1:\
    - Go to the egg_roll release folder.
    - Two methods to play levels:\
      a. **Recommended**, through the Main Menu: `python3.12 menu.py`\
-     b. Direct-to-level, with a level file: `python3.12 egg_roll.py .|valid_location|level_file.in`
+     b. Direct-to-level, with a level file: `python3.12 egg_roll.py .|valid_location|level_file.in`\
+      &nbsp;&nbsp;&nbsp;&nbsp;*Method (b) is primarily for testing and does NOT save highscores.
 
 2. Via _Main Menu_
    - To play, input an available level's full `file_name.in` from the selection.
