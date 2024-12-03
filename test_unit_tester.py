@@ -34,8 +34,8 @@ row_level_rows
 expected_points: int
 expected_no_eggs: bool (int: 0 or 1)
 '''
-#@pytest.mark.parametrize("test_file", [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_Level_Tilt")])
-def _test_Level_Tilt(test_file):
+@pytest.mark.parametrize("test_file", [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_Level_Tilt")])
+def test_Level_Tilt(test_file):
     with open("." + os.sep + "unit_testing" + os.sep + "_test_Level_Tilt" + os.sep + test_file, encoding='utf-8') as level_file:
         level_rows = int(level_file.readline())
         moves_left = int(level_file.readline())
@@ -72,8 +72,8 @@ row_level_rows
 expected_move_list: list[str]
 expected_total_points: int
 '''
-#@pytest.mark.parametrize("test_file", [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_game_state")])
-def _test_game_state(test_file):
+@pytest.mark.parametrize("test_file", [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_game_state")])
+def test_game_state(test_file):
     level_path = "." + os.sep + "unit_testing" + os.sep + "_test_game_state" + os.sep + test_file
     with open(level_path, encoding='utf-8') as level_file:
         sys.stdin = io.StringIO(level_file.readline())
@@ -94,10 +94,10 @@ def main():
     sys.stdout = io.StringIO() #THIS DISABLES PRINTS
 
     for test_file in [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_Level_Tilt")]:
-        _test_Level_Tilt(test_file)
+        test_Level_Tilt(test_file)
 
     for test_file in [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_game_state")]:
-        _test_game_state(test_file)
+        test_game_state(test_file)
 
 if __name__ == '__main__':
     main()
