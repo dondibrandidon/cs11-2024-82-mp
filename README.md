@@ -156,7 +156,7 @@ unit_testing/
   - Final grid matches expected grid.
   - Point increment matches expected points.
   - Egg presence matches expected value.
-- **Test Level File Format:**
+**Test Level File Format:**
 ```
 level_rows: int
 moves_left: int
@@ -181,7 +181,7 @@ expected_no_eggs: bool (int: 0 or 1)
   - Final grid matches expected grid.
   - List of moves matches expected moves.
   - Total points match expected points.
-- **Test Level File Format:**
+**Test Level File Format:**
 ```
 string_input: str    #IMPORTANT: len(string_input) >= moves_left
 level_rows: int
@@ -196,8 +196,11 @@ row_level_rows: str
 expected_moves: str
 expected_total_points: int
 ```
+
+
+
 ### **Test Levels**
-#### **`_test_Level_Tilt`**
+#### **in `_test_Level_Tilt`**
 *(arranged alphabetically/how it would appear inside the folder)*
 
   1. `basic_level`
@@ -238,7 +241,7 @@ expected_total_points: int
       - Tests the movements of 2 vertically adjacent eggs across different movements.
       - Simulates how 2 vertically adjacent eggs would behave.
       
-#### **`_test_game_state`**
+#### **in `_test_game_state`**
 *(arranged alphabetically/how it would appear inside the folder)*
 
   1. `basic_level`
