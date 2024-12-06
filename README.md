@@ -129,7 +129,53 @@ You are the mayor of ChickenCity [🐔] tasked to give all of the city's egg a s
 
 ## [🧪] Unit Testing
 
-Lorem ipsum
+### **Overview**
+The `test_er.py` script is designed to test the functionality of the `egg_roll` module, specifically the `level` class and `game_state` function. It utilizes the `pytest` framework to automate the unit testing.
+
+### **Directory**
+The script uses the following directory structure for input test files:
+```
+unit_testing/
+│
+├── _test_Level_tilt/
+│   ├── file1.in
+│   ├── file2.in
+│   └── ...
+│
+└── _test_game_state/
+    ├── file1.in
+    ├── file2.in
+    └── ...
+```
+
+### **`test_level_tilt`**
+- **Purpose**: Tests the `tilt` method.
+- **Input**: Reads from test files in:
+    `unit_testing/_test_Level_tilt`
+- **Assertions:**
+  - Final grid matches expected grid.
+  - Point increment matches expected points.
+  - Egg presence matches expected value.
+- **Test Level File Format:**
+```
+level_rows: int
+moves_left: int
+row_1: str <input level>
+row_2: str
+...
+row_level_rows: str
+valid_character_input: str (character_input validation happens in game_state)
+row_1 <expected output level>
+row_2
+...
+row_level_rows 
+expected_points: int
+expected_no_eggs: bool (int: 0 or 1)
+```
+
+### **test_game_state**
+- lorem ipsum
+
 
 
 ## [💞] Bonus Features
