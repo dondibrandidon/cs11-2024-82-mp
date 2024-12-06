@@ -159,10 +159,12 @@ unit_testing/
 - **Purpose**: Tests the `tilt` method.
 - **Input**: Reads from test files in:
     `unit_testing/_test_Level_tilt`
+
 - **Assertions:**
   - Final grid matches expected grid.
   - Point increment matches expected points.
   - Egg presence matches expected value.
+
 **Test Level File Format:**
 File name: `test_file_name.in`
 ```
@@ -189,6 +191,7 @@ expected_no_eggs: bool (int: 0 or 1)
   - Final grid matches expected grid.
   - List of moves matches expected moves.
   - Total points match expected points.
+
 **Test Level File Format:**
 File name: `test_file_name.in`
 ```
