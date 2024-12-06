@@ -281,16 +281,16 @@ expected_total_points: int
 ## [💞] Bonus Features
 
 ### **Main Menu**
-lorem ipsum
+A simple yet intuitive main menu, providing players easy access to see the list of levels they can play and choose which to play, as well as letting them exit the program.
 
 ### **Move Undo**
-lorem ipsum
+Players are able to undo their moves at the cost of one move per undo.
 
 ### **Highscore Tracking**
-lorem ipsum
+Tracks the top 5 scores for each level in which the name, score, and date & time are stored and shown.
 
 ### **Restart**
-lorem ipsum
+Allows the players to reset the current level and start from scratch.
 
 ## **Tile Sets**
 lorem ipsum
