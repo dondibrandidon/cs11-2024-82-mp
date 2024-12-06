@@ -207,34 +207,35 @@ expected_total_points: int
      - Tests how the egg will behave when there is no grass per alternating column and how empty spaces `" "` affect the grid and the egg's movement.
   3. `collision`
      - Tests the collision physics of the egg and walls.
-  5. `egg_in_nest`
+  4. `egg_in_nest`
      - Tests the interaction and scoring function of when an egg goes in an empty nest.
      - Simulates a condition when an egg interacts with an empty nest.
-  6. `egg_in_pan`
+  5. `egg_in_pan`
      - Tests the interaction and scoring function of when an egg goes in a pan.
      - Simulates a condition when an egg interacts with a pan.
-  7. `hor_three_egg`
+  6. `hor_three_egg`
      - Tests the movements of 3 horizontally adjacent eggs across different movements.
      - Simulates how 3 horizontally adjacent eggs would behave. 
-  8. `hor_two_egg`
+  7. `hor_two_egg`
      - Tests the movements of 2 horizontally adjacent eggs across different movements.
      - Simulates how 2 horizontally adjacent eggs would behave.
-  9. `one_move`
+  8. `one_move`
      - Tests the egg's horizontal (lL/rR) and vertical (fF/bB) movement.
-  10. `plus_remaining_moves`
+  9.  `plus_remaining_moves`
      - Tests how the number of remaining moves is computed to the score when an egg goes in an empty nest.
      - Simulates a condition where an egg goes in an empty nest while having leftover moves.
-  11. `running_bond`
+  
+  10. `running_bond`
      - Tests how levels and the grid are affected by empty spaces `" "` and how it affects the movement of the egg.
      - Level is named after the alternating pattern formed by the empty spaces. (https://www.dimensions.com/element/running-bond)
-  12. `stuck`
+  11. `stuck`
      - Tests how the egg confined by walls will behave when made to move.
-  13. `ver_three_egg`
+  12. `ver_three_egg`
      - Tests the movements of 3 vertically adjacent eggs across different movements.
      - Simulates how 3 vertically adjacent eggs would behave.
       a. `ver_three_egg_down_pan`
         - Simulates how 3 vertically adjacent eggs would behave and interact with a single pan.
-  14. `ver_two_egg`
+  13. `ver_two_egg`
      - Tests the movements of 2 vertically adjacent eggs across different movements.
      - Simulates how 2 vertically adjacent eggs would behave.
       
