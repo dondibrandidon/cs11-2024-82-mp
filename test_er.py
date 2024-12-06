@@ -27,10 +27,10 @@ row_2: str
 ...
 row_level_rows: str
 valid_character_input: str (character_input validation happens in game_state)
-row_1 <expected output level>
-row_2
+row_1: str <expected output level>
+row_2: str
 ...
-row_level_rows 
+row_level_rows: str
 expected_points: int
 expected_no_eggs: bool (int: 0 or 1)
 '''
@@ -58,18 +58,17 @@ def test_Level_tilt(test_file):
 
 # Expected file format for _test_game_state (".|unit_testing|_test_game_state|file.in"):
 '''
+string_input: str    #IMPORTANT: len(string_input) >= moves_left
 level_rows: int
 moves_left: int
 row_1: str <input level>
 row_2: str
 ...
-row_level_rows: str
-string_input: str <IMPORTANT: len(string_input) >= moves_left>
-row_1 <expected output level>
-row_2
+row_1: str <expected output level>
+row_2: str
 ...
-row_level_rows 
-expected_move_list: list[str]
+row_level_rows: str
+expected_moves: str
 expected_total_points: int
 '''
 @pytest.mark.parametrize("test_file", [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_game_state")])
@@ -80,11 +79,11 @@ def test_game_state(test_file):
         final_state, moves_made, total_points = game_state(level_file, 0)
         
         fin_grid = list(list(tile for tile in level_file.readline() if tile != '\n') for i in range(final_state.rows))
-        expected_move_list = str(level_file.readline()).strip('\n')
+        expected_moves = str(level_file.readline()).strip('\n')
         expected_total_points = int(level_file.readline())
 
         assert fin_grid == final_state.grid
-        assert expected_move_list == ''.join(moves_made)
+        assert expected_moves == ''.join(moves_made)
         assert expected_total_points == total_points
 
 
