@@ -218,23 +218,23 @@ expected_total_points: int
      - Simulates how 3 horizontally adjacent eggs would behave. 
   8. `hor_two_egg`
      - Tests the movements of 2 horizontally adjacent eggs across different movements.
-     - Simulates how 2 horizontally adjacent eggs would behave. 
-  9. `one_move`
+     - Simulates how 2 horizontally adjacent eggs would behave.
+  10. `one_move`
      - Tests the egg's horizontal (lL/rR) and vertical (fF/bB) movement.
-  10. `plus_remaining_moves`
+  11. `plus_remaining_moves`
      - Tests how the number of remaining moves is computed to the score when an egg goes in an empty nest.
      - Simulates a condition where an egg goes in an empty nest while having leftover moves.
-  11. `running_bond`
+  12. `running_bond`
      - Tests how levels and the grid are affected by empty spaces `" "` and how it affects the movement of the egg.
      - Level is named after the alternating pattern formed by the empty spaces. (https://www.dimensions.com/element/running-bond)
-  12.`stuck`
+  13. `stuck`
      - Tests how the egg confined by walls will behave when made to move.
-  13. `ver_three_egg`
+  14. `ver_three_egg`
      - Tests the movements of 3 vertically adjacent eggs across different movements.
      - Simulates how 3 vertically adjacent eggs would behave.
       a. `ver_three_egg_down_pan`
         - Simulates how 3 vertically adjacent eggs would behave and interact with a single pan.
-  14. `ver_two_egg`
+  15. `ver_two_egg`
      - Tests the movements of 2 vertically adjacent eggs across different movements.
      - Simulates how 2 vertically adjacent eggs would behave.
          
