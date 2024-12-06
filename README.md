@@ -238,7 +238,29 @@ expected_total_points: int
       - Tests the movements of 2 vertically adjacent eggs across different movements.
       - Simulates how 2 vertically adjacent eggs would behave.
       
-         
+#### **`_test_game_state`**
+*(arranged alphabetically/how it would appear inside the folder)*
+
+  1. `basic_level`
+     - Tests all basic functions of a level (tilt, movement, scoring).
+     - Simulates a basic environment for levels.
+  2. `blurred_lines`
+     - Tests how the egg will behave when there is no grass per alternating column and how empty spaces `" "` affect the grid and the egg's movement.
+  3. `collision`
+     - Tests the collision physics of the egg and walls.
+  4. `egg_in_nest`
+     - Tests the interaction and scoring function of when an egg goes in an empty nest.
+     - Simulates a condition when an egg interacts with an empty nest.
+  5. `egg_in_pan`
+     - Tests the interaction and scoring function of when an egg goes in a pan.
+     - Simulates a condition when an egg interacts with a pan.
+  6. `plus_remaining_moves`
+     - Tests how the number of remaining moves is computed to the score when an egg goes in an empty nest.
+     - Simulates a condition where an egg goes in an empty nest while having leftover moves. 
+  7. `test_all_directions`
+     - Tests all the movements.
+
+   
 ## [💞] Bonus Features
 
 ### **Main Menu**
