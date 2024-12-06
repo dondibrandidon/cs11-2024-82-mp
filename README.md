@@ -235,8 +235,8 @@ expected_total_points: int
       a. `ver_three_egg_down_pan`
         - Simulates how 3 vertically adjacent eggs would behave and interact with a single pan.
   13. `ver_two_egg`
-     - Tests the movements of 2 vertically adjacent eggs across different movements.
-     - Simulates how 2 vertically adjacent eggs would behave.
+      - Tests the movements of 2 vertically adjacent eggs across different movements.
+      - Simulates how 2 vertically adjacent eggs would behave.
       
          
 ## [💞] Bonus Features
