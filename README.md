@@ -166,6 +166,7 @@ unit_testing/
   - Egg presence matches expected value.
 
 **Test Level File Format:**
+
 File name: `test_file_name.in`
 ```
 level_rows: int
@@ -193,6 +194,7 @@ expected_no_eggs: bool (int: 0 or 1)
   - Total points match expected points.
 
 **Test Level File Format:**
+
 File name: `test_file_name.in`
 ```
 string_input: str    #IMPORTANT: len(string_input) >= moves_left
