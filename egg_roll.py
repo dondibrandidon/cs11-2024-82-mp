@@ -1,67 +1,88 @@
-import os
-import subprocess
-import sys
-import time
+import os, subprocess                       # for clear_screen
+import sys                                  # for clear_screen and file handling
+import time                                 # for delay
+from dataclasses import dataclass, astuple  # for TileSet
 
+@dataclass
+class TileSet:
+    egg_key: str
+    grass_key: str
+    wall_key: str
+    pan_key: str
+    empty_key: str
+    full_key: str
+    magic_key: str
+
+global DEBUG, EMOJI_SET, ASCII_SET
+DEBUG: bool = False # This toggles debugging prints and disables clear_screens for egg_roll.py
+EMOJI_SET: TileSet = TileSet(egg_key='🥚', grass_key='🟩', wall_key='🧱', pan_key='🍳', empty_key='🪹', full_key='🪺', magic_key='✨')
+ASCII_SET: TileSet = TileSet(egg_key='0', grass_key='.', wall_key='#', pan_key='P', empty_key='O', full_key='@', magic_key='*')
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 class Level:
     '''
-    This is the main playing field that the user will see.
-    Level takes a tuple of lists of characters: grid.
+    Each Level object has:
+    1. main gameplay interactible 'grid' of tiles
+    2. level maker's set move 'limit'
+    3. a list of the postions of the 'eggs' in (i, j)
+    4. number of grid's 'rows'
+    5. number of grid's 'cols'
+    6. the 'key' for the relevant graphic
     '''
-    def __init__(self, grid, limit):
-        self.grid = list(list(char for char in row if char != '\n') for row in grid)
-        self.limit = 0 if limit == "inf" else limit
-        self.rows = len(self.grid)
-        self.cols = len(self.grid[0])
 
-        #Level.eggs stores the position of all active eggs on the grid
-        self.eggs = []
+    def __init__(self, grid: tuple[tuple[str, ...], ...], max_moves: int | str) -> None:
+        self.grid: list[list[str]] = list(list(char for char in row if char != '\n') for row in grid)
+        self.limit: int = 0 if max_moves == "inf" else int(max_moves)
+        self.rows: int = len(self.grid)
+        self.cols: int = max(len(row) for row in self.grid)
+
+        # This sets the appropriate TileSet depending on the grid
+        self.key: TileSet = EMOJI_SET if any(char in astuple(EMOJI_SET) for row in self.grid for char in row) else ASCII_SET
+
+        # This stores the position of all active eggs on the grid
+        self.eggs: list[tuple[int, int]] = []
         for i in range(self.rows):
             for j in range(self.cols):
-                if grid[i][j] == '🥚' or grid[i][j] == '0':
-                    self.eggs.append((i, j))
+                try:
+                    if grid[i][j] == '🥚' or grid[i][j] == '0':
+                        self.eggs.append((i, j))
+                except:
+                    pass
+
         
-    def __str__(self):
+    def __str__(self) -> str:
         return '\n'.join(tuple(''.join(row) for row in self.grid))
 
-    def copy(self):
+    def get_copy(self): # -> Level
         return Level(self.grid, self.limit)
+    
+    def get_grid(self) -> list[list[str]]:
+        return self.grid
 
-    def tilt(self, degree, energy):
-        '''
-        This is the main player interaction.
-        '''
+    def get_limit(self) -> int:
+        return self.limit
+    
+    def get_rows(self) -> int:
+        return self.rows
+    
+    def get_cols(self) -> int:
+        return self.cols
 
-        #text-based check (defaults to emoji version)
-        try:
-            if TEXT_BASED:
-                EGG_KEY = '0'
-                GRASS_KEY = '.'
-                WALL_KEY = '#'
-                PAN_KEY = 'P'
-                EMPTY_KEY = 'O'
-                FULL_KEY = '@'
-            else:
-                raise Exception()
-        except:
-            EGG_KEY = '🥚'
-            GRASS_KEY = '🟩'
-            WALL_KEY = '🧱'
-            PAN_KEY = '🍳'
-            EMPTY_KEY = '🪹'
-            FULL_KEY = '🪺'
+    def get_key(self) -> TileSet:
+        return self.key
 
-        #This will be used to monitor points made or lost due to this tilt action
-        points = 0
+    # This is the main player interaction!
+    def tilt(self, degree: str, moves_left: int | str) -> tuple[int, list[str], bool]:
+        assert degree in 'fFbBrRlL'
 
-        #This will be used to add points when an egg reaches an empty nest
-        try:
-            energy = 0 + energy
-        except:
-            energy = 0
+        # This will be used to monitor points made or lost due to this tilt action
+        points: int = 0
 
-        #This will be used to animate the egg rolling, first frame is contingency for stuck eggs
-        tweens = [str(self)]
+        # This will be used to add points when an egg reaches an empty nest
+        energy: int = 0 if moves_left == "inf" else int(moves_left)
+
+        # This will be used to animate the egg rolling, first frame is contingency for stuck eggs
+        tweens: list[str] = [str(self)]
 
         '''
         Tiles for reference:
@@ -73,134 +94,137 @@ class Level:
         '🪺' or '@' - full nest   (blocks egg)
         '''
 
-        #This tracks eggs that might still move
+        # This list tracks eggs that might still move
         if degree in 'fFlL':
-            #During forward and leftward tilts, the grid is processed uppermost then leftmost first to prevent two eggs going into same spot
-            roll_eggs = sorted(self.eggs)
+            # During forward and leftward tilts, the grid is processed uppermost then leftmost first to prevent two eggs from going into same spot
+            roll_eggs: list[tuple[int, int]] = sorted(self.eggs)
         elif degree in 'bBrR':
-            #During backward and rightward tilts, the grid is processed lowermost then rightmost first to prevent two eggs going into same spot
+            # During backward and rightward tilts, the grid is processed lowermost then rightmost first to prevent two eggs from going into same spot
             roll_eggs = sorted(self.eggs)[::-1]
         else:
             raise ValueError(f"Level.tilt() received: {degree}")
 
-        #This tracks eggs that have stopped moving
-        wall_eggs = []
+        # This list tracks eggs that have stopped moving
+        wall_eggs: list[tuple[int, int]] = []
 
         while True:
-            for (i, j) in tuple(roll_eggs):
+            for (i, j) in tuple(roll_eggs): # tuple-ized since roll_eggs might change
+
                 if DEBUG:
                     print(f"# roll_eggs: {roll_eggs}, wall_eggs: {wall_eggs}")#, super_eggs: {super_eggs}")
                     print('#' + str(self) + '#')
+                
                 if degree in 'fF':
-                    #Tilt Forward
-                    if i == 0 or self.grid[i-1][j] in WALL_KEY+FULL_KEY or (i-1, j) in wall_eggs:
+                    # Tilt Forward
+                    if i == 0 or self.grid[i-1][j] in self.key.wall_key + self.key.full_key or (i-1, j) in wall_eggs:
                         roll_eggs.remove((i, j))
                         wall_eggs.append((i, j))
-                    elif self.grid[i-1][j] in PAN_KEY:
+                    elif self.grid[i-1][j] in self.key.pan_key:
                         roll_eggs.remove((i, j))
-                        self.grid[i][j] = GRASS_KEY
+                        self.grid[i][j] = self.key.grass_key
                         points -= 5
-                    elif self.grid[i-1][j] in EMPTY_KEY:
+                    elif self.grid[i-1][j] in self.key.empty_key:
                         roll_eggs.remove((i, j))
-                        self.grid[i][j] = GRASS_KEY
-                        self.grid[i-1][j] = FULL_KEY
+                        self.grid[i][j] = self.key.grass_key
+                        self.grid[i-1][j] = self.key.full_key
                         points += 10 + energy
                     else:
                         roll_eggs.remove((i, j))
-                        self.grid[i][j] = GRASS_KEY
+                        self.grid[i][j] = self.key.grass_key
                         roll_eggs.append((i-1, j))
-                        self.grid[i-1][j] = EGG_KEY
+                        self.grid[i-1][j] = self.key.egg_key
                     
                 elif degree in 'bB':
-                    #Tilt Backward
-                    if i+1 == len(self.grid) or self.grid[i+1][j] in WALL_KEY+FULL_KEY or (i+1, j) in wall_eggs:
+                    # Tilt Backward
+                    if i+1 == len(self.grid) or self.grid[i+1][j] in self.key.wall_key + self.key.full_key or (i+1, j) in wall_eggs:
                         roll_eggs.remove((i, j))
                         wall_eggs.append((i, j))
-                    elif self.grid[i+1][j] in PAN_KEY:
+                    elif self.grid[i+1][j] in self.key.pan_key:
                         roll_eggs.remove((i, j))
-                        self.grid[i][j] = GRASS_KEY
+                        self.grid[i][j] = self.key.grass_key
                         points -= 5
-                    elif self.grid[i+1][j] in EMPTY_KEY:
+                    elif self.grid[i+1][j] in self.key.empty_key:
                         roll_eggs.remove((i, j))
-                        self.grid[i][j] = GRASS_KEY
-                        self.grid[i+1][j] = FULL_KEY
+                        self.grid[i][j] = self.key.grass_key
+                        self.grid[i+1][j] = self.key.full_key
                         points += 10 + energy
                     else:
                         roll_eggs.remove((i, j))
-                        self.grid[i][j] = GRASS_KEY
+                        self.grid[i][j] = self.key.grass_key
                         roll_eggs.append((i+1, j))
-                        self.grid[i+1][j] = EGG_KEY
+                        self.grid[i+1][j] = self.key.egg_key
 
                 elif degree in 'rR':
-                    #Tilt Rightward
-                    if j+1 == len(self.grid[0]) or self.grid[i][j+1] in WALL_KEY+FULL_KEY or (i, j+1) in wall_eggs:
+                    # Tilt Rightward
+                    if j+1 == len(self.grid[0]) or self.grid[i][j+1] in self.key.wall_key + self.key.full_key or (i, j+1) in wall_eggs:
                         roll_eggs.remove((i, j))
                         wall_eggs.append((i, j))
-                    elif self.grid[i][j+1] in PAN_KEY:
+                    elif self.grid[i][j+1] in self.key.pan_key:
                         roll_eggs.remove((i, j))
-                        self.grid[i][j] = GRASS_KEY
+                        self.grid[i][j] = self.key.grass_key
                         points -= 5
-                    elif self.grid[i][j+1] in EMPTY_KEY:
+                    elif self.grid[i][j+1] in self.key.empty_key:
                         roll_eggs.remove((i, j))
-                        self.grid[i][j] = GRASS_KEY
-                        self.grid[i][j+1] = FULL_KEY
+                        self.grid[i][j] = self.key.grass_key
+                        self.grid[i][j+1] = self.key.full_key
                         points += 10 + energy
                     else:
                         roll_eggs.remove((i, j))
-                        self.grid[i][j] = GRASS_KEY
+                        self.grid[i][j] = self.key.grass_key
                         roll_eggs.append((i, j+1))
-                        self.grid[i][j+1] = EGG_KEY
+                        self.grid[i][j+1] = self.key.egg_key
 
                 elif degree in 'lL':
-                    #Tilt Leftward
-                    if j == 0 or self.grid[i][j-1] in WALL_KEY+FULL_KEY or (i, j-1) in wall_eggs:
+                    # Tilt Leftward
+                    if j == 0 or self.grid[i][j-1] in self.key.wall_key + self.key.full_key or (i, j-1) in wall_eggs:
                         roll_eggs.remove((i, j))
                         wall_eggs.append((i, j))
-                    elif self.grid[i][j-1] in PAN_KEY:
+                    elif self.grid[i][j-1] in self.key.pan_key:
                         roll_eggs.remove((i, j))
-                        self.grid[i][j] = GRASS_KEY
-                        points -= 5
-                    elif self.grid[i][j-1] in EMPTY_KEY:
+                        self.grid[i][j] = self.key.grass_key
+                    elif self.grid[i][j-1] in self.key.empty_key:
                         roll_eggs.remove((i, j))
-                        self.grid[i][j] = GRASS_KEY
-                        self.grid[i][j-1] = FULL_KEY
+                        self.grid[i][j] = self.key.grass_key
+                        self.grid[i][j-1] = self.key.full_key
                         points += 10 + energy
                     else:
                         roll_eggs.remove((i, j))
-                        self.grid[i][j] = GRASS_KEY
+                        self.grid[i][j] = self.key.grass_key
                         roll_eggs.append((i, j-1))
-                        self.grid[i][j-1] = EGG_KEY
+                        self.grid[i][j-1] = self.key.egg_key
                 else:
                     raise ValueError(f"Level.tilt() received: {degree}")
+                
             if not roll_eggs:
-                #If there are no more moving eggs
+                # If there are no more moving eggs,
                 break
             else:
-                #This appends the last state of the level
+                # This appends the current state of the Level
                 tweens.append(str(self))
 
-        #This "re-sorts" roll_eggs turned wall_eggs back to self.eggs
+        # This properly re-sorts roll_eggs turned wall_eggs back to self.eggs
         if degree in 'lLfF':
                 self.eggs = sorted(wall_eggs)
         elif degree in 'rRbB':
                 self.eggs = sorted(wall_eggs)[::-1]
 
-        #The boolean here returns game_end
+        # The returned raw boolean is whether there are any eggs left
         if not self.eggs:
-            return self.grid, points, tweens, True
+            return points, tweens, True
         else:
-            return self.grid, points, tweens, False
+            return points, tweens, False
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-def clear_screen(DEBUG):
+def clear_screen(DEBUG: bool) -> None:
     '''
     Clears the terminal screen, if any, while DEBUG is False
     '''
+
     if not DEBUG:
-        #This newline is important, if clear_screen is called after a print with end=''
+        # This newline is here for whenever clear_screen is called after a print(*args, end='')
         print()
         if sys.stdout.isatty():
-            clear_cmd = 'cls' if os.name == 'nt' else 'clear'
+            clear_cmd: str = 'cls' if os.name == 'nt' else 'clear'
             try:
                 subprocess.run([clear_cmd])
             except:
@@ -209,48 +233,53 @@ def clear_screen(DEBUG):
         print("# clear_screen() called")
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-def game_state(level_file, factor=1):
+def game_state(level_file, factor=1) -> tuple[Level, list[str], int]:
     '''
-    This is a SINGLE instance of level_file gameplay.
-    The repeat prompt happens in the menu() call, to make it neater.
-    '''
-    num_of_rows = int(level_file.readline())
+    This is an instance of level_file gameplay.
+    The repeat prompt happens in the main_menu call, to make it neater.
 
-    #This decrements with each succesful tilt of the player
-    moves_left = level_file.readline()
+    The factor multiplies the time.sleep arg, for testing
+    '''
+
+    num_of_rows: int = int(level_file.readline())
+
+    # This decrements with each succesful tilt of the player, accepts "inf" as an input
+    moves_left: int | str = level_file.readline()
+
     if moves_left != "inf\n":
         moves_left = int(moves_left)
     else:
         moves_left = "inf"
 
-    grid = tuple(list(level_file.readline()) for i in range(num_of_rows))
+    # This is the grid of tiles for Level, still has '\n'
+    grid = tuple(tuple(str(level_file.readline())) for i in range(num_of_rows))
 
-    #This sets the current level for the game
-    current_level = Level(grid, moves_left)
+    # This sets the current level for the game
+    current_level: Level = Level(grid, moves_left)
     
-    #This logs past moves the player has made
-    past_moves = []
+    # This logs past moves the player has made
+    past_moves: list[str] = []
 
-    #This converts arrow symbol to string
-    move_name = {'↑':"forward", '↓':"backward", '→':"rightward", '←':"leftward"}
+    # This converts arrow symbol to string
+    move_name: dict[str, str] = {'↑':"forward", '↓':"backward", '→':"rightward", '←':"leftward"}
     
-    #The player starts with zero points
-    points = 0
+    # The player starts with zero points
+    points: int = 0
     
-    #This tracks the current player input
-    player = ""
+    # This tracks the current player input
+    player: tuple[str, ...]
     
-    #This tracks whether the game is finished
-    game_end = False
+    # This tracks whether the game is finished
+    game_end: bool = False
 
-    #This stores last level states as a Level
-    undo_levels = [current_level.copy()]
+    # This stores last level states as a Level
+    undo_levels: list[Level] = [current_level.get_copy()]
 
-    #This stores last scores (to be used with undo_levels)
-    undo_points = [points]
+    # This stores last scores (to be used with undo_levels)
+    undo_points: list[int] = [points]
 
-    #Start of gameplay
-    while moves_left == "inf" or moves_left >= 0:
+    # >>> Start of gameplay <<<
+    while str(moves_left) == "inf" or int(moves_left) >= 0:
 
         if DEBUG:
             print("# START OF UNDO CHECK")
@@ -260,7 +289,7 @@ def game_state(level_file, factor=1):
                 print()
             print("# END OF UNDO CHECK")
 
-        #>>>>> START of gameplay terminal UI/UX
+        # >> START of gameplay terminal UI/UX <<
         try:
             clear_screen(DEBUG)
         except NameError:
@@ -275,7 +304,6 @@ def game_state(level_file, factor=1):
 
         print()
 
-        #This displays the grid to the player
         print(current_level)
         print()
         
@@ -294,16 +322,16 @@ def game_state(level_file, factor=1):
 
         print("Energy left: ", end='')
         try:
-            if moves_left == "inf":
+            if str(moves_left) == "inf":
                 print(colored("∞", "red"))
-            elif moves_left == 1:
+            elif int(moves_left) == 1:
                 print(colored(moves_left, "red"))
-            elif moves_left <= current_level.limit//2:
+            elif int(moves_left) <= current_level.limit//2:
                 print(colored(moves_left, "yellow"))
             else:
                 print(colored(moves_left, "green"))
         except NameError:
-            if moves_left == "inf":
+            if str(moves_left) == "inf":
                 print("∞")
             else:
                 print(moves_left)
@@ -311,42 +339,37 @@ def game_state(level_file, factor=1):
         print(f"Points collected: {points}")
 
         try:
-            player = tuple(char for char in input(colored("Next move/s:", attrs=["reverse"]) + ' '))
+            player = tuple(str(char) for char in input(colored("Next move/s:", attrs=["reverse"]) + ' '))
         except NameError:
-            player = tuple(char for char in input("Next move/s: "))
-        #END of gameplay terminal UI/UX <<<<<
+            player = tuple(str(char) for char in input("Next move/s: "))
 
-#-----------------------------------------------------------------#
-        #Start of input processing
+        # >> END of gameplay terminal UI/UX <<
+
+
+        # >> Start of input processing <<
+
         if ''.join(player).lower() == 'exit':
-            #EXIT SCENARIO
+            # EXIT SCENARIO
             game_end = True
             break
 
         elif ''.join(player).lower() == 'undo':
-            #UNDO SCENARIO
+            # UNDO SCENARIO
             if len(undo_levels) > 1:
                 past_moves.append('⎌')
 
-                undo_temp_grid = str(undo_levels.pop()).split('\n')
+                undo_temp_grid: list[str] = str(undo_levels.pop()).split('\n')
+                current_level = undo_levels[-1].get_copy()
                 undo_points.pop()
-                current_level = undo_levels[-1].copy()
                 points = undo_points[-1]
+
                 try:
                     moves_left -= 1
                 except:
                     pass
 
-                #Undo animation happens here
-                try:
-                    if TEXT_BASED:
-                        MAGIC_KEY = 'X'
-                    else:
-                        raise Exception()
-                except:
-                    MAGIC_KEY = '✨'
-                
-                for i in range(current_level.rows+1):
+                # Undo animation happens here
+                for i in range(current_level.get_rows()+1):
                     if DEBUG:
                         print(f"i: {i}")
                     
@@ -359,14 +382,14 @@ def game_state(level_file, factor=1):
                     print()
 
                     for _ in range(i):
-                        print(MAGIC_KEY*current_level.cols)
-                    for j in range(i, current_level.rows):
+                        print(current_level.get_key().magic_key*current_level.get_cols())
+                    for k in range(i, current_level.get_rows()):
                         if DEBUG:
-                            print(f"j: {j}")
+                            print(f"# k: {k}")
 
-                        print(undo_temp_grid[j])
+                        print(undo_temp_grid[k])
 
-                    time.sleep((1/current_level.rows) * factor)
+                    time.sleep((1/current_level.get_rows()) * factor)
 
             else:
                 print("You can't go back any further...")
@@ -374,7 +397,7 @@ def game_state(level_file, factor=1):
                 continue
 
         else:
-            #INPUT SCENARIO
+            # INPUT SCENARIO
             for char in player:
 
                 if DEBUG:
@@ -382,28 +405,28 @@ def game_state(level_file, factor=1):
 
                 if char in "fFbBrRlL":
 
-                    #THIS WHERE THE TILT RETURNS VALUES
-                    current_level.grid, temp_points, wowaka, game_end = current_level.tilt(char, moves_left)
+                    # THIS WHERE THE TILT RETURNS VALUES
+                    temp_points, wowaka, game_end = current_level.tilt(char, moves_left)
 
-                    #Logging of move to past_moves list
+                    # Logging of move to past_moves list
                     if char in 'fF':
-                        #Tilt Forward
+                        # Tilt Forward
                         past_moves.append('↑')
                     elif char in 'bB':
-                        #Tilt Backward
+                        # Tilt Backward
                         past_moves.append('↓')
                     elif char in 'rR':
-                        #Tilt Rightward
+                        # Tilt Rightward
                         past_moves.append('→')
                     elif char in 'lL':
-                        #Tilt Leftward
+                        # Tilt Leftward
                         past_moves.append('←')
 
-                    #This checks if any eggs rolled (if none display same frame else remove buffer frame)
+                    # This checks if any eggs rolled (if none display same frame, else remove buffer frame)
                     if len(wowaka) > 1:
                         wowaka = wowaka[1:]
 
-                    #Rolling animation happens here
+                    # Rolling animation happens here
                     for frame in wowaka:
                         try:
                             try:
@@ -433,35 +456,40 @@ def game_state(level_file, factor=1):
                     except NameError:
                         print("# clear_screen(DEBUG)")
 
-                    #Undo processing here
-                    undo_levels.append(current_level.copy())
+                    # Undo processing here
+                    undo_levels.append(current_level.get_copy())
                     undo_points.append(points)
 
-                    #Game state check (per individual move)
-                    if game_end or (moves_left != "inf" and moves_left <= 0):
+                    # Game state check (per individual move)
+                    if game_end or (moves_left != "inf" and int(moves_left) <= 0):
                         break
                 else:
                     pass
 
-        #Game state check (per player input)
-        if game_end or (moves_left != "inf" and moves_left <= 0):
+        # Game state check (per player input)
+        if game_end or (moves_left != "inf" and int(moves_left) <= 0):
             break
     
-    #Start of GAME END STATE here
+
+    # >>> Start of GAME END STATE here <<<
 
     try:
-        #Short last game state lag to not make end too abrupt
-        clear_screen(DEBUG)
-        print("[!!!]")
-        print()
-        print(str(current_level))
-        time.sleep(0.5 * factor)
         clear_screen(DEBUG)
     except NameError:
-        if DEBUG:
-            print("# Game over screen")
+        print("# clear_screen(DEBUG)")
+
+    # Short lag for last frame to make end less abrupt
+    print("[!!!]")
+    print()
+    print(str(current_level))
+    time.sleep(0.5 * factor)
+
+    try:
+        clear_screen(DEBUG)
+    except NameError:
+        print("# clear_screen(DEBUG)")
     
-    #Game Over Screen here
+    # Game Over Screen here
     print("<Game Over>")
     print()
 
@@ -484,11 +512,10 @@ def game_state(level_file, factor=1):
     print()
 
     return current_level, past_moves, points
-    #End of game_state()
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-def argument_handling():
-    #Gameplay initialization
+def argument_handling() -> None:
+    # Gameplay initialization
     print("<Welcome to EGG ROLL!>")
     print()
     try:
@@ -497,7 +524,7 @@ def argument_handling():
                 try:
                     game_state(level_file)
                 except FileNotFoundError:
-                    #End program if argument level_file invalid
+                    # End program if argument level_file invalid
                     try:
                         clear_screen(DEBUG)
                     except NameError:
@@ -505,7 +532,7 @@ def argument_handling():
                     print("File argument invalid! Please open game with valid file location...")
                     print()
                     return
-                repeat = input("Type [Yes] to replay level, else exit game: ")
+                repeat: str = input("Type [Yes] to replay level, else exit game: ")
                 if repeat.lower() == 'yes':
                     continue
                 else:
@@ -518,25 +545,20 @@ def argument_handling():
         print("No file argument! Please open file with valid file location argument...")
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-#Program initialization
+# Program initialization
 
-global DEBUG, TEST_BASED
-DEBUG = False #This toggles insider info print and disables clear_screen calls
-TEXT_BASED = False #This disables emojis and utilizes ASCII instead (WARNING!: REQUIRES ASCII-BASED LEVEL_FILE)
-
-if DEBUG:
-    print("~~~~~~~~~~~~~~~~~")
-    print("# EGG ROLL STARTED: DEBUG IS ON")
-
-try:
-    from termcolor import colored, cprint
-    if DEBUG:
-        print("# termcolor loaded")
-except ImportError:
-    if DEBUG:
-        print("# termcolor NOT loaded")
-    pass
-
-#This is to prevent menu from running when imported for unit testing
+# This is to prevent argument_handling from running when imported for unit testing
 if __name__ == '__main__':
+    if DEBUG:
+        print("# egg_roll.py DEBUG IS ON")
+
+    try:
+        from termcolor import colored, cprint
+        if DEBUG:
+            print("# termcolor loaded")
+    except ImportError:
+        if DEBUG:
+            print("# termcolor NOT loaded")
+        pass
+
     argument_handling()

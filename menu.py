@@ -1,12 +1,14 @@
-import os
-import sys
-import time
-import datetime
+import os       # for file handling
+import time     # for delay
+import datetime # for highscore time logging
+from egg_roll import clear_screen, game_state
 
-from egg_roll import Level, clear_screen, game_state
+global DEBUG
+DEBUG: bool = False # This toggles debugging prints and disables clear_screens for menu.py
 
+
+# The format of a highscore file is as follows:
 '''
-#The format of a highscore file is as follows:
 player_score1: int
 player_score_datetime1: datetime.datetime
 player_score_name1: str
@@ -14,15 +16,16 @@ player_score_name1: str
 player_score5: int
 player_score_datetime5: datetime.datetime
 player_score_name5: str
-# Only top five (5) players are kept by order of highest score, oldest datetime, alphabetic
 '''
-def generate_highscore_files(levels):
+# Note that only the TOP 5 mayors are kept in memory
+def generate_highscore_files(levels) -> None:
     for level in levels:
         if os.path.isfile(f".{os.sep}levels{os.sep}_score_{level[:-3]}.txt"):
             pass
         else:
             if DEBUG:
-                print(f"highscore file made for {level}")
+                print(f"# highscore file made for {level}")
+            
             with open(f".{os.sep}levels{os.sep}_score_{level[:-3]}.txt", 'a') as score_file:
                 hold_names = ("Stanley Aubudon", "Nein Gizzard", "Jefferyi Aves", "Philip Ketupa", "Yangyeom Yangyeom")
                 for name in hold_names:
@@ -30,42 +33,58 @@ def generate_highscore_files(levels):
                     score_file.write("0\n")
                     score_file.write(f"{datetime.datetime.today()}\n")
 
-def highscore_handling(level_file, score):
+# This is called after game_state is returned to main_menu
+def highscore_handling(level_file, score) -> None:
     with open(f".{os.sep}levels{os.sep}_score_{str(level_file)[:-3]}.txt") as score_file:
-        player_name = input("> And you were Mayor ")
-        
+        player_name: str = input("""\
+ ______________________________________...
+(______________________________________...
+ |
+ | Thank you for your hard work mayor!
+ |
+ |
+ |
+ |
+ |
+ .
+ . Please sign your name below,
+ . \
+""")
+
         try:
             clear_screen(DEBUG)
         except NameError:
             print("# clear_screen(DEBUG)")
 
-        score_hold = [(player_name, score, datetime.datetime.today())]
+        score_hold: list[tuple[str, int, datetime.datetime]] = [(player_name, score, datetime.datetime.today())]
         for _ in range(5):
             score_hold.append((str(score_file.readline())[:-1], int(score_file.readline()), datetime.datetime.strptime(str(score_file.readline())[:-1], '%Y-%m-%d %H:%M:%S.%f')))
         
         if DEBUG:
-            print(f"BEFORE: {score_hold}")
-        score_hold.sort(key = lambda x: (- int(x[1]), x[2], x[0]))
+            print(f"# BEFORE: {score_hold}")
+        
+        # The TOP 5 mayors are ordered by of highest score, then oldest datetime, then alphabetically
+        score_hold.sort(key = lambda x: (-int(x[1]), x[2], x[0]))
         score_hold.pop()
         if DEBUG:
-            print(f"AFTER: {score_hold}")
+            print(f"# AFTER: {score_hold}")
 
-        longest_display = max(len(str(max(score_hold, key = lambda x: x[1])[1])), 6)
-        longest_name = max(len(str(max(score_hold, key = lambda x: x[0])[0])), 18)
+        longest_score: int = max(max(len(str(hold[1])) for hold in score_hold), 6)
+        longest_name: int = max(max(len(hold[0]) for hold in score_hold) + 6, 18)
 
         if DEBUG:
-            print(longest_display)
-        
+            print(f"# longest_score: {longest_score}")
+            print(f"# longest_name: {longest_name}")
         
         print(f"~ ChickenCity *HALL OF FAME* for {level_file} ~")
         print()
         time.sleep(1)
 
-        print("SCORES" + " "*(longest_display-6) + " | CHICKENCITY MAYORS" + " "*(longest_name-18) + " | TIME")
+        print("SCORES" + " "*(longest_score-6) + " | CHICKENCITY MAYORS" + " "*(longest_name-18) + " | TIME")
         time.sleep(0.5)
 
         for (name, score, date) in score_hold:
-            print(f"{score}{' '*(longest_display-len(str(score)))} | Mayor {name}{' '*(longest_name-len(str(name))-6)} | {date.strftime('%d %b %Y %H:%S')}")
+            print(f"{score}{' '*(longest_score-len(str(score)))} | Mayor {name}{' '*(longest_name-len(str(name))-6)} | {date}")
             time.sleep(0.5)
         
         time.sleep(0.5)
@@ -76,7 +95,7 @@ def highscore_handling(level_file, score):
             score_file.write(f"{score}\n")
             score_file.write(f"{date}\n")
 
-def menu():
+def main_menu() -> None:
     '''
     This is the game's MAIN MENU.
     '''
@@ -93,9 +112,9 @@ def menu():
             print()
             return
 
-        #Gameplay initialization
+        # Gameplay initialization
         if not level_list:
-            #End program if no level_file can be loaded
+            # End program if no level_file can be loaded
             print("<Welcome to EGG ROLL!>")
             print()
             print('No level files available...')
@@ -153,7 +172,7 @@ def menu():
                         if repeat.lower() == 'yes':
                             continue
                         else:
-                            print()
+                            clear_screen(DEBUG)
                             highscore_handling(choice, score)
                             print()
                             input("Press [ENTER] to continue...")
@@ -179,24 +198,20 @@ def menu():
         continue
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-#Program initialization
+# Program initialization
 
-global DEBUG
-DEBUG = False #This toggles insider info print and disables clear_screen calls
-
-if DEBUG:
-    print("~~~~~~~~~~~~~~~~~")
-    print("# MAIN MENU STARTED: DEBUG IS ON")
-
-try:
-    from termcolor import colored, cprint
-    if DEBUG:
-        print("# termcolor loaded")
-except ImportError:
-    if DEBUG:
-        print("# termcolor NOT loaded")
-    pass
-
-#This is to prevent menu from running when imported for unit testing
+# This is to prevent main_menu from running when imported for unit testing
 if __name__ == '__main__':
-    menu()
+    if DEBUG:
+        print("# menu.py DEBUG IS ON")
+
+    try:
+        from termcolor import colored, cprint
+        if DEBUG:
+            print("# termcolor loaded")
+    except ImportError:
+        if DEBUG:
+            print("# termcolor NOT loaded")
+        pass
+
+    main_menu()
