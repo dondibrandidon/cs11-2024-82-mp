@@ -147,6 +147,13 @@ unit_testing/
     ├── file2.in
     └── ...
 ```
+### **Prerequisites**
+- Python 3.x
+- `pytest` module
+  - (If `pytest` not available, you can run the script directly as it has a built-in function to run tests)
+- [Directory](https://github.com/dondibrandidon/cs11-2024-82-mp/blob/main/README.md#directory) and file structure mentioned.
+
+### **Functions**
 
 ### **`test_Level_tilt`**
 - **Purpose**: Tests the `tilt` method.
@@ -157,6 +164,7 @@ unit_testing/
   - Point increment matches expected points.
   - Egg presence matches expected value.
 **Test Level File Format:**
+File name: `test_file_name.in`
 ```
 level_rows: int
 moves_left: int
@@ -182,6 +190,7 @@ expected_no_eggs: bool (int: 0 or 1)
   - List of moves matches expected moves.
   - Total points match expected points.
 **Test Level File Format:**
+File name: `test_file_name.in`
 ```
 string_input: str    #IMPORTANT: len(string_input) >= moves_left
 level_rows: int
@@ -196,8 +205,6 @@ row_level_rows: str
 expected_moves: str
 expected_total_points: int
 ```
-
-
 
 ### **Test Levels**
 #### **in `_test_Level_Tilt`**
@@ -262,7 +269,9 @@ expected_total_points: int
      - Simulates a condition where an egg goes in an empty nest while having leftover moves. 
   7. `test_all_directions`
      - Tests all the movements.
-
+### *Notes*
+- Ensure that test files are properly formatted: `test_file_name.in`.
+- While you can run the script itself for testing, using `pytest` is advisable for more detailed logs and better debugging capabilities.
    
 ## [💞] Bonus Features
 
