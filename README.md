@@ -221,11 +221,14 @@ expected_total_points: int
      - Simulates how 2 horizontally adjacent eggs would behave.
   8. `one_move`
      - Tests the egg's horizontal (lL/rR) and vertical (fF/bB) movement.
-  9.  `plus_remaining_moves`
+  9. `plus_remaining_moves`
      - Tests how the number of remaining moves is computed to the score when an egg goes in an empty nest.
      - Simulates a condition where an egg goes in an empty nest while having leftover moves.
-  
   10. `running_bond`
+  11. 
+     
+  
+  12. 
      - Tests how levels and the grid are affected by empty spaces `" "` and how it affects the movement of the egg.
      - Level is named after the alternating pattern formed by the empty spaces. (https://www.dimensions.com/element/running-bond)
   11. `stuck`
