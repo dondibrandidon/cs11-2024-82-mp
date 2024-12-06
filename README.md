@@ -23,9 +23,9 @@ Submission of Group **#82** (*daegu_original*) from class WFJ/MUV1:\
 - `.|levels|*` - stores all `.in` gameplay levels for egg_roll level select
   - `.|levels|level_file.in` (sample valid level file)
 
-- `_test_er.py` - **unit testing program**
+- `test_er.py` - **unit testing program**
 - `.|unit_testing|*` - stores all testing files for egg_roll functionalities
-  - `.|unit_testing|_test_Level_Tilt|test_case.in`\
+  - `.|unit_testing|_test_Level_tilt|test_case.in`\
       (sample test case file for Level.tilt())
   - `.|unit_testing|_test_game_state|test_case.in`\
       (sample test case file for game_state())
@@ -33,18 +33,18 @@ Submission of Group **#82** (*daegu_original*) from class WFJ/MUV1:\
 
 ## [🥚] How to Play
 
-1. Via *Terminal*
+1. Opening the file: *Terminal*
    - Go to the egg_roll release folder.
    - Two methods to play levels:\
      a. **Recommended**, through the Main Menu: `python3.12 menu.py`\
      b. Direct-to-level, with a level file: `python3.12 egg_roll.py .|valid_location|level_file.in`\
       &nbsp;&nbsp;&nbsp;&nbsp;*Method (b) is primarily for testing and does NOT save highscores.
 
-2. Via _Main Menu_
+2. Navigating the: *Main Menu*
    - To play, input an available level's full `file_name.in` from the selection.
    - To quit the game, type `quit` then `yes`.
 
-3. Via _Level Interface_
+3. Playing a level: *Level Interface*
    - To move the eggs on the board, type a sequence of any valid characters:
      - `F` or `f` to tilt the board forwards    (moving the eggs up)
      - `B` or `b` to tilt the board backwards   (moving the eggs down)
@@ -107,11 +107,23 @@ You are the mayor of ChickenCity [🐔] tasked to give all of the city's egg a s
 
 1. egg_roll.py
    ```python
-   pass
+   class Level:
+      def def __init__(self, grid: tuple[tuple[str, ...], ...], max_moves: int | str) -> None
+      def tilt(self, degree: str, moves_left: int | str) -> tuple[int, list[str], bool]
+   
+   def clear_screen(DEBUG: bool) -> None
+
+   def game_state(level_file, factor=1) -> tuple[Level, list[str], int]
+
+   def argument_handling() -> None
    ```
 2. menu.py
    ```python
-   pass
+   def generate_highscore_files(levels) -> None
+
+   def highscore_handling(level_file, score) -> None
+
+   def main_menu() -> None
    ```
 
 

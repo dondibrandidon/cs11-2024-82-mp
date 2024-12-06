@@ -27,7 +27,8 @@ class Level:
     3. a list of the postions of the 'eggs' in (i, j)
     4. number of grid's 'rows'
     5. number of grid's 'cols'
-    6. the 'key' for the relevant graphic
+    6. a tuple of the positions of the 'gaps' in (i, j)
+    7. the 'key' for the relevant TileSet
     '''
 
     def __init__(self, grid: tuple[tuple[str, ...], ...], max_moves: int | str) -> None:
@@ -35,20 +36,21 @@ class Level:
         self.limit: int = 0 if max_moves == "inf" else int(max_moves)
         self.rows: int = len(self.grid)
         self.cols: int = max(len(row) for row in self.grid)
-
+        
         # This sets the appropriate TileSet depending on the grid
         self.key: TileSet = EMOJI_SET if any(char in astuple(EMOJI_SET) for row in self.grid for char in row) else ASCII_SET
 
         # This stores the position of all active eggs on the grid
         self.eggs: list[tuple[int, int]] = []
+        gaps_holder: list[tuple[int, int]] = []
         for i in range(self.rows):
             for j in range(self.cols):
                 try:
-                    if grid[i][j] == '🥚' or grid[i][j] == '0':
+                    if self.grid[i][j] == '🥚' or self.grid[i][j] == '0':
                         self.eggs.append((i, j))
                 except:
-                    pass
-
+                    gaps_holder.append((i, j))
+        self.gaps = tuple(gaps_holder)
         
     def __str__(self) -> str:
         return '\n'.join(tuple(''.join(row) for row in self.grid))
@@ -111,12 +113,13 @@ class Level:
             for (i, j) in tuple(roll_eggs): # tuple-ized since roll_eggs might change
 
                 if DEBUG:
-                    print(f"# roll_eggs: {roll_eggs}, wall_eggs: {wall_eggs}")#, super_eggs: {super_eggs}")
+                    print(self.gaps)
+                    print(f"# roll_eggs: {roll_eggs}, wall_eggs: {wall_eggs}, gaps: {self.gaps}")#, super_eggs: {super_eggs}")
                     print('#' + str(self) + '#')
                 
                 if degree in 'fF':
                     # Tilt Forward
-                    if i == 0 or self.grid[i-1][j] in self.key.wall_key + self.key.full_key or (i-1, j) in wall_eggs:
+                    if i == 0 or (i-1, j) in self.gaps or self.grid[i-1][j] in self.key.wall_key + self.key.full_key or (i-1, j) in wall_eggs:
                         roll_eggs.remove((i, j))
                         wall_eggs.append((i, j))
                     elif self.grid[i-1][j] in self.key.pan_key:
@@ -136,7 +139,7 @@ class Level:
                     
                 elif degree in 'bB':
                     # Tilt Backward
-                    if i+1 == len(self.grid) or self.grid[i+1][j] in self.key.wall_key + self.key.full_key or (i+1, j) in wall_eggs:
+                    if i+1 == len(self.grid) or (i+1, j) in self.gaps or self.grid[i+1][j] in self.key.wall_key + self.key.full_key or (i+1, j) in wall_eggs:
                         roll_eggs.remove((i, j))
                         wall_eggs.append((i, j))
                     elif self.grid[i+1][j] in self.key.pan_key:
@@ -156,7 +159,7 @@ class Level:
 
                 elif degree in 'rR':
                     # Tilt Rightward
-                    if j+1 == len(self.grid[0]) or self.grid[i][j+1] in self.key.wall_key + self.key.full_key or (i, j+1) in wall_eggs:
+                    if j+1 == len(self.grid[0]) or (i, j+1) in self.gaps or self.grid[i][j+1] in self.key.wall_key + self.key.full_key or (i, j+1) in wall_eggs:
                         roll_eggs.remove((i, j))
                         wall_eggs.append((i, j))
                     elif self.grid[i][j+1] in self.key.pan_key:
@@ -176,7 +179,7 @@ class Level:
 
                 elif degree in 'lL':
                     # Tilt Leftward
-                    if j == 0 or self.grid[i][j-1] in self.key.wall_key + self.key.full_key or (i, j-1) in wall_eggs:
+                    if j == 0 or (i, j-1) in self.gaps or self.grid[i][j-1] in self.key.wall_key + self.key.full_key or (i, j-1) in wall_eggs:
                         roll_eggs.remove((i, j))
                         wall_eggs.append((i, j))
                     elif self.grid[i][j-1] in self.key.pan_key:
@@ -256,6 +259,7 @@ def game_state(level_file, factor=1) -> tuple[Level, list[str], int]:
 
     # This sets the current level for the game
     current_level: Level = Level(grid, moves_left)
+    print(f"AFTER CALL {current_level.gaps}")
     
     # This logs past moves the player has made
     past_moves: list[str] = []
