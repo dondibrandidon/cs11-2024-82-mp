@@ -130,7 +130,7 @@ You are the mayor of ChickenCity [🐔] tasked to give all of the city's egg a s
 ## [🧪] Unit Testing
 
 ### **Overview**
-The `test_er.py` script is designed to test the functionality of the `egg_roll` module, specifically the `level` class and `game_state` function. It utilizes the `pytest` framework to automate the unit testing.
+The `test_er.py` script is designed to test the functionality of the `egg_roll` module, specifically the `Level` class and `game_state` function. It utilizes the `pytest` framework to automate the unit testing.
 
 ### **Directory**
 The script uses the following directory structure for input test files:
