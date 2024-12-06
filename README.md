@@ -229,16 +229,12 @@ expected_total_points: int
       - Level is named after the alternating pattern formed by the empty spaces. (https://www.dimensions.com/element/running-bond)
   11. `stuck`
       - Tests how the egg confined by walls will behave when made to move.
-  13. `ver_three_egg`
-  14. `ver_two_egg`
-     
-     
-  12. 
-     - Tests the movements of 3 vertically adjacent eggs across different movements.
-     - Simulates how 3 vertically adjacent eggs would behave.
+  12. `ver_three_egg`
+      - Tests the movements of 3 vertically adjacent eggs across different movements.
+      - Simulates how 3 vertically adjacent eggs would behave.
       a. `ver_three_egg_down_pan`
         - Simulates how 3 vertically adjacent eggs would behave and interact with a single pan.
-  13. 
+  13. `ver_two_egg`
      - Tests the movements of 2 vertically adjacent eggs across different movements.
      - Simulates how 2 vertically adjacent eggs would behave.
       
