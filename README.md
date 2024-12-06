@@ -225,12 +225,12 @@ expected_total_points: int
      - Tests how the number of remaining moves is computed to the score when an egg goes in an empty nest.
      - Simulates a condition where an egg goes in an empty nest while having leftover moves.
   10. `running_bond`
-     - Tests how levels and the grid are affected by empty spaces `" "` and how it affects the movement of the egg.
-     - Level is named after the alternating pattern formed by the empty spaces. (https://www.dimensions.com/element/running-bond)
+      - Tests how levels and the grid are affected by empty spaces `" "` and how it affects the movement of the egg.
+      - Level is named after the alternating pattern formed by the empty spaces. (https://www.dimensions.com/element/running-bond)
 
-  11. `stuck`
-  12. `ver_three_egg`
-  13. `ver_two_egg`
+  12. `stuck`
+  13. `ver_three_egg`
+  14. `ver_two_egg`
 
 
   12. 
