@@ -353,13 +353,19 @@ expected_total_points: int
 - While you can run the script itself for testing, using `pytest` is advisable for more detailed logs and better debugging capabilities.
 
 
-## [🗺️] Level Submissions
+## [🗺️] Levels
 
-1. **ULTIMATE MAZE** (`daegu_original_ultimate_maze.in`)
+1. **Example Level** (`example.in`)
+   > The basic example level
+
+2. **Example Text-based Level** (`ascii_example.in`)
+   > A text-based version of the basic example level with infinite moves
+
+   **ULTIMATE MAZE** (`ultimate_maze.in`)
    > Maze semi-inspired by the tomb of the mask, it's fun :)
 
-2. **Nested oops** (`daegu_original_nested_oops.in`)
+3. **Nested oops** (`nested_oops.in`)
    > Very compact puzzle, hope "Nested oops" don't take too much time XD
 
-3. ***CS11 2024 WFJ*** (`daegu_original_cs11_2024_wfj.in`)
+4. ***CS11 2024 WFJ*** (`cs11_2024_wfj.in`)
    > A small tribute to our CS11 lecturers, thank you sirs!
