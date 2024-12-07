@@ -100,7 +100,8 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
 ## [🥚] How to Play
 
 1. Opening the program: *Terminal*
-   - First, go to the egg_roll release folder.
+   - First, it is highly recommended to install the `termcolor` module for much more colorful interfaces.
+   - To play, go to the egg_roll release folder.
    - Then choose between the two methods to play levels:\
      a. **Recommended**, through the Main Menu:
      ```bash
@@ -110,7 +111,6 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
      ```bash
      python3.12 egg_roll.py .|valid_location|level_file.in
      ```
-   - Also highly recommended to `pip install` the module `termcolor` for much more colorful interfaces.
 
 2. Navigating: *Main Menu*
    - To play, input an available valid level's full `file_name.in` from the selection.
@@ -160,7 +160,8 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
       def tilt(self, degree, moves_left):
          ...
    ```
-   As for the main user interface, the following functions are used:
+   As for the main user interface, the following are used:\
+   A function for clearing the terminal,
    ```python
    def clear_screen(DEBUG):
       ...
@@ -194,7 +195,9 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
    This function displays the level select, calls game_state, and prompts the mayor if they want to play the level again.
 
 3. *Implementing everything*\
-   For this project, `Python3.12` was used in Sublime Text and VSCode. The `mypy` module was used for type checking. Finally, unit testing was done with the help of `pytest`:
+   - For this project, `Python3.12` was used in Sublime Text and VSCode.
+   - The `mypy` module was used for type checking.
+   - Finally, unit testing was done with the help of `pytest`:
 
 
 ## [🧪] Unit Testing
@@ -218,10 +221,10 @@ The script uses the following directory structure for input test files:
     └── ...
 ```
 ### **Prerequisites**
-- Python 3.x
-- `pytest` module
-  - (If `pytest` not available, you can run the file through Python as it has built-in assertions to run the testcases)
-- [Directory](https://github.com/dondibrandidon/cs11-2024-82-mp/blob/main/README.md#directory) and file structure as mentioned.
+- The test runner,
+  - **Recommended** to download and use the `pytest` module
+  - Otherwise, the file can be ran through Python to use the built-in assertions
+- As well as, the [directory](https://github.com/dondibrandidon/cs11-2024-82-mp/blob/main/README.md#directory) and file structure as mentioned.
 
 ### **Functions**
 
