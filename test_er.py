@@ -5,16 +5,16 @@ from egg_roll import Level, game_state
 
 
 # EXPECTED INPUTS AND OUTPUTS
-'''
-test_level = Level(grid, moves_left)
 
-if character in 'fFbBrRlL':
-    increment_points, animation, no_eggs = current_level.tilt(character, moves_left)
+# test_level = Level(grid, moves_left)
 
-file_name = valid_location/level_file.in
-with open(file_name, encoding='utf-8') as level_file:
-    level_file_Level, list_of_moves_made, total_points = game_state(level_file)
-'''
+# if character in 'fFbBrRlL':
+#     increment_points, animation, no_eggs = current_level.tilt(character, moves_left)
+
+# file_name = */valid_location/level_file.in
+# with open(file_name, encoding='utf-8') as level_file:
+#     level_file_Level, list_of_moves_made, total_points = game_state(level_file)
+
 
 #-------------------------------------------START OF TESTS------------------------------------------------#
 
@@ -22,17 +22,17 @@ with open(file_name, encoding='utf-8') as level_file:
 '''
 level_rows: int
 moves_left: int
-row_1: str <input level>
+row_1: str                 # the initial grid state
 row_2: str
 ...
-row_level_rows: str
-valid_character_input: str (character_input validation happens in game_state)
-row_1: str <expected output level>
-row_2: str
+row_n: str
+valid_character_input: str # validation happens in game_state not here
+row_1: str                 # the expected final state
+row_2: str  
 ...
-row_level_rows: str
+row_n: str  
 expected_points: int
-expected_no_eggs: bool (int: 0 or 1)
+expected_no_eggs: 0 | 1    # acts as bool
 '''
 @pytest.mark.parametrize("test_file", [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_Level_Tilt")])
 def test_Level_tilt(test_file):
@@ -58,16 +58,17 @@ def test_Level_tilt(test_file):
 
 # Expected file format for _test_game_state (".|unit_testing|_test_game_state|file.in"):
 '''
-string_input: str    #IMPORTANT: len(string_input) >= moves_left
+string_input: str          # assert sum(char for char in string_input char in "fFbBrRlL") >= moves_left
 level_rows: int
 moves_left: int
-row_1: str <input level>
+row_1: str                 # the initial grid state
 row_2: str
 ...
-row_1: str <expected output level>
+row_n: str
+row_1: str                 # the expected final state
 row_2: str
 ...
-row_level_rows: str
+row_n: str
 expected_moves: str
 expected_total_points: int
 '''
@@ -76,7 +77,11 @@ def test_game_state(test_file):
     level_path = "." + os.sep + "unit_testing" + os.sep + "_test_game_state" + os.sep + test_file
     with open(level_path, encoding='utf-8') as level_file:
         sys.stdin = io.StringIO(level_file.readline())
-        final_state, moves_made, total_points = game_state(level_file, 0)
+
+        try:
+            final_state, moves_made, total_points = game_state(level_file, 0)
+        except EOFError:
+            raise ValueError(f'`sum(char for char in string_input char in "fFbBrRlL") >= moves_left` was not met')
         
         fin_grid = list(list(tile for tile in level_file.readline() if tile != '\n') for i in range(final_state.rows))
         expected_moves = str(level_file.readline()).strip('\n')

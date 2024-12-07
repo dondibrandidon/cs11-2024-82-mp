@@ -218,16 +218,15 @@ The script uses the following directory structure for input test files:
 ### **Prerequisites**
 - Python 3.x
 - `pytest` module
-  - (If `pytest` not available, you can run the script directly as it has a built-in function to run tests)
-- [Directory](https://github.com/dondibrandidon/cs11-2024-82-mp/blob/main/README.md#directory) and file structure mentioned.
+  - (If `pytest` not available, you can run the file through Python as it has built-in assertions to run the testcases)
+- [Directory](https://github.com/dondibrandidon/cs11-2024-82-mp/blob/main/README.md#directory) and file structure as mentioned.
 
 ### **Functions**
 
-### **`test_Level_tilt`**
-- **Purpose**: Tests the `tilt` method.
+### > **`test_Level_tilt`**
+- **Purpose**: Tests the `Level.tilt` method.
 - **Input**: Reads from test files in:
-    `unit_testing/_test_Level_tilt`
-
+    `.|unit_testing|_test_Level_tilt`
 - **Assertions:**
   - Final grid matches expected grid.
   - Point increment matches expected points.
@@ -239,23 +238,23 @@ File name: `test_file_name.in`
 ```
 level_rows: int
 moves_left: int
-row_1: str <input level>
+row_1: str                 # the initial grid state
 row_2: str
 ...
-row_level_rows: str
-valid_character_input: str (character_input validation happens in game_state)
-row_1 <expected output level>
-row_2
+row_n: str
+valid_character_input: str # validation happens in game_state not here
+row_1: str                 # the expected final state
+row_2: str  
 ...
-row_level_rows 
+row_n: str  
 expected_points: int
-expected_no_eggs: bool (int: 0 or 1)
+expected_no_eggs: 0 | 1    # acts as bool
 ```
 
-### **`test_game_state`**
-- **Purpose**: Tests the `game_state` function.
+### > **`test_game_state`**
+- **Purpose**: Simulates a complete call of `game_state`.
 - **Input**: Reads from test files in:
-    `unit_testing/_test_game_state`
+    `.|unit_testing|_test_game_state`
 - **Assertions:**
   - Final grid matches expected grid.
   - List of moves matches expected moves.
@@ -263,18 +262,20 @@ expected_no_eggs: bool (int: 0 or 1)
 
 **Test Level File Format:**
 
-File name: `test_file_name.in`
+File name: `test_file_name.in`\
+NOTE: It is important that the `string_input` would be enough to "finish" the game so that `game_state` would be able to `return` the final states.
 ```
-string_input: str    #IMPORTANT: len(string_input) >= moves_left
+string_input: str          # assert sum(char for char in string_input char in "fFbBrRlL") >= moves_left
 level_rows: int
 moves_left: int
-row_1: str <input level>
+row_1: str                 # the initial grid state
 row_2: str
 ...
-row_1: str <expected output level>
+row_n: str
+row_1: str                 # the expected final state
 row_2: str
 ...
-row_level_rows: str
+row_n: str
 expected_moves: str
 expected_total_points: int
 ```
