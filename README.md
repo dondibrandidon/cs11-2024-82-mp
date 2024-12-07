@@ -192,7 +192,7 @@ As of today, you are the proud mayor of **ChickenCity** 🐔 tasked to give all 
    This function displays the level select, calls game_state, and prompts the mayor if they want to play the level again.
 
 3. *Implementing everything*\
-   For this project, Python3.12 was used in Sublime Text and VSCode. The program will be tested using mypy, and pytest:
+   For this project, Python3.12 was used in Sublime Text and VSCode. The mypy module was used for type checking. Finally, unut testing was done with the help of pytest:
 
 
 ## [🧪] Unit Testing
