@@ -194,7 +194,9 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
    This function displays the level select, calls game_state, and prompts the mayor if they want to play the level again.
 
 3. *Implementing everything*\
-   For this project, `Python3.12` was used in Sublime Text and VSCode. The `mypy` module was used for type checking. Finally, unit testing was done with the help of `pytest`:
+   For this project, `Python3.12` was used in Sublime Text and VSCode.\
+   The `mypy` module was used for type checking.\
+   Finally, unit testing was done with the help of `pytest`:
 
 
 ## [🧪] Unit Testing
@@ -218,10 +220,10 @@ The script uses the following directory structure for input test files:
     └── ...
 ```
 ### **Prerequisites**
-- Python 3.x
-- `pytest` module
-  - (If `pytest` not available, you can run the file through Python as it has built-in assertions to run the testcases)
-- [Directory](https://github.com/dondibrandidon/cs11-2024-82-mp/blob/main/README.md#directory) and file structure as mentioned.
+- A testing method:
+      - Download and use the `pytest` module for much more convinient and detailed tracking of bugs.
+      - Otherwise, run the file through Python as it has built-in assertions to run the testcases though bugs cannot be tracked.
+- Follow the prescribed [directory](https://github.com/dondibrandidon/cs11-2024-82-mp/blob/main/README.md#directory) and file structure.
 
 ### **Functions**
 
@@ -393,11 +395,11 @@ expected_total_points: int
 
 ## [🗺️] Level Submissions
 
-1. **ULTIMATE MAZE** (`daegu_original_ultimate_maze.in`)
+1. **ULTIMATE MAZE** (`ultimate_maze.in`)
    > Maze semi-inspired by the tomb of the mask, it's fun :)
 
-2. **Nested oops** (`daegu_original_nested_oops.in`)
+2. **Nested oops** (`nested_oops.in`)
    > Very compact puzzle, hope "Nested oops" don't take too much time XD
 
-3. ***CS11 2024 WFJ*** (`daegu_original_cs11_2024_wfj.in`)
+3. ***CS11 2024 WFJ*** (`cs11_2024_wfj.in`)
    > A small tribute to our CS11 lecturers, thank you sirs!
