@@ -222,7 +222,7 @@ The script uses the following directory structure for input test files:
 ### **Prerequisites**
 - A testing method:\
       - Download and use the `pytest` module for much more convenient and detailed tracking of bugs.\
-      - Otherwise, run the file through Python as it has built-in assertions to run the testcases though bugs cannot be tracked.
+      - Otherwise, run the file through Python as it has built-in assertions to run the testcases, though bugs will not be tracked easily.
 - Follow the prescribed [directory](https://github.com/dondibrandidon/cs11-2024-82-mp/blob/main/README.md#directory) and file structure.
 
 ### **Functions**
