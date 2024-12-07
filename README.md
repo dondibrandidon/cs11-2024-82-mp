@@ -7,8 +7,8 @@ Submission of Group **#82** (*daegu_original*) from class WFJ/MUV1:\
 ## [📃] Table of Contents
 <!-- no toc -->
 1. [[📂] Files](#📂-files)
-2. [[🥚] How to Play](#🥚-how-to-play)
-3. [[🎯] Mechanics](#🎯-mechanics)
+2. [[🎯] Mechanics](#🎯-mechanics)
+3. [[🥚] How to Play](#🥚-how-to-play)
 4. [[💞] Features](#💞-features)
 5. [[🤓] Implementation](#🤓-implementation)
 6. [[🧪] Unit Testing](#🧪-unit-testing)
@@ -21,7 +21,7 @@ The included files in the submission are laid out as:
 ```python
 .|
 ├── menu.py                # The main program for playing egg_roll
-├── egg_roll.py            # Bulk of the logic behind the gameplay
+├── egg_roll.py            # Bulk of the gameplay logic code
 |
 ├── levels|                # Contains level files
 │   ├── valid_level.in     # Example valid level file
@@ -29,56 +29,28 @@ The included files in the submission are laid out as:
 │
 ├── test_er.py             # Unit testing program for egg_roll.py
 |
-└── unit_testing|
+└── unit_testing|          # More on this in "[🧪] Unit Testing"
     ├── _test_game_state|  # Folder containing test cases for game_state
     └── _test_Level_tilt|  # Folder containing test cases for Level.tilt
 ```
 
 
-## [🥚] How to Play
-
-1. Opening the program: *Terminal*
-   - First, go to the egg_roll release folder.
-   - Then choose between the two methods to play levels:\
-     a. **Recommended**, through the Main Menu:
-     ```bash
-     python3.12 menu.py
-     ```
-     b. Direct-to-level, with a level file: (*does not save highscore!*)
-     ```bash
-     python3.12 egg_roll.py .|valid_location|level_file.in
-     ```
-   - Also highly recommended to `pip install` the module `termcolor` for much more colorful interfaces.
-
-2. Navigating: *Main Menu*
-   - To play, input an available valid level's full `file_name.in` from the selection.
-   - To quit the game, type `quit`, then `yes` to the prompt.
-
-3. Playing a level: *Level Interface*
-   - To move the eggs on the board, type a sequence of any valid characters:
-     - `F` or `f` to tilt the board forwards (*moving the eggs up*)
-     - `B` or `b` to tilt the board backwards (*moving the eggs down*)
-     - `L` or `l` to tilt the board leftwards   (*moving the eggs left*)
-     - `R` or `r` to tilt the board rightwards  (*moving the eggs right*)
-   - To undo your last move at the cost of energy, type the word `undo`.
-   - To exit the level, type the word `exit`.
-   - To play the same level again after reaching the end, type the word `yes` to the retry prompt.
-
-
 ## [🎯] Mechanics
 
-```
-🧱⏹️⏹️⏹️⏹️⏹️⏹️⏹️🧱
-🧱🗄️🗄️🗄️🗄️🗄️🗄️🗄️🧱
-🧱⬜⬜⬜🪑⬜⬜⬜🧱
-🧱⬜⬜⬜🐔⬜⬜⬜🧱
-🧱⬜⬜🟫🟫🟫⬜⬜🧱
-🧱⬜⬜⬜⬜⬜⬜⬜🧱
-🧱🪴⬜⬜⬜⬜⬜🪴🧱
-🧱🧱🧱🧱🚪🧱🧱🧱🧱
-```
-
-As of today, you are the proud mayor of **ChickenCity** 🐔 tasked to give all of the city's eggs an available safe nesting place. Below is a short dossier you should read to familiarize yourself with the things you'll with in your job...
+<h3 style="text-align:center;"> ~ Welcome to EGG ROLL! ~ <br/>
+<br/>
+🧱🧱🧱🧱🚪🧱🧱🧱🧱<br/>
+🧱🪴⬜🟦🟦🟦⬜🪴🧱<br/>
+🧱⬜⬜⬜⬜⬜⬜⬜🧱<br/>
+🧱⬜⬜⬜⬜⬜⬜⬜🧱<br/>
+🧱⬜⬜📋🖥️🥤⬜⬜🧱<br/>
+🧱🖨️⬜⬜🐔⬜⬜🗑️🧱<br/>
+🧱🗄️🗄️⬜⬜⬜🗄️🗄️🧱<br/>
+🧱🪟🪟🪟🪟🪟🪟🪟🧱<br/>
+<br/>
+As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of the city's eggs an available safe nesting place. Below is a short dossier to familiarize yourself with the things you'll need to know for the job...
+</h3>
+<hr>
 
 ### **Eggs** [🥚/ `0`]
 > "*Ang Itloogan ay ang pag-asa ng ating bayan*" (said by Jose Rizal)\
@@ -123,6 +95,36 @@ As of today, you are the proud mayor of **ChickenCity** 🐔 tasked to give all 
    - These are fully occupied empty nests.
    - Excerpt from the *Chickipedia* article, "M.T. Nests":
       > Originally, M.T. Nests could actually hold up to a dozen eggs at a time. This helped make nest maintenance easier and cheaper as it was split among 12 tenants. Although after a _bird flu_ epidemic<sup>[16]</sup> that put the entire plane on quarantine, the Lord Chicken<sup>[17]</sup>, passed a law that required nest manufacturers to allow for only one egg to fit per nest. Even after the end of the pandemic, progress in the field of Nestic Engineering<sup>[18]</sup> actually made single-type M.T. Nests a lot more affordable to the common nest-owner.
+
+
+## [🥚] How to Play
+
+1. Opening the program: *Terminal*
+   - First, go to the egg_roll release folder.
+   - Then choose between the two methods to play levels:\
+     a. **Recommended**, through the Main Menu:
+     ```bash
+     python3.12 menu.py
+     ```
+     b. Direct-to-level, with a level file: (*does not save highscore!*)
+     ```bash
+     python3.12 egg_roll.py .|valid_location|level_file.in
+     ```
+   - Also highly recommended to `pip install` the module `termcolor` for much more colorful interfaces.
+
+2. Navigating: *Main Menu*
+   - To play, input an available valid level's full `file_name.in` from the selection.
+   - To quit the game, type `quit`, then `yes` to the prompt.
+
+3. Playing a level: *Level Interface*
+   - To move the eggs on the board, type a sequence of any valid characters:
+     - `F` or `f` to tilt the board forwards (*moving the eggs up*)
+     - `B` or `b` to tilt the board backwards (*moving the eggs down*)
+     - `L` or `l` to tilt the board leftwards   (*moving the eggs left*)
+     - `R` or `r` to tilt the board rightwards  (*moving the eggs right*)
+   - To undo your last move at the cost of energy, type the word `undo`.
+   - To exit the level, type the word `exit`.
+   - To play the same level again after reaching the end, type the word `yes` to the retry prompt.
 
 
 ## [💞] Features
