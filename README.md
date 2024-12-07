@@ -286,49 +286,65 @@ expected_total_points: int
 #### **in `_test_Level_Tilt`**
 *(arranged alphabetically/how it would appear inside the folder)*
 
-  1.`ascii`
-     - Tests the levels in `ASCII` format.
-  2. `basic_level`
-     - Tests all basic functions of a level (tilt, movement, scoring).
-     - Simulates a basic environment for levels.
-  3. `blurred_lines`
-     - Tests how the egg will behave when there is no grass per alternating column and how empty spaces `" "` affect the grid and the egg's movement.
-  4. `collision`
-     - Tests the collision physics of the egg and walls.
-  5. `egg_in_nest`
-     - Tests the interaction and scoring function of when an egg goes in an empty nest.
-     - Simulates a condition when an egg interacts with an empty nest.
-  6. `egg_in_pan`
-     - Tests the interaction and scoring function of when an egg goes in a pan.
-     - Simulates a condition when an egg interacts with a pan.
-  7. `cent_egg`
-     - Tests the behavior of 100 eggs across different cases.
-  8. `hor_three_egg`
-     - Tests the movements of 3 horizontally adjacent eggs across different movements.
-     - Simulates how 3 horizontally adjacent eggs would behave. 
-  9. `hor_two_egg`
-     - Tests the movements of 2 horizontally adjacent eggs across different movements.
-     - Simulates how 2 horizontally adjacent eggs would behave.
-  10. `one_move`
-     - Tests the egg's horizontal (lL/rR) and vertical (fF/bB) movement.
-  11. `plus_remaining_moves`
-     - Tests how the number of remaining moves is computed to the score when an egg goes in an empty nest.
-     - Simulates a condition where an egg goes in an empty nest while having leftover moves.
-  12. `running_bond`
-      - Tests how levels and the grid are affected by empty spaces `" "` and how it affects the movement of the egg.
-      - Level is named after the alternating pattern formed by the empty spaces. (https://www.dimensions.com/element/running-bond)
-  13. `stuck`
-      - Tests how the egg confined by walls will behave when made to move.
-  14. `uppercase`
-       - Tests how the program would accept uppercase valid inputs.
-  15. `ver_three_egg`
-      - Tests the movements of 3 vertically adjacent eggs across different movements.
-      - Simulates how 3 vertically adjacent eggs would behave.
-      a. `ver_three_egg_down_pan`
-        - Simulates how 3 vertically adjacent eggs would behave and interact with a single pan.
-  16. `ver_two_egg`
-      - Tests the movements of 2 vertically adjacent eggs across different movements.
-      - Simulates how 2 vertically adjacent eggs would behave.
+1. **`ascii`**
+   - Tests the levels in `ASCII` format.
+
+2. **`basic_level`**
+   - Tests all basic functions of a level (tilt, movement, scoring).
+   - Simulates a basic environment for levels.
+
+3. **`blurred_lines`**
+   - Tests how the egg will behave when there is no grass per alternating column and how empty spaces (`" "`) affect the grid and the egg's movement.
+
+4. **`collision`**
+   - Tests the collision physics of the egg and walls.
+
+5. **`egg_in_nest`**
+   - Tests the interaction and scoring function of when an egg goes in an empty nest.
+   - Simulates a condition when an egg interacts with an empty nest.
+
+6. **`egg_in_pan`**
+   - Tests the interaction and scoring function of when an egg goes in a pan.
+   - Simulates a condition when an egg interacts with a pan.
+
+7. **`cent_egg`**
+   - Tests the behavior of 100 eggs across different cases.
+
+8. **`hor_three_egg`**
+   - Tests the movements of 3 horizontally adjacent eggs across different movements.
+   - Simulates how 3 horizontally adjacent eggs would behave. 
+
+9. **`hor_two_egg`**
+   - Tests the movements of 2 horizontally adjacent eggs across different movements.
+   - Simulates how 2 horizontally adjacent eggs would behave.
+
+10. **`one_move`**
+    - Tests the egg's horizontal (`lL/rR`) and vertical (`fF/bB`) movement.
+
+11. **`plus_remaining_moves`**
+    - Tests how the number of remaining moves is computed into the score when an egg goes in an empty nest.
+    - Simulates a condition where an egg goes in an empty nest while having leftover moves.
+
+12. **`running_bond`**
+    - Tests how levels and the grid are affected by empty spaces (`" "`) and how they affect the movement of the egg.
+    - Level is named after the alternating pattern formed by the empty spaces. ([Running Bond](https://www.dimensions.com/element/running-bond))
+
+13. **`stuck`**
+    - Tests how the egg confined by walls will behave when made to move.
+
+14. **`uppercase`**
+    - Tests how the program would accept uppercase valid inputs.
+
+15. **`ver_three_egg`**
+    - Tests the movements of 3 vertically adjacent eggs across different movements.
+    - Simulates how 3 vertically adjacent eggs would behave.
+    - **`ver_three_egg_down_pan`**
+      - Simulates how 3 vertically adjacent eggs would behave and interact with a single pan.
+
+16. **`ver_two_egg`**
+    - Tests the movements of 2 vertically adjacent eggs across different movements.
+    - Simulates how 2 vertically adjacent eggs would behave.
+
       
 #### **in `_test_game_state`**
 *(arranged alphabetically/how it would appear inside the folder)*
