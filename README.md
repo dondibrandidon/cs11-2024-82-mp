@@ -129,17 +129,17 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
 
 ## [💞] Features
 
-- #### 📃 **Main Menu**
+- #### 📃 **Main Menu w/ Level Selection and Exit Options**
   A simple intuitive main menu, providing mayors with easy access the list of levels they can play. The display allows level selection and program quitting.
 
-- #### ⌛ **Move Undo**
+- #### ⌛ **Game State Undo-er**
   Mayors are able to undo any of the moves they've done at the cost of losing a chance to play another move.
 
-- #### 🎖️ **Highscore Tracking**
-  The Hall of Fame displays after finishing a level and before going back to the main menu. It tracks the top 5 mayors for each level. The cream of the crop are decided by the highest score, with ties broken by when it was accomplished. After all, the earliest bird catches the worm.
-
-- #### ♻️ **Restart**
+- #### ♻️ **Level Restart**
   Allows the mayors to reset the current level and start from scratch, if they weren't satisified with your previous run through the level. Useful if you're trying to beat the highscore!
+
+- #### 🎖️ **Persistent Highscore Tracking**
+  The Hall of Fame displays after finishing a level and before going back to the main menu. It tracks the top 5 mayors for each level. The cream of the crop are decided by the highest score, with ties broken by when it was accomplished. After all, the earliest bird catches the worm.
 
 - #### 📐 **Tile Sets**
   The game accepts both emoji-based or text-based levels seemlesly. Advanced TileSet-swapping technology was implemented, although mixing the two tile sets will not work.
