@@ -289,7 +289,7 @@ expected_total_points: int
 *(arranged alphabetically/how it would appear inside the folder)*
 
 1. **`ascii`**
-   - Tests the levels in `ASCII` format.
+   - Tests the levels in `ASCII` format for the monospace format.
 
 2. **`basic_level`**
    - Tests all basic functions of a level (tilt, movement, scoring).
@@ -352,7 +352,7 @@ expected_total_points: int
 *(arranged alphabetically/how it would appear inside the folder)*
 
 1. **`ascii`**  
-   - Tests the levels in `ASCII` format.
+   - Tests the levels in `ASCII` format for the monospace format.
 
 2. **`basic_level`**  
    - Tests all basic functions of a level (tilt, movement, scoring).  
