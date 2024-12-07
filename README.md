@@ -379,13 +379,16 @@ expected_total_points: int
 10. **`test_all_directions`**  
     - Tests all the movements.  
 
-11. **`with_invalids`**  
+11. **`with_invalids`**
     - Tests graceful handling of invalid inputs.
     - The invalid inputs are:
       ```python
       invalid_inputs = "thequickownoxjumpedovetheazydogTHEQUICKOWNOXJUMPEDOVETHEAZYDOG1234567890`-=[]\;',./~!@#$%^&*()_+{}|:"<>?"
       ```
 
+13. **`n`**
+    - For the `n` cases, the values tested were 2, and 3.
+    
 ### *Notes*
 - Ensure that test files are properly formatted: `test_file_name.in`.
 - As mentioned before, `undo` inputs were not tested, but the implementation was pretty straightforward with game_state keeping "snapshots" of the level with each valid input in a `list`. Undoing simply sets the current level state to the last item on this list, and decrements the `moves_left` of the player.
