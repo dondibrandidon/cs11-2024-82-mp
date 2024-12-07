@@ -557,7 +557,7 @@ if __name__ == '__main__':
         print("# egg_roll.py DEBUG IS ON")
 
     try:
-        from termcolor import colored, cprint
+        #from termcolor import colored, cprint
         if DEBUG:
             print("# termcolor loaded")
     except ImportError:

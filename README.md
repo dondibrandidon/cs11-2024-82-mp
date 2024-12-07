@@ -9,75 +9,97 @@ Submission of Group **#82** (*daegu_original*) from class WFJ/MUV1:\
 1. [[📂] Files](#📂-files)
 2. [[🥚] How to Play](#🥚-how-to-play)
 3. [[🎯] Mechanics](#🎯-mechanics)
-4. [[🤓] Implementation](#🤓-implementation)
-5. [[🧪] Unit Testing](#🧪-unit-testing)
-6. [[💞] Bonus Features](#💞-bonus-features)
+4. [[💞] Features](#💞-features)
+5. [[🤓] Implementation](#🤓-implementation)
+6. [[🧪] Unit Testing](#🧪-unit-testing)
 7. [[🗺️] Level Submissions](#🗺️-level-submissions)
 
 
 ## [📂] Files
 
-
-- `egg_roll.py` - **main program for playing egg_roll**
-
-- `.|levels|*` - stores all `.in` gameplay levels for egg_roll level select
-  - `.|levels|level_file.in` (sample valid level file)
-
-- `test_er.py` - **unit testing program**
-- `.|unit_testing|*` - stores all testing files for egg_roll functionalities
-  - `.|unit_testing|_test_Level_tilt|test_case.in`\
-      (sample test case file for Level.tilt())
-  - `.|unit_testing|_test_game_state|test_case.in`\
-      (sample test case file for game_state())
+The included files in the submission are laid out as:
+```python
+.|
+├── menu.py                # The main program for playing egg_roll
+├── egg_roll.py            # Bulk of the logic behind the gameplay
+|
+├── levels|                # Contains level files
+│   ├── valid_level.in     # Example valid level file
+│   └── ...
+│
+├── test_er.py             # Unit testing program for egg_roll.py
+|
+└── unit_testing|
+    ├── _test_game_state|  # Folder containing test cases for game_state
+    └── _test_Level_tilt|  # Folder containing test cases for Level.tilt
+```
 
 
 ## [🥚] How to Play
 
-1. Opening the file: *Terminal*
-   - Go to the egg_roll release folder.
-   - Two methods to play levels:\
-     a. **Recommended**, through the Main Menu: `python3.12 menu.py`\
-     b. Direct-to-level, with a level file: `python3.12 egg_roll.py .|valid_location|level_file.in`\
-      &nbsp;&nbsp;&nbsp;&nbsp;*Method (b) is primarily for testing and does NOT save highscores.
+1. Opening the program: *Terminal*
+   - First, go to the egg_roll release folder.
+   - Then choose between the two methods to play levels:\
+     a. **Recommended**, through the Main Menu:
+     ```bash
+     python3.12 menu.py
+     ```
+     b. Direct-to-level, with a level file: (*does not save highscore!*)
+     ```bash
+     python3.12 egg_roll.py .|valid_location|level_file.in
+     ```
+   - Also highly recommended to `pip install` the module `termcolor` for much more colorful interfaces.
 
-2. Navigating the: *Main Menu*
-   - To play, input an available level's full `file_name.in` from the selection.
-   - To quit the game, type `quit` then `yes`.
+2. Navigating: *Main Menu*
+   - To play, input an available valid level's full `file_name.in` from the selection.
+   - To quit the game, type `quit`, then `yes` to the prompt.
 
 3. Playing a level: *Level Interface*
    - To move the eggs on the board, type a sequence of any valid characters:
-     - `F` or `f` to tilt the board forwards    (moving the eggs up)
-     - `B` or `b` to tilt the board backwards   (moving the eggs down)
-     - `L` or `l` to tilt the board leftwards   (moving the eggs left)
-     - `R` /or `r` to tilt the board rightwards  (moving the eggs right)
+     - `F` or `f` to tilt the board forwards (*moving the eggs up*)
+     - `B` or `b` to tilt the board backwards (*moving the eggs down*)
+     - `L` or `l` to tilt the board leftwards   (*moving the eggs left*)
+     - `R` or `r` to tilt the board rightwards  (*moving the eggs right*)
    - To undo your last move at the cost of energy, type the word `undo`.
    - To exit the level, type the word `exit`.
-   - To retry the level after reaching the end, type the word `yes` to the prompt.
+   - To play the same level again after reaching the end, type the word `yes` to the retry prompt.
 
 
 ## [🎯] Mechanics
 
-You are the mayor of ChickenCity [🐔] tasked to give all of the city's egg a safe home...
+```
+🧱⏹️⏹️⏹️⏹️⏹️⏹️⏹️🧱
+🧱🗄️🗄️🗄️🗄️🗄️🗄️🗄️🧱
+🧱⬜⬜⬜🪑⬜⬜⬜🧱
+🧱⬜⬜⬜🐔⬜⬜⬜🧱
+🧱⬜⬜🟫🟫🟫⬜⬜🧱
+🧱⬜⬜⬜⬜⬜⬜⬜🧱
+🧱🪴⬜⬜⬜⬜⬜🪴🧱
+🧱🧱🧱🧱🚪🧱🧱🧱🧱
+```
 
-### **Eggs** [🥚 / `0`]
+As of today, you are the proud mayor of **ChickenCity** 🐔 tasked to give all of the city's eggs an available safe nesting place. Below is a short dossier you should read to familiarize yourself with the things you'll with in your job...
+
+### **Eggs** [🥚/ `0`]
 > "*Ang Itloogan ay ang pag-asa ng ating bayan*" (said by Jose Rizal)\
 > (lit. 'Eggs are the hope of our nation')
    - Eggs are the future of our species, cherish them, protect them, and bring them to an empty nest.
    - A wise birdie once said  that the smart mayor can save most of the eggs, but the pragmatic mayor can sacrifice one egg to save the all the eggs.
 
 
-### **Grass** [🟩 / `.`]
+### **Grass** [🟩/ `.`]
 > "*The Green Green Grass of Home*" (hit single of Tom "Yum" Jones)
    - One of the few spaces that can provide almost as much comfort as a nest.
    - Though, eggs on grass get so excited that they continue rolling until they are physically stopped...
 
 
-### **Walls** [🧱 / `#`]
+### **Walls** [🧱/ `#`]
 > "*Walls, the all in one solution to ethereal effusion*" (from ████████)
    - Walls stop rolling eggs.
-   - Walls contain ███████████ from the ██████████████████ and protect us from the ancient ████.
+   - Walls contain our reality from the ███ █████ ██████ and protect us from the ancient ████.
+   - Walls are made of the ██████ of dead ████.
 
-### **Pans** [🍳 / `P`]
+### **Pans** [🍳/ `P`]
 > "*You can't cook an omelette without breaking a few eggs...*" (ancient proverb)
    - Prevent eggs, especially a whole line of them, from rolling into these\
 *prominent painfully-proficient pugnacious and profane predatory pans*.
@@ -90,41 +112,87 @@ You are the mayor of ChickenCity [🐔] tasked to give all of the city's egg a s
       > ---
       > Metallic weapons called "Metal Utensils" where created to help defend against pans, although a single unit is still too expensive<sup>[9]</sup> to be widespread in the public. [...]
 
-### **Empty Nests** [🪹 / `O`]
+### **Empty Nests** [🪹/ `O`]
 > "*You haven't had a good night's rest, until you've tried these M.T. Nests!*" (old candidacy campaign)
    - The dream resting place of any egg.
    - Excerpt from the *Chickipedia* article, "M.T. Nests":
       > [The distribution of] "Maturation Turkish Nests" (M.T. Nests) was a project originally initiated by the 3rd mayor of ChickenCity, Stanley Aubudon<sup>[3]</sup>, after negotiation with a nest production company from Turkey<sup>[4]</sup>. This provided eggs from all around ChickenCity with incredibly cheap but sustainable housing that also decreased hatching time ten-fold. The program was so successful that other cities across the plane have adopted the same project. These nests have become so ubiqutous in the past century that any available nests have simply been referred to as "emti" nests (see genericization<sup>[5]</sup>). A trend in 2024, popularized by the younger generations in the social media app ClickCluck, has fancified the term to the now colloquially accepted term, "empty" nests.
 
-### **Full Nests** [🪺 / `@`]
+### **Full Nests** [🪺/ `@`]
 > "*DO YOUR PART! Don't share M.T. Nests with other eggs.*" (old health poster)
    - These are fully occupied empty nests.
    - Excerpt from the *Chickipedia* article, "M.T. Nests":
       > Originally, M.T. Nests could actually hold up to a dozen eggs at a time. This helped make nest maintenance easier and cheaper as it was split among 12 tenants. Although after a _bird flu_ epidemic<sup>[16]</sup> that put the entire plane on quarantine, the Lord Chicken<sup>[17]</sup>, passed a law that required nest manufacturers to allow for only one egg to fit per nest. Even after the end of the pandemic, progress in the field of Nestic Engineering<sup>[18]</sup> actually made single-type M.T. Nests a lot more affordable to the common nest-owner.
 
 
+## [💞] Features
+
+- #### 📃 **Main Menu**
+  A simple intuitive main menu, providing mayors with easy access the list of levels they can play. The display allows level selection and program quitting.
+
+- #### ⌛ **Move Undo**
+  Mayors are able to undo any of the moves they've done at the cost of losing a chance to play another move.
+
+- #### 🎖️ **Highscore Tracking**
+  The Hall of Fame displays after finishing a level and before going back to the main menu. It tracks the top 5 mayors for each level. The cream of the crop are decided by the highest score, with ties broken by when it was accomplished. After all, the earliest bird catches the worm.
+
+- #### ♻️ **Restart**
+  Allows the mayors to reset the current level and start from scratch, if they weren't satisified with your previous run through the level. Useful if you're trying to beat the highscore!
+
+- #### 📐 **Tile Sets**
+  The game accepts both emoji-based or text-based levels seemlesly. Advanced TileSet-swapping technology was implemented, although mixing the two tile sets will not work.
+
+
 ## [🤓] Implementation
 
-1. egg_roll.py
+1. *Implementing* `egg_roll.py`\
+   The main logic of the gameplay uses a Level class for the main player interaction logic.
    ```python
    class Level:
-      def def __init__(self, grid: tuple[tuple[str, ...], ...], max_moves: int | str) -> None
-      def tilt(self, degree: str, moves_left: int | str) -> tuple[int, list[str], bool]
-   
-   def clear_screen(DEBUG: bool) -> None
-
-   def game_state(level_file, factor=1) -> tuple[Level, list[str], int]
-
-   def argument_handling() -> None
+      ...
    ```
-2. menu.py
+   This class initializes with a values for its main playing `grid`, set move `limit`, list of `eggs`, number of `rows`, maximum number of `cols`, lsit of `gaps`, and the TileSet `key`. With the main tilting action accomplished through: 
+
    ```python
-   def generate_highscore_files(levels) -> None
-
-   def highscore_handling(level_file, score) -> None
-
-   def main_menu() -> None
+      ...
+      def tilt(self, degree, moves_left):
+         ...
    ```
+   As for the main user interface, the following functions are used:
+   ```python
+   def clear_screen(DEBUG):
+      ...
+   ```
+   and the main interface:
+   ```python
+   def game_state(level_file, factor=1):
+      ...
+   ```
+   A backup function was also defined to handle egg_roll direct-to-file requests:
+   ```python
+   def argument_handling():
+      ...
+   ```
+2. *Implementing* `menu.py`\
+   Next, all of the main menu interface and highscore tracking is done in this file. A placeholder highscore file is immediately created for each level file found in the `.|levels` folder, which is handled by:
+   ```python
+   def generate_highscore_files(levels):
+      ...
+   ```
+   The highscore logging after a level is done by:
+   ```python
+   def highscore_handling(level_file, score):
+      ...
+   ```
+   The main menu interface is run through:
+   ```python
+   def main_menu():
+      ...
+   ```
+   This function displays the level select, calls game_state, and prompts the mayor if they want to play the level again.
+
+3. *Implementing everything*\
+   For this project, Python3.12 was used in Sublime Text and VSCode. The program will be tested using mypy, and pytest:
 
 
 ## [🧪] Unit Testing
@@ -134,17 +202,17 @@ The `test_er.py` script is designed to test the functionality of the `egg_roll` 
 
 ### **Directory**
 The script uses the following directory structure for input test files:
-```
-unit_testing/
+```python
+.|unit_testing|
 │
-├── _test_Level_tilt/
-│   ├── file1.in
-│   ├── file2.in
+├── _test_Level_tilt|
+│   ├── test_case1.in
+│   ├── test_case2.in
 │   └── ...
 │
-└── _test_game_state/
-    ├── file1.in
-    ├── file2.in
+└── _test_game_state|
+    ├── test_case1.in
+    ├── test_case2.in
     └── ...
 ```
 ### **Prerequisites**
@@ -277,23 +345,6 @@ expected_total_points: int
 ### *Notes*
 - Ensure that test files are properly formatted: `test_file_name.in`.
 - While you can run the script itself for testing, using `pytest` is advisable for more detailed logs and better debugging capabilities.
-   
-## [💞] Bonus Features
-
-### **Main Menu**
-A simple yet intuitive main menu, providing players easy access to see the list of levels they can play and choose which to play, as well as letting them exit the program.
-
-### **Move Undo**
-Players are able to undo their moves at the cost of one move per undo.
-
-### **Highscore Tracking**
-Tracks the top 5 scores for each level in which the name, score, and date & time are stored and shown.
-
-### **Restart**
-Allows the players to reset the current level and start from scratch.
-
-## **Tile Sets**
-lorem ipsum
 
 
 ## [🗺️] Level Submissions
