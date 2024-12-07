@@ -267,7 +267,9 @@ expected_no_eggs: 0 | 1    # acts as bool
 **Test Level File Format:**
 
 File name: `test_file_name.in`\
-NOTE: It is important that the `string_input` would be enough to "finish" the game so that `game_state` would be able to `return` the final states. Because of this format, `undo` was not tested.
+
+> NOTE: It is important that the `string_input` would be enough to "finish" the game so that `game_state` would be able to `return` the final states. Because of this format, `undo` was not tested.
+
 ```
 string_input: str          # assert sum(char for char in string_input char in "fFbBrRlL") >= moves_left
 level_rows: int
