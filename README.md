@@ -56,7 +56,7 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
 > "*Ang Itloogan ay ang pag-asa ng ating bayan*" (said by Jose Rizal)\
 > (lit. 'Eggs are the hope of our nation')
    - Eggs are the future of our species, cherish them, protect them, and bring them to an empty nest.
-   - A wise birdie once said  that the smart mayor can save most of the eggs, but the pragmatic mayor can sacrifice one egg to save the all the eggs.
+   - A wise birdie once said  that the smart mayor can save most of the eggs, but the pragmatic mayor can sacrifice one egg to save all the eggs.
 
 
 ### **Grass** [🟩/ `.`]
@@ -66,7 +66,7 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
 
 
 ### **Walls** [🧱/ `#`]
-> "*Walls, the all in one solution to ethereal effusion*" (from ████████)
+> "*Walls, the all-in-one solution to ethereal effusion*" (from ████████)
    - Walls stop rolling eggs.
    - Walls contain our reality from the ███ █████ ██████ and protect us from the ancient ████.
    - Walls are made of the ██████ of dead ████.
@@ -79,22 +79,22 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
       > The _Ferricarbus panluto_, known colloquially as the "pan", is the natural predator of the egg. [...]
       > ### Behavior
       > ---
-      > Although pans have no locomotive ability, pans have an insatiable appetite that can consume as much eggs as it can be fed; because of this, pans thrive in grass-filled biomes where unsuspecting eggs, in their excitement, might accidentally directly roll into the gaping mouth of an awaiting pan. After which, the pan starts to secrete a special type of oil<sup>[2]</sup> that prevents the egg from escaping, as well as, conducts the heat eminating from the pan in order to digest the trapped egg.[...]
+      > Although pans have no locomotive ability, pans have an insatiable appetite that can consume as many eggs as it can be fed; because of this, pans thrive in grass-filled biomes where unsuspecting eggs, in their excitement, might accidentally directly roll into the gaping mouth of an awaiting pan. After which, the pan starts to secrete a special type of oil<sup>[2]</sup> that prevents the egg from escaping, as well as, conducts the heat emanating from the pan in order to digest the trapped egg.[...]
       > ### Relationship with bird-kind ###
       > ---
-      > Metallic weapons called "Metal Utensils" where created to help defend against pans, although a single unit is still too expensive<sup>[9]</sup> to be widespread in the public. [...]
+      > Metallic weapons called "Metal Utensils" were created to help defend against pans, although a single unit is still too expensive<sup>[9]</sup> to be widespread in the public. [...]
 
 ### **Empty Nests** [🪹/ `O`]
 > "*You haven't had a good night's rest, until you've tried these M.T. Nests!*" (old candidacy campaign)
    - The dream resting place of any egg.
    - Excerpt from the *Chickipedia* article, "M.T. Nests":
-      > [The distribution of] "Maturation Turkish Nests" (M.T. Nests) was a project originally initiated by the 3rd mayor of ChickenCity, Stanley Aubudon<sup>[3]</sup>, after negotiation with a nest production company from Turkey<sup>[4]</sup>. This provided eggs from all around ChickenCity with incredibly cheap but sustainable housing that also decreased hatching time ten-fold. The program was so successful that other cities across the plane have adopted the same project. These nests have become so ubiqutous in the past century that any available nests have simply been referred to as "emti" nests (see genericization<sup>[5]</sup>). A trend in 2024, popularized by the younger generations in the social media app ClickCluck, has fancified the term to the now colloquially accepted term, "empty" nests.
+      > [The distribution of] "Maturation Turkish Nests" (M.T. Nests) was a project originally initiated by the 3rd mayor of ChickenCity, Stanley Aubudon<sup>[3]</sup>, after negotiation with a nest production company from Turkey<sup>[4]</sup>. This provided eggs from all around ChickenCity with incredibly cheap but sustainable housing that also decreased hatching time ten-fold. The program was so successful that other cities across the plane have adopted the same project. These nests have become so ubiquitous in the past century that any available nests have simply been referred to as "emti" nests (see genericization<sup>[5]</sup>). A trend in 2024, popularized by the younger generations in the social media app ClickCluck, has fancified the term to the now colloquially accepted term, "empty" nests.
 
 ### **Full Nests** [🪺/ `@`]
 > "*DO YOUR PART! Don't share M.T. Nests with other eggs.*" (old health poster)
    - These are fully occupied empty nests.
    - Excerpt from the *Chickipedia* article, "M.T. Nests":
-      > Originally, M.T. Nests could actually hold up to a dozen eggs at a time. This helped make nest maintenance easier and cheaper as it was split among 12 tenants. Although after a _bird flu_ epidemic<sup>[16]</sup> that put the entire plane on quarantine, the Lord Chicken<sup>[17]</sup>, passed a law that required nest manufacturers to allow for only one egg to fit per nest. Even after the end of the pandemic, progress in the field of Nestic Engineering<sup>[18]</sup> actually made single-type M.T. Nests a lot more affordable to the common nest-owner.
+      > Originally, M.T. Nests could actually hold up to a dozen eggs at a time. This helped make nest maintenance easier and cheaper as it was split among 12 tenants. Although after a _bird flu_ epidemic<sup>[16]</sup> that put the entire plane on quarantine, the Lord Chicken<sup>[17]</sup>, passed a law that required nest manufacturers to allow for only one egg to fit per nest. Even after the end of the pandemic, progress in the field of Nestic Engineering<sup>[18]</sup> actually made single-type M.T. Nests a lot more affordable to the common nest owner.
 
 
 ## [🥚] How to Play
@@ -130,7 +130,7 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
 ## [💞] Features
 
 - #### 📃 **Main Menu**
-  A simple intuitive main menu, providing mayors with easy access the list of levels they can play. The display allows level selection and program quitting.
+  A simple intuitive main menu, providing mayors with easy access to the list of levels they can play. The display allows level selection and program quitting.
 
 - #### ⌛ **Move Undo**
   Mayors are able to undo any of the moves they've done at the cost of losing a chance to play another move.
@@ -142,7 +142,7 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
   Allows the mayors to reset the current level and start from scratch, if they weren't satisified with your previous run through the level. Useful if you're trying to beat the highscore!
 
 - #### 📐 **Tile Sets**
-  The game accepts both emoji-based or text-based levels seemlesly. Advanced TileSet-swapping technology was implemented, although mixing the two tile sets will not work.
+  The game accepts both emoji-based and text-based levels seemlesly. Advanced TileSet-swapping technology was implemented, although mixing the two tile sets will not work.
 
 
 ## [🤓] Implementation
@@ -153,7 +153,7 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
    class Level:
       ...
    ```
-   This class initializes with a values for its main playing `grid`, set move `limit`, list of `eggs`, number of `rows`, maximum number of `cols`, lsit of `gaps`, and the TileSet `key`. With the main tilting action accomplished through: 
+   This class initializes with values for its main playing `grid`, set move `limit`, list of `eggs`, number of `rows`, maximum number of `cols`, list of `gaps`, and the TileSet `key`. With the main tilting action accomplished through: 
 
    ```python
       ...
@@ -221,7 +221,7 @@ The script uses the following directory structure for input test files:
 ```
 ### **Prerequisites**
 - A testing method:
-      - Download and use the `pytest` module for much more convinient and detailed tracking of bugs.
+      - Download and use the `pytest` module for much more convenient and detailed tracking of bugs.
       - Otherwise, run the file through Python as it has built-in assertions to run the testcases though bugs cannot be tracked.
 - Follow the prescribed [directory](https://github.com/dondibrandidon/cs11-2024-82-mp/blob/main/README.md#directory) and file structure.
 
@@ -313,31 +313,31 @@ expected_total_points: int
    - Tests the movements of `n` horizontally adjacent eggs across different movements.
    - Simulates how `n` horizontally adjacent eggs would behave.
 
-10. **`one_move`**
+8. **`one_move`**
     - Tests the egg's horizontal (`lL/rR`) and vertical (`fF/bB`) movement.
 
-11. **`plus_remaining_moves`**
+9. **`plus_remaining_moves`**
     - Tests how the number of remaining moves is computed into the score when an egg goes in an empty nest.
     - Simulates a condition where an egg goes in an empty nest while having leftover moves.
 
-12. **`running_bond`**
+10. **`running_bond`**
     - Tests how levels and the grid are affected by empty spaces (`" "`) and how they affect the movement of the egg.
     - Level is named after the alternating pattern formed by the empty spaces. ([Running Bond](https://www.dimensions.com/element/running-bond))
 
-13. **`stuck`**
+11. **`stuck`**
     - Tests how the egg confined by walls will behave when made to move.
 
-14. **`uppercase`**
+12. **`uppercase`**
     - Tests how the program would accept uppercase valid inputs.
 
-16. **`ver_n_egg`**
+13. **`ver_n_egg`**
     - Tests the movements of `n` vertically adjacent eggs across different movements.
     - Simulates how `n` vertically adjacent eggs would behave.
 
-20. **`_pan`**
+14. **`_pan`**
     - This is tested in conjunction with the `hor` and `ver` cases for multiple eggs rolling into a pan in one turn.
 
-21. **`n`**
+15. **`n`**
     - For the `n` cases, the values tested were 2, 3, and 100.
 
       
@@ -367,7 +367,7 @@ expected_total_points: int
    - Simulates a condition when an egg interacts with a pan.  
 
 7. **`no_wall_stuck_egg`**  
-   - Tests how eggs behaves in a 1 x 1 grid with no surrounding walls.  
+   - Tests how eggs behave in a 1 x 1 grid with no surrounding walls.  
 
 8. **`plus_remaining_moves`**  
    - Tests how the number of remaining moves is computed into the score when an egg goes in an empty nest.  
@@ -386,7 +386,7 @@ expected_total_points: int
       invalid_inputs = "thequickownoxjumpedovetheazydogTHEQUICKOWNOXJUMPEDOVETHEAZYDOG1234567890`-=[]\;',./~!@#$%^&*()_+{}|:"<>?"
       ```
 
-13. **`n`**
+12. **`n`**
     - For the `n` cases, the values tested were 2, and 3.
     
 ### *Notes*
@@ -400,7 +400,7 @@ expected_total_points: int
    > Maze semi-inspired by the tomb of the mask, it's fun :)
 
 2. **Nested oops** (`nested_oops.in`)
-   > Very compact puzzle, hope "Nested oops" don't take too much time XD
+   > Very compact puzzle, hope "Nested oops" doesn't take too much time XD
 
 3. ***CS11 2024 WFJ*** (`cs11_2024_wfj.in`)
    > A small tribute to our CS11 lecturers, thank you sirs!
