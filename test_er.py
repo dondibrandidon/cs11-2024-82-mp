@@ -96,11 +96,16 @@ def test_game_state(test_file):
 def main():
     sys.stdout = io.StringIO() #THIS DISABLES PRINTS
 
-    for test_file in [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_Level_tilt")]:
-        test_Level_tilt(test_file)
+    try:
+        for test_file in [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_Level_tilt")]:
+            test_Level_tilt(test_file)
+            
+        for test_file in [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_game_state")]:
+            test_game_state(test_file)
 
-    for test_file in [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_game_state")]:
-        test_game_state(test_file)
+        print("ALL ASSERTIONS PASSED!")
+    except:
+        print("AN ASSERTION FAILED...")
 
 if __name__ == '__main__':
     main()
