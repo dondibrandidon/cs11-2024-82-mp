@@ -285,10 +285,10 @@ expected_total_points: int
 ```
 
 ### **Test Levels**
-#### **in `_test_Level_Tilt`**
+#### **in `_test_Level_tilt`**
 *(arranged alphabetically/how it would appear inside the folder)*
 
-1. **`ascii`**
+1. **`ascii_`**
    - Tests the levels in `ASCII` format for the monospace format.
 
 2. **`basic_level`**
@@ -309,16 +309,9 @@ expected_total_points: int
    - Tests the interaction and scoring function of when an egg goes in a pan.
    - Simulates a condition when an egg interacts with a pan.
 
-7. **`cent_egg`**
-   - Tests the behavior of 100 eggs across different cases.
-
-8. **`hor_three_egg`**
-   - Tests the movements of 3 horizontally adjacent eggs across different movements.
-   - Simulates how 3 horizontally adjacent eggs would behave. 
-
-9. **`hor_two_egg`**
-   - Tests the movements of 2 horizontally adjacent eggs across different movements.
-   - Simulates how 2 horizontally adjacent eggs would behave.
+7. **`hor_n_egg`**
+   - Tests the movements of `n` horizontally adjacent eggs across different movements.
+   - Simulates how `n` horizontally adjacent eggs would behave.
 
 10. **`one_move`**
     - Tests the egg's horizontal (`lL/rR`) and vertical (`fF/bB`) movement.
@@ -337,21 +330,21 @@ expected_total_points: int
 14. **`uppercase`**
     - Tests how the program would accept uppercase valid inputs.
 
-15. **`ver_three_egg`**
-    - Tests the movements of 3 vertically adjacent eggs across different movements.
-    - Simulates how 3 vertically adjacent eggs would behave.
-    - **`ver_three_egg_down_pan`**
-      - Simulates how 3 vertically adjacent eggs would behave and interact with a single pan.
+16. **`ver_n_egg`**
+    - Tests the movements of `n` vertically adjacent eggs across different movements.
+    - Simulates how `n` vertically adjacent eggs would behave.
 
-16. **`ver_two_egg`**
-    - Tests the movements of 2 vertically adjacent eggs across different movements.
-    - Simulates how 2 vertically adjacent eggs would behave.
+20. **`_pan`**
+    - This is tested in conjunction with the `hor` and `ver` cases for multiple eggs rolling into a pan in one turn.
+
+21. **`n`**
+    - For the `n` cases, the values tested were 2, 3, and 100.
 
       
 #### **in `_test_game_state`**
 *(arranged alphabetically/how it would appear inside the folder)*
 
-1. **`ascii`**  
+1. **`ascii_`**  
    - Tests the levels in `ASCII` format for the monospace format.
 
 2. **`basic_level`**  
@@ -361,8 +354,9 @@ expected_total_points: int
 3. **`block`**  
    - Tests how eggs behave when moved in 2x2 and 3x3 formations.  
 
-4. **`collision`**  
-   - Tests the collision physics of the egg and walls.  
+4. **`collision_nxn`**  
+   - Tests the collision physics of an `n` x `n` block of eggs with walls.
+   - An early bug was eggs "eating" each other, in cases like this.
 
 5. **`egg_in_nest`**  
    - Tests the interaction and scoring function of when an egg goes in an empty nest.  
@@ -373,7 +367,7 @@ expected_total_points: int
    - Simulates a condition when an egg interacts with a pan.  
 
 7. **`no_wall_stuck_egg`**  
-   - Tests how eggs behave in a grid with empty spaces (`" "`) only.  
+   - Tests how eggs behaves in a 1 x 1 grid with no surrounding walls.  
 
 8. **`plus_remaining_moves`**  
    - Tests how the number of remaining moves is computed into the score when an egg goes in an empty nest.  
@@ -386,11 +380,15 @@ expected_total_points: int
     - Tests all the movements.  
 
 11. **`with_invalids`**  
-    - Tests invalid inputs to levels.  
+    - Tests graceful handling of invalid inputs.
+    - The invalid inputs are:
+      ```python
+      invalid_inputs = "thequickownoxjumpedovetheazydogTHEQUICKOWNOXJUMPEDOVETHEAZYDOG1234567890`-=[]\;',./~!@#$%^&*()_+{}|:"<>?"
+      ```
 
 ### *Notes*
 - Ensure that test files are properly formatted: `test_file_name.in`.
-- While you can run the script itself for testing, using `pytest` is advisable for more detailed logs and better debugging capabilities.
+- As mentioned before, `undo` inputs were not tested, but the implementation was pretty straightforward with game_state keeping "snapshots" of the level with each valid input in a `list`. Undoing simply sets the current level state to the last item on this list, and decrements the `moves_left` of the player.
 
 
 ## [🗺️] Level Submissions
