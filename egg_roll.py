@@ -48,6 +48,8 @@ class Level:
                 try:
                     if self.grid[i][j] == '🥚' or self.grid[i][j] == '0':
                         self.eggs.append((i, j))
+                    elif self.grid[i][j] == ' ':
+                        gaps_holder.append((i, j))
                 except:
                     gaps_holder.append((i, j))
         self.gaps = tuple(gaps_holder)
