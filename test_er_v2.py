@@ -1,15 +1,25 @@
 import pytest
-import os       # for file handling
-import sys, io  # for overloading print and input
-from egg_roll import Level, game_state
+import os
+import sys
+import io
+from egg_roll_v2 import Level, Player
 
 
 # EXPECTED INPUTS AND OUTPUTS
 
-# test_level = Level(grid, moves_left)
+# test_level: Level = Level(grid: tuple[tuple[str, ...], ...], move_limit: int)
 
 # if character in 'fFbBrRlL':
-#     increment_points, animation, no_eggs = current_level.tilt(character, moves_left)
+#     debug_logs: list[str]
+#     temporary_points: int
+#     animation_frames: list[str]
+#     eggs_are_left: bool
+#     debug_logs, temporary_points, animation_frames, eggs_are_left = (
+#         self.current_level.tilt(
+#                                 char: str,
+#                                 moves_left: int,
+#                                 )
+#         )
 
 # file_name = */valid_location/level_file.in
 # with open(file_name, encoding='utf-8') as level_file:
