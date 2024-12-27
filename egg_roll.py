@@ -1,7 +1,11 @@
-import os, subprocess                       # for clear_screen
+import os                                   # for clear_screen
+import subprocess                           # for clear_screen
 import sys                                  # for clear_screen and file handling
 import time                                 # for delay
 from dataclasses import dataclass, astuple  # for TileSet
+from typing import Self                     # for type hinting
+from copy import deepcopy                   # for undo functionality
+
 
 @dataclass
 class TileSet:
@@ -14,14 +18,13 @@ class TileSet:
     magic_key: str
 
 global DEBUG, EMOJI_SET, ASCII_SET
-DEBUG: bool = False # This toggles debugging prints and disables clear_screens for egg_roll.py
+DEBUG: bool = False # This toggles debugging prints and disables local clear_screens
 EMOJI_SET: TileSet = TileSet(egg_key='🥚', grass_key='🟩', wall_key='🧱', pan_key='🍳', empty_key='🪹', full_key='🪺', magic_key='✨')
 ASCII_SET: TileSet = TileSet(egg_key='0', grass_key='.', wall_key='#', pan_key='P', empty_key='O', full_key='@', magic_key='*')
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 class Level:
-    '''
-    Each Level object has:
+    """Each Level object has:
     1. main gameplay interactible 'grid' of tiles
     2. level maker's set move 'limit'
     3. a list of the postions of the 'eggs' in (i, j)
@@ -29,17 +32,16 @@ class Level:
     5. number of grid's 'cols'
     6. a tuple of the positions of the 'gaps' in (i, j)
     7. the 'key' for the relevant TileSet
-    '''
-
+    """
     def __init__(self, grid: tuple[tuple[str, ...], ...], max_moves: int | str) -> None:
         self.grid: list[list[str]] = list(list(char for char in row if char != '\n') for row in grid)
         self.limit: int = 0 if max_moves == "inf" else int(max_moves)
         self.rows: int = len(self.grid)
         self.cols: int = max(len(row) for row in self.grid)
-        
+
         # This sets the appropriate TileSet depending on the grid
         self.key: TileSet = EMOJI_SET if any(char in astuple(EMOJI_SET) for row in self.grid for char in row) else ASCII_SET
-
+        
         # This stores the position of all active eggs on the grid
         self.eggs: list[tuple[int, int]] = []
         gaps_holder: list[tuple[int, int]] = []
@@ -56,9 +58,6 @@ class Level:
         
     def __str__(self) -> str:
         return '\n'.join(tuple(''.join(row) for row in self.grid))
-
-    def get_copy(self): # -> Level
-        return Level(self.grid, self.limit)
     
     def get_grid(self) -> list[list[str]]:
         return self.grid
@@ -279,7 +278,7 @@ def game_state(level_file, factor=1) -> tuple[Level, list[str], int]:
     game_end: bool = False
 
     # This stores last level states as a Level
-    undo_levels: list[Level] = [current_level.get_copy()]
+    undo_levels: list[Level] = [deepcopy(current_level)]
 
     # This stores last scores (to be used with undo_levels)
     undo_points: list[int] = [points]
@@ -365,7 +364,7 @@ def game_state(level_file, factor=1) -> tuple[Level, list[str], int]:
                 past_moves.append('⎌')
 
                 undo_temp_grid: list[str] = str(undo_levels.pop()).split('\n')
-                current_level = undo_levels[-1].get_copy()
+                current_level = deepcopy(undo_levels[-1])
                 undo_points.pop()
                 points = undo_points[-1]
 
@@ -463,7 +462,7 @@ def game_state(level_file, factor=1) -> tuple[Level, list[str], int]:
                         print("# clear_screen(DEBUG)")
 
                     # Undo processing here
-                    undo_levels.append(current_level.get_copy())
+                    undo_levels.append(deepcopy(current_level))
                     undo_points.append(points)
 
                     # Game state check (per individual move)
