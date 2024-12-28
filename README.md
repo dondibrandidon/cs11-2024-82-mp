@@ -20,18 +20,18 @@ Submission of Group **#82** (*daegu_original*) from class WFJ/MUV1:\
 The included files in the submission are laid out as:
 ```python
 .|
-├── menu.py                # The main program for playing egg_roll
-├── egg_roll.py            # Bulk of the gameplay logic code
+├── menu.py                         # The main program for playing egg_roll_v2
+├── egg_roll_v2.py                  # Bulk of the gameplay logic code
 |
-├── levels|                # Contains level files
-│   ├── valid_level.in     # Example valid level file
+├── levels|                         # Contains level files
+│   ├── valid_level.in              # Example valid level file
 │   └── ...
 │
-├── test_er.py             # Unit testing program for egg_roll.py
+├── test_er_v2.py                   # Unit testing program for egg_roll_v2.py
 |
-└── unit_testing|          # More on this in "[🧪] Unit Testing"
-    ├── _test_game_state|  # Folder containing test cases for game_state
-    └── _test_Level_tilt|  # Folder containing test cases for Level.tilt
+└── unit_testing_v2|                # More on this in "[🧪] Unit Testing"
+    ├── _test_Player_start_playing| # Folder containing test cases for game_state
+    └── _test_Level_tilt|           # Folder containing test cases for Level.tilt
 ```
 
 
@@ -104,11 +104,11 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
    - Then choose between the two methods to play levels:\
      a. **Recommended**, through the Main Menu:
      ```bash
-     python3.12 menu.py
+     python3.12 menu_v2.py
      ```
      b. Direct-to-level, with a level file: (*does not save highscore!*)
      ```bash
-     python3.12 egg_roll.py .|valid_location|level_file.in
+     python3.12 egg_roll_v2.py .|valid_location|level_file.in
      ```
    - Also highly recommended to `pip install` the module `termcolor` for much more colorful interfaces.
 
@@ -147,7 +147,7 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
 
 ## [🤓] Implementation
 
-1. *Implementing* `egg_roll.py`\
+1. *Implementing* `egg_roll_v2.py`\
    The main logic of the gameplay uses a Level class for the main player interaction logic.
    ```python
    class Level:
@@ -160,15 +160,21 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
       def tilt(self, degree, moves_left):
          ...
    ```
-   As for the main user interface, the following functions are used:
+   As for the main user interface, the following function is used:
    ```python
    def clear_screen(DEBUG):
       ...
    ```
-   and the main interface:
+   along with the controller Player class:
    ```python
-   def game_state(level_file, factor=1):
+   class Player:
       ...
+   ```
+   This class processess all of the contents of the chosen `level_file`, and tracks of the players current info. The main interaction method is:
+   ```python
+      ...
+      def start_playing(self):
+         ...
    ```
    A backup function was also defined to handle egg_roll direct-to-file requests:
    ```python
@@ -195,6 +201,7 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
 
 3. *Implementing everything*\
    For this project, `Python3.12` was used in Sublime Text and VSCode.\
+   Autodocumentation was done with the help of `Sphinx`.\
    The `mypy` module was used for type checking.\
    Finally, unit testing was done with the help of `pytest`:
 
@@ -202,7 +209,7 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
 ## [🧪] Unit Testing
 
 ### **Overview**
-The `test_er.py` script is designed to test the functionality of the `egg_roll` module, specifically the `Level` class and `game_state` function. It utilizes the `pytest` framework to automate the unit testing.
+The `test_er_v2.py` script is designed to test the functionality of the `egg_roll_v2` module, specifically the `Level.tilt` and `Class.start_playing`/`Class.get_state` interactions. It utilizes the `pytest` framework to automate the unit testing.
 
 ### **Directory**
 The script uses the following directory structure for input test files:
@@ -214,7 +221,7 @@ The script uses the following directory structure for input test files:
 │   ├── test_case2.in
 │   └── ...
 │
-└── _test_game_state|
+└── _test_Player_start_playing|
     ├── test_case1.in
     ├── test_case2.in
     └── ...
@@ -255,10 +262,10 @@ expected_points: int
 expected_no_eggs: 0 | 1    # acts as bool
 ```
 
-### > **`test_game_state`**
-- **Purpose**: Simulates a complete call of `game_state`.
+### > **`test_Player_start_playing`**
+- **Purpose**: Simulates an interaction with `Player`.
 - **Input**: Reads from test files in:
-    `.|unit_testing|_test_game_state`
+    `.|unit_testing|_Player_start_playing`
 - **Assertions:**
   - Final grid matches expected grid.
   - List of moves matches expected moves.
@@ -268,10 +275,10 @@ expected_no_eggs: 0 | 1    # acts as bool
 
 File name: `test_file_name.in`
 
-> NOTE: It is important that the `string_input` would be enough to "finish" the game so that `game_state` would be able to `return` the final states. Because of this format, `undo` was not tested.
+> NOTE: This tests `Player.start_playing` specifically for `string_input`s that would be enough to "finish" the game so that `start_playing` would be able to `return` the final states properly. Because of this, `Player.get_state` was used for cases where used to handle `EOFError`s where the `string_input` was not enough.
 
 ```
-string_input: str          # assert sum(char for char in string_input char in "fFbBrRlL") >= moves_left
+string_input: str
 level_rows: int
 moves_left: int
 row_1: str                 # the initial grid state
@@ -343,7 +350,7 @@ expected_total_points: int
     - For the `n` cases, the values tested were 2, 3, and 100.
 
       
-#### **in `_test_game_state`**
+#### **in `_test_Player_start_playing`**
 *(arranged alphabetically/how it would appear inside the folder)*
 
 1. **`ascii_`**  
@@ -390,10 +397,15 @@ expected_total_points: int
 
 12. **`n`**
     - For the `n` cases, the values tested were 2, and 3.
+
+13. **`undo`**
+    - Tests the `undo` input functionality.
+
+14. **`incomplete`**
+    - Tests `Player.get_state`'s handling of incomplete `string_inputs`.
     
 ### *Notes*
 - Ensure that test files are properly formatted: `test_file_name.in`.
-- As mentioned before, `undo` inputs were not tested, but the implementation was pretty straightforward with game_state keeping "snapshots" of the level with each valid input in a `list`. Undoing simply sets the current level state to the last item on this list, and decrements the `moves_left` of the player.
 
 
 ## [🗺️] Levels

@@ -245,7 +245,8 @@ class Player:
         moves_left_holder: str = level_file.readline().strip('\n')
         grid = tuple(
             tuple(str(level_file.readline()).strip('\n'))
-            for i in range(num_of_rows))
+            for i in range(num_of_rows)
+            )
 
         self.file_name: str = level_file.name
         self.moves_left: int = (
@@ -407,7 +408,7 @@ class Player:
         self._set_current_input()
         return None
 
-    def _game_over(self) -> tuple[Level, tuple[str, ...], int]:
+    def _game_over(self) -> None:
         print("[!!!]")
         print()
         print(str(self.current_level))
@@ -436,9 +437,9 @@ class Player:
             print(self.points)
         print()
 
-        return self.current_level, tuple(self.past_moves), self.points
+        return None
 
-    def start_playing(self):
+    def start_playing(self) -> tuple[Level, tuple[str, ...], int]:
         while not self.game_end and self.moves_left != 0:
             if self.debug:  # debug info
                 print("# START OF UNDO CHECK")
@@ -450,6 +451,8 @@ class Player:
 
             clear_screen(self.debug)
             self._print_interface()
+            if self.debug:  # debug info
+                print(f"self._print_interface() updated {self.current_input=}")
 
             clear_screen(self.debug)
             if ''.join(self.current_input).lower() == 'exit':
@@ -461,7 +464,11 @@ class Player:
                     self._character_scenario(char)
 
         clear_screen(self.debug)
-        return self._game_over()
+        self._game_over()
+        return self.get_state()
+
+    def get_state(self) -> tuple[Level, tuple[str, ...], int]:
+        return self.current_level, tuple(self.past_moves), self.points
 
 
 def clear_screen(is_debug: bool) -> None:
