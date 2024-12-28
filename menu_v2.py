@@ -243,7 +243,7 @@ def main_menu(is_debug: bool = False) -> None:
                         game_state: Player = Player(level_file, is_debug)
 
                         level_end_state: Level
-                        moves_made: list[str]
+                        moves_made: tuple[str, ...]
                         score: int
                         level_end_state, moves_made, score = (
                             game_state.start_playing())
