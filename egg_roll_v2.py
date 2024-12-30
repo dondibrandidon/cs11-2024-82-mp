@@ -7,6 +7,17 @@ from dataclasses import dataclass, astuple
 from copy import deepcopy
 
 
+@dataclass
+class TileSet:
+    egg_key: str
+    grass_key: str
+    wall_key: str
+    pan_key: str
+    empty_key: str
+    full_key: str
+    magic_key: str
+
+
 class Level:
     """This class processes the current level file being played.
 
@@ -25,16 +36,6 @@ class Level:
     :param gaps: _description_
     :type gaps: tuple[tuple[int, int]]
     """
-
-    @dataclass
-    class TileSet:
-        egg_key: str
-        grass_key: str
-        wall_key: str
-        pan_key: str
-        empty_key: str
-        full_key: str
-        magic_key: str
 
     emoji_set: TileSet = TileSet(
         egg_key='🥚',
@@ -55,7 +56,7 @@ class Level:
         magic_key='*',
         )
 
-    freedom = {'f': (-1, 0), 'b': (1, 0), 'r': (0, 1), 'l': (0, -1)}
+    freedom = {'↑': (-1, 0), '↓': (1, 0), '→': (0, 1), '←': (0, -1)}
 
     def __init__(self, grid: tuple[tuple[str, ...], ...], max_moves: int,
                  ) -> None:
@@ -65,7 +66,7 @@ class Level:
         self.limit: int = int(max_moves)
         self.rows: int = len(self.grid)
         self.cols: int = max(len(row) for row in self.grid)
-        self.key: Level.TileSet = (
+        self.key: TileSet = (
             Level.emoji_set if any(
                 char in astuple(Level.emoji_set)
                 for row in self.grid
@@ -122,6 +123,9 @@ class Level:
         :return: _description_
         :rtype: tuple[int, list[str], bool]
         """
+
+        assert degree in "↑↓→←"  # sanity check
+
         try:
             i_velocity, j_velocity = Level.freedom[degree.lower()]
         except KeyError:
@@ -132,9 +136,9 @@ class Level:
         tweens: list[str] = [str(self)]
         """This will be used to animate the eggs rolling"""
         roll_eggs: list[tuple[int, int]]
-        if degree in 'fFlL':
+        if degree in "↑←":
             roll_eggs = sorted(self.eggs)
-        elif degree in 'bBrR':
+        elif degree in "↓→":
             roll_eggs = sorted(self.eggs)[::-1]
             """This is done to prevent multiple eggs in one tile"""
         else:
@@ -191,9 +195,9 @@ class Level:
                         )
             tweens.append(str(self))
 
-        if degree in 'lLfF':
+        if degree in "↑←":
             self.eggs = sorted(wall_eggs)
-        elif degree in 'rRbB':
+        elif degree in "↓→":
             self.eggs = sorted(wall_eggs)[::-1]
         """This re-sorts roll_eggs turned wall_eggs back to self.eggs"""
 
@@ -225,22 +229,33 @@ class Player:
     :type debug: bool
     """
 
-    move_to_name: dict[str, str] = {
-        'f': "forward",
-        'b': "backward",
-        'r': "rightward",
-        'l': "leftward",
+    # move_to_name: dict[str, str] = {
+    #     'f': "forward",
+    #     'b': "backward",
+    #     'r': "rightward",
+    #     'l': "leftward",
+    # }
+
+    name_to_symbol: dict[str, str] = {
+        'forward': '↑',
+        'backward': '↓',
+        'rightward': '→',
+        'leftward': '←',
     }
 
-    move_to_symbol: dict[str, str] = {
-        'f': '↑',
-        'b': '↓',
-        'r': '→',
-        'l': '←',
+    symbol_to_name: dict[str, str] = {
+        '↑': 'forward',
+        '↓': 'backward',
+        '→': 'rightward',
+        '←': 'leftward',
     }
 
-    def __init__(self, level_file: TextIOWrapper, is_debug: bool = False
-                 ) -> None:
+    def __init__(
+            self,
+            freedom: dict[str, str],
+            level_file: TextIOWrapper,
+            is_debug: bool = False
+            ) -> None:
         num_of_rows: int = int(level_file.readline())
         moves_left_holder: str = level_file.readline().strip('\n')
         grid = tuple(
@@ -248,6 +263,14 @@ class Player:
             for i in range(num_of_rows)
             )
 
+        self.degrees: dict[str, str] = {
+            char: Player.name_to_symbol[key]
+            for key, value
+            in freedom.items()
+            for char
+            in value
+        }
+        self.valids: str = ''.join(freedom.values())
         self.file_name: str = level_file.name
         self.moves_left: int = (
             -1 if moves_left_holder == "inf"
@@ -323,14 +346,15 @@ class Player:
         if self.debug:  # debug info
             print(f"# Input to process: {char}")
 
-        if char in "fFbBrRlL":
-            self.past_moves.append(Player.move_to_symbol[char.lower()])
+        if char in self.valids:
+            self.past_moves.append(
+                self.degrees[char])
 
             debug_logs: list[str]
             temp_points: int
             wowaka: list[str]
             debug_logs, temp_points, wowaka, self.game_end = (
-                self.current_level.tilt(char, self.moves_left))
+                self.current_level.tilt(self.degrees[char], self.moves_left))
 
             if self.debug:  # debug info
                 for log in debug_logs:
@@ -342,7 +366,9 @@ class Player:
 
             for frame in wowaka:
                 clear_screen(self.debug)
-                print(f"<Tilting {Player.move_to_name[char.lower()]}...>")
+                print(
+                    f'<Tilting '
+                    f'{Player.symbol_to_name[self.degrees[char]]}...>')
                 print()
                 print(frame)
                 time.sleep(0.3 * (not self.debug))
@@ -371,13 +397,15 @@ class Player:
         print(self.current_level)
         print()
 
+        print("Controls:")
+        for arrow in Player.symbol_to_name:
+            print(
+                f"> Use any of ['{''.join(
+                    char for char in self.degrees
+                    if self.degrees[char] == arrow)}']"
+                f" to tilt the board {Player.symbol_to_name[arrow]}")
+        print()
         print(
-            "Controls:",
-            "> [f] or [F] to tilt the board forward",
-            "> [b] or [B] to tilt the board backward",
-            "> [r] or [R] to tilt the board rightward",
-            "> [l] or [L] to tilt the board leftward",
-            "",
             "> [\"Undo\"] to use energy to undo last move",
             "> [\"Exit\"] to quit this level",
             sep="\n")
@@ -439,6 +467,9 @@ class Player:
 
         return None
 
+    def get_state(self) -> tuple[Level, tuple[str, ...], int]:
+        return self.current_level, tuple(self.past_moves), self.points
+
     def start_playing(self) -> tuple[Level, tuple[str, ...], int]:
         while not self.game_end and self.moves_left != 0:
             if self.debug:  # debug info
@@ -466,9 +497,6 @@ class Player:
         clear_screen(self.debug)
         self._game_over()
         return self.get_state()
-
-    def get_state(self) -> tuple[Level, tuple[str, ...], int]:
-        return self.current_level, tuple(self.past_moves), self.points
 
 
 def clear_screen(is_debug: bool) -> None:
@@ -508,13 +536,19 @@ if __name__ == '__main__':
             while True:
                 with open(sys.argv[1], encoding='utf-8') as level_file:
                     try:
-                        game_state: Player = Player(level_file, is_debug)
+                        default = {
+                            "forward": 'fF',
+                            "backward": 'bB',
+                            "rightward": 'rR',
+                            "leftward": 'lL,'
+                            }
+                        game_state: Player = Player(
+                            default,
+                            level_file,
+                            is_debug,
+                            )
 
-                        level_end_state: Level
-                        moves_made: tuple[str, ...]
-                        score: int
-                        level_end_state, moves_made, score = (
-                            game_state.start_playing())
+                        game_state.start_playing()
 
                     except FileNotFoundError:
                         clear_screen(is_debug)
