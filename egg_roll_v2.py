@@ -56,7 +56,7 @@ class Level:
         magic_key='*',
         )
 
-    freedom = {'↑': (-1, 0), '↓': (1, 0), '→': (0, 1), '←': (0, -1)}
+    freedom = {'f': (-1, 0), 'b': (1, 0), 'r': (0, 1), 'l': (0, -1)}
 
     def __init__(self, grid: tuple[tuple[str, ...], ...], max_moves: int,
                  ) -> None:
@@ -124,7 +124,7 @@ class Level:
         :rtype: tuple[int, list[str], bool]
         """
 
-        assert degree in "↑↓→←"  # sanity check
+        assert degree in "fbrl"  # sanity check
 
         try:
             i_velocity, j_velocity = Level.freedom[degree.lower()]
@@ -136,9 +136,9 @@ class Level:
         tweens: list[str] = [str(self)]
         """This will be used to animate the eggs rolling"""
         roll_eggs: list[tuple[int, int]]
-        if degree in "↑←":
+        if degree in "fl":
             roll_eggs = sorted(self.eggs)
-        elif degree in "↓→":
+        elif degree in "br":
             roll_eggs = sorted(self.eggs)[::-1]
             """This is done to prevent multiple eggs in one tile"""
         else:
@@ -195,9 +195,9 @@ class Level:
                         )
             tweens.append(str(self))
 
-        if degree in "↑←":
+        if degree in "fl":
             self.eggs = sorted(wall_eggs)
-        elif degree in "↓→":
+        elif degree in "br":
             self.eggs = sorted(wall_eggs)[::-1]
         """This re-sorts roll_eggs turned wall_eggs back to self.eggs"""
 
@@ -236,18 +236,25 @@ class Player:
     #     'l': "leftward",
     # }
 
-    name_to_symbol: dict[str, str] = {
-        'forward': '↑',
-        'backward': '↓',
-        'rightward': '→',
-        'leftward': '←',
+    name_to_char: dict[str, str] = {
+        'forward': 'f',
+        'backward': 'b',
+        'rightward': 'r',
+        'leftward': 'l',
     }
 
-    symbol_to_name: dict[str, str] = {
-        '↑': 'forward',
-        '↓': 'backward',
-        '→': 'rightward',
-        '←': 'leftward',
+    char_to_name: dict[str, str] = {
+        'f': 'forward',
+        'b': 'backward',
+        'r': 'rightward',
+        'l': 'leftward',
+    }
+
+    char_to_symbol: dict[str, str] = {
+        'f': '↑',
+        'b': '↓',
+        'r': '→',
+        'l': '←',
     }
 
     def __init__(
@@ -264,7 +271,7 @@ class Player:
             )
 
         self.degrees: dict[str, str] = {
-            char: Player.name_to_symbol[key]
+            char: Player.name_to_char[key]
             for key, value
             in freedom.items()
             for char
@@ -348,7 +355,7 @@ class Player:
 
         if char in self.valids:
             self.past_moves.append(
-                self.degrees[char])
+                Player.char_to_symbol[self.degrees[char]])
 
             debug_logs: list[str]
             temp_points: int
@@ -368,7 +375,7 @@ class Player:
                 clear_screen(self.debug)
                 print(
                     f'<Tilting '
-                    f'{Player.symbol_to_name[self.degrees[char]]}...>')
+                    f'{Player.char_to_name[self.degrees[char]]}...>')
                 print()
                 print(frame)
                 time.sleep(0.3 * (not self.debug))
@@ -398,12 +405,13 @@ class Player:
         print()
 
         print("Controls:")
-        for arrow in Player.symbol_to_name:
+        for arrow in Player.char_to_name:
+            sub_valids = ''.join(
+                char for char in self.degrees
+                if self.degrees[char] == arrow)
             print(
-                f"> Use any of ['{''.join(
-                    char for char in self.degrees
-                    if self.degrees[char] == arrow)}']"
-                f" to tilt the board {Player.symbol_to_name[arrow]}")
+                f"> Use any of ['{sub_valids}']"
+                f" to tilt the board {Player.char_to_name[arrow]}")
         print()
         print(
             "> [\"Undo\"] to use energy to undo last move",

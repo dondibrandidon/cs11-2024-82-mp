@@ -31,12 +31,12 @@ class Menu:
             }
 
             if os.path.isfile(
-                f".{os.sep}controls.ini",
+                f".{os.sep}controls.in",
             ):
-                pass  # do nothing if controls.ini already exists
+                pass  # do nothing if controls.in already exists
             else:
                 with open(
-                        f".{os.sep}controls.ini",
+                        f".{os.sep}controls.in",
                         'w') as settings:
                     # f, b, r, l
                     settings.write("""\
@@ -62,7 +62,7 @@ leftward = 'lL'
 
     def _update_freedom(self) -> None:
         with open(
-                f".{os.sep}controls.ini",
+                f".{os.sep}controls.in",
                 'r') as settings:
             i = 0
             for setting in settings:
@@ -72,7 +72,7 @@ leftward = 'lL'
 
     def _update_settings_file(self) -> None:
         with open(
-                f".{os.sep}controls.ini",
+                f".{os.sep}controls.in",
                 'w') as settings:
             for key, value in self.freedom.items():
                 settings.write(f"{value}\n")
@@ -285,7 +285,7 @@ _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   █▓▓▒░   _|_\\  _|_\\
 
             print("<Controls Settings>")
             with open(
-                    f".{os.sep}controls.ini",
+                    f".{os.sep}controls.in",
                     'r') as settings:
                 i = 0
                 for setting in settings:

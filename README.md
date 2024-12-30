@@ -336,17 +336,14 @@ expected_total_points: int
 11. **`stuck`**
     - Tests how the egg confined by walls will behave when made to move.
 
-12. **`uppercase`**
-    - Tests how the program would accept uppercase valid inputs.
-
-13. **`ver_n_egg`**
+11. **`ver_n_egg`**
     - Tests the movements of `n` vertically adjacent eggs across different movements.
     - Simulates how `n` vertically adjacent eggs would behave.
 
-14. **`_pan`**
+12. **`_pan`**
     - This is tested in conjunction with the `hor` and `ver` cases for multiple eggs rolling into a pan in one turn.
 
-15. **`n`**
+13. **`n`**
     - For the `n` cases, the values tested were 2, 3, and 100.
 
       
