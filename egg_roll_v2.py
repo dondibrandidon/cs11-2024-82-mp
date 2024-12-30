@@ -536,7 +536,7 @@ if __name__ == '__main__':
             while True:
                 with open(sys.argv[1], encoding='utf-8') as level_file:
                     try:
-                        default = {
+                        default: dict[str, str] = {
                             "forward": 'fF',
                             "backward": 'bB',
                             "rightward": 'rR',

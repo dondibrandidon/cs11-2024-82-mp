@@ -293,7 +293,8 @@ _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   █▓▓▒░   _|_\\  _|_\\
                     i += 1
 
             print()
-            print("* To change something type [direction = 'valid_characters']")
+            print(
+                "* To change something type [direction = 'valid_characters']")
             """This format should be strictly followed by user!"""
             print()
 

@@ -145,7 +145,13 @@ def test_Player_start_playing(test_file):
     with open(level_path, encoding='utf-8') as level_file:
         sys.stdin = io.StringIO(level_file.readline().replace(',', '\n'))
         try:
-            game_state: Player = Player(level_file, is_debug=True)
+            default: dict[str, str] = {
+                            "forward": 'fF',
+                            "backward": 'bB',
+                            "rightward": 'rR',
+                            "leftward": 'lL,'
+                            }
+            game_state: Player = Player(default, level_file, is_debug=True)
             final_state, moves_made, total_points = (
                 game_state.start_playing())
         except EOFError:
@@ -175,10 +181,22 @@ def test_Player_start_playing(test_file):
 
 
 def main():
-    for test_file in [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_Level_tilt")]:
+    for test_file in [
+            file
+            for file
+            in os.listdir(
+                "."
+                + os.sep + "unit_testing"
+                + os.sep + "_test_Level_tilt")]:
         test_Level_tilt(test_file)
 
-    for test_file in [file for file in os.listdir("." + os.sep + "unit_testing" + os.sep + "_test_Player_start_playing")]:
+    for test_file in [
+            file
+            for file
+            in os.listdir(
+                "."
+                + os.sep + "unit_testing"
+                + os.sep + "_test_Player_start_playing")]:
         test_Player_start_playing(test_file)
 
 
