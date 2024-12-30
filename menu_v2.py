@@ -40,10 +40,10 @@ class Menu:
                         'w') as settings:
                     # f, b, r, l
                     settings.write("""\
-forward = 'fF'
-backward = 'bB'
-rightward = 'rR'
-leftward = 'lL'
+fF
+bB
+rR
+lL
 """)
         except FileNotFoundError:
             raise FileNotFoundError
@@ -211,8 +211,8 @@ ______________________________________...
 
             for (name, score, date) in score_hold:
                 print(
-                    f'{score}{' '*(longest_score-len(str(score)))} '
-                    f'| Mayor {name}{' '*(longest_name-len(str(name))-6)} '
+                    f'{score}{" "*(longest_score-len(str(score)))} '
+                    f'| Mayor {name}{" "*(longest_name-len(str(name))-6)} '
                     f'| {date}'
                     )
                 time.sleep(0.5 * (not self.debug))
@@ -289,7 +289,9 @@ _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   █▓▓▒░   _|_\\  _|_\\
                     'r') as settings:
                 i = 0
                 for setting in settings:
-                    print(f"{Menu.directions[i]} = '{setting.strip('\n')}'")
+                    print(Menu.directions[i], end='')
+                    print(" = '", end='')
+                    print(setting.strip('\n'), end="'\n")
                     i += 1
 
             print()
@@ -431,7 +433,7 @@ if __name__ == '__main__':
         print("# menu.py DEBUG IS ON")
 
     try:
-        from termcolor import colored
+        from termcolor import colored  # type: ignore
         if debug:  # debug info
             print("# termcolor loaded")
     except ImportError:
