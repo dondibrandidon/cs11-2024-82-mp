@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>egg_roll_v2.Level &#8212; Egg Roll 2: Electric Boogaloo  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="egg_roll_v2.Player" href="egg_roll_v2.Player.html" />
+    <link rel="prev" title="egg_roll_v2" href="egg_roll_v2.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="egg-roll-v2-level">
+<h1>egg_roll_v2.Level<a class="headerlink" href="#egg-roll-v2-level" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="egg_roll_v2.Level">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">egg_roll_v2.</span></span><span class="sig-name descname"><span class="pre">Level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#egg_roll_v2.Level" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is the model handling all logic involving the grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>emoji_set</strong> – Set of tiles for emoji levels (🥚, 🟩, 🧱, 🍳, 🪹, 🪺, ✨)</p></li>
+<li><p><strong>ascii_set</strong> – Set of tiles for ascii levels (0, ., #, P, O, &#64;, <a href="#id1"><span class="problematic" id="id2">*</span></a>)</p></li>
+<li><p><strong>themes</strong> – Set of all allowed TileSet</p></li>
+<li><p><strong>grid</strong> – The 2D matrix filled with string representing the tiles</p></li>
+<li><p><strong>rows</strong> – The number of rows of the grid</p></li>
+<li><p><strong>cols</strong> – The maximum row length of the grid</p></li>
+<li><p><strong>eggs</strong> – The mutable array of egg coordinates in the grid</p></li>
+<li><p><strong>gaps</strong> – The immutable array of all the gaps in a non-square grid</p></li>
+<li><p><strong>key</strong> – The TileSet dataclass of the characters used by the grid</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="egg_roll_v2.Level.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#egg_roll_v2.Level.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes all of the variables of the Level instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>grid</strong> (<em>tuple</em><em>[</em><em>tuple</em><em>[</em><em>str</em><em>, </em><em>...</em><em>]</em><em>, </em><em>...</em><em>]</em>) – The grid of tiles to be processed</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Raised for grids that don’t follow a TileSet</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#egg_roll_v2.Level.__init__" title="egg_roll_v2.Level.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(grid)</p></td>
+<td><p>Initializes all of the variables of the Level instance.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cols</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_grid</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_key</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_rows</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tilt</span></code>(degree, moves_left)</p></td>
+<td><p>The main logical interaction with the player! Simulates a tilting of the board, which moves the eggs.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ascii_set</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">emoji_set</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">freedom</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sea_set</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">themes</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Egg Roll 2: Electric Boogaloo</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="egg_roll_v2.html">egg_roll_v2</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">egg_roll_v2.Level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="egg_roll_v2.Player.html">egg_roll_v2.Player</a></li>
+<li class="toctree-l1"><a class="reference internal" href="egg_roll_v2.clear_screen.html">egg_roll_v2.clear_screen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="menu_v2.html">menu_v2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="menu_v2.Menu.html">menu_v2.Menu</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="egg_roll_v2.html" title="previous chapter">egg_roll_v2</a></li>
+      <li>Next: <a href="egg_roll_v2.Player.html" title="next chapter">egg_roll_v2.Player</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;egg_roll: 2024, Martin Mendoza C. M. and Brandon E. Sayo;
+egg_roll_v2: 2024, Brandon E. Sayo.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/_autosummary/egg_roll_v2.Level.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

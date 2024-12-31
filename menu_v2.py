@@ -5,10 +5,27 @@ from egg_roll_v2 import clear_screen, Player, Level
 
 
 class Menu:
+    """This is the class handling all Main Menu displays.
 
+    :cvar directions: Word directions used for Controls menu
+    :type directions: tuple[str, str, str, str]
+
+    :ivar debug: Enables printing of debug info and disables time.sleep if True
+    :type debug: bool
+    :ivar level_list: Array containing all levels_file.in in .|levels|*
+    :type level_list: tuple[str]
+    :ivar freedom: Returns set valid characters for each word drection
+    :type freedom: dict[str, str]
+    """
     directions = ["forward", "backward", "rightward", "leftward"]
 
     def __init__(self, is_debug=False):
+        """Initializes all of the variables of the Menu instance.
+
+        :param is_debug: Makes debugging more convenient if True,
+                         defaults to False
+        :type is_debug: bool, optional
+        """
         self.debug: bool = is_debug
         try:
             # This lists ALL of the .in contents
@@ -17,7 +34,7 @@ class Menu:
                 file
                 for file
                 in os.listdir(f".{os.sep}levels")
-                if file[-3:] == ".in"
+                if file.endswith(".in")
                 )
 
             if self.debug:  # debug info
@@ -37,8 +54,9 @@ class Menu:
             else:
                 with open(
                         f".{os.sep}controls.in",
-                        'w') as settings:
-                    # f, b, r, l
+                        'w'
+                        ) as settings:
+                    # in order of: forward, backward, rightward, leftward
                     settings.write("""\
 fF
 bB
@@ -49,6 +67,7 @@ lL
             raise FileNotFoundError
 
     def _update_level_list(self) -> None:
+        """Updates the array of levels by checking the folder."""
         try:
             self.level_list = tuple(
                     file
@@ -61,6 +80,7 @@ lL
             raise FileNotFoundError
 
     def _update_freedom(self) -> None:
+        """Updates the freedom dictionary by checking the controls.in file."""
         with open(
                 f".{os.sep}controls.in",
                 'r') as settings:
@@ -71,6 +91,7 @@ lL
         return None
 
     def _update_settings_file(self) -> None:
+        """Updates the controls.in file form the freedom dictionary."""
         with open(
                 f".{os.sep}controls.in",
                 'w') as settings:
@@ -81,7 +102,9 @@ lL
     def _generate_blank_highscore_files(
             self,
             ) -> None:
-        """The format of a highscore file is as follows:
+        """Generates _score_level_file.txt for all levels in level_list.
+
+        The format of a highscore file is as follows:
 
             player_score1: int
             player_score_datetime1: datetime.datetime
@@ -91,10 +114,7 @@ lL
             player_score_datetime5: datetime.datetime
             player_score_name5: str
 
-        *Note that only the TOP 5 mayors are kept in memory.
-
-        :param levels: _description_
-        :type levels: _type_
+        Note that only the TOP 5 mayors are kept in memory.
         """
         for level in self.level_list:
             if os.path.isfile(
@@ -129,7 +149,8 @@ lL
             file_played: str,
             score: int,
             ) -> None:
-        """This is called after Player.start_playing returns
+        """Updates the relevant _score_level_file.txt file
+        from what Player.start_playing returns.
         """
         with open(
                 f'.'
@@ -137,7 +158,7 @@ lL
                 f'{os.sep}_score_{str(file_played)[:-3]}.txt'
                 ) as score_file:
             player_name: str = input("""\
-______________________________________...
+ ______________________________________...
 (______________________________________...
 |
 | Thank you for your hard work mayor!
@@ -216,7 +237,7 @@ ______________________________________...
                     f'| {date}'
                     )
                 time.sleep(0.5 * (not self.debug))
-            time.sleep(0.5 * (not self.debug))
+        time.sleep(3 * (not self.debug))
 
         with open(
                 f'.'
@@ -230,6 +251,7 @@ ______________________________________...
         return None
 
     def _print_logo(self) -> None:
+        """Handles anytime the logo needs to be printed."""
         print("""\
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -246,6 +268,7 @@ _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   █▓▓▒░   _|_\\  _|_\\
         return None
 
     def _levels_menu(self) -> None:
+        """Handles the [Levels] menu"""
         choice: str = ''
         while choice.lower() != "back":
             clear_screen(self.debug)
@@ -277,6 +300,7 @@ _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   █▓▓▒░   _|_\\  _|_\\
         return None
 
     def _controls_menu(self) -> None:
+        """Handles the [Controls] menu"""
         choice: str = ''
         while choice.lower() != "back":
             clear_screen(self.debug)
@@ -330,24 +354,35 @@ _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   █▓▓▒░   _|_\\  _|_\\
                                 reverse=True),
                             key=lambda x: x.lower()))
                 self._update_settings_file()
-            else:
+            elif choice.lower() != "back":
                 print()
                 print("Invalid input...")
                 time.sleep(2 * (not self.debug))
         return None
 
     def _game_menu(self, selected_level) -> None:
+        """Handles the menu for displaying Player.start_playing"""
         repeat: str = "yes"
         while repeat.lower() == "yes":
             clear_screen(self.debug)
             with open(
                     f".{os.sep}levels{os.sep}{selected_level}",
                     encoding='utf-8') as level_file:
-                game_state: Player = Player(
-                    self.freedom,
-                    level_file,
-                    self.debug,
-                    )
+                try:
+                    game_state: Player = Player(
+                        level_file,
+                        freedom=self.freedom,
+                        is_debug=self.debug,
+                        )
+                except ValueError:
+                    self._print_logo()
+                    print()
+                    print("[!!!]")
+                    print(
+                        f"Sorry but the level '{selected_level}' is invalid!"
+                        )
+                    time.sleep(3 * (not self.debug))
+                    return None
 
                 final_level_state: Level  # unused here
                 moves_made: tuple[str, ...]  # unused here
@@ -360,15 +395,12 @@ _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   █▓▓▒░   _|_\\  _|_\\
                     'else log your highscore '
                     'and go back to main menu: '
                 )
+        clear_screen(self.debug)
         self._update_highscore(selected_level, score)
         return None
 
     def main_menu(self) -> None:
-        """This is the game's MAIN MENU.
-
-        :return: _description_
-        :rtype: _type_
-        """
+        """This is from where the game handles all of the sub-menus!"""
         while True:
             clear_screen(self.debug)
             self._print_logo()
@@ -379,8 +411,8 @@ _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   █▓▓▒░   _|_\\  _|_\\
                 self._update_level_list()
                 self._generate_blank_highscore_files()
             except FileNotFoundError:
-                print("Please run this file from the menu_v2's folder.")
                 # Error might happen since relative folder locations are used
+                print("Please run this file from the menu_v2's folder.")
 
             if not self.level_list:
                 # End program if no level_file can be loaded

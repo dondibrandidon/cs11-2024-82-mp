@@ -76,7 +76,7 @@ def test_Level_tilt(test_file):
             for i in range(level_rows)
             )
 
-        test_level = Level(ini_grid, moves_left)
+        test_level = Level(ini_grid)
 
         character_input = str(level_file.readline()).strip('\n')
 
@@ -145,13 +145,7 @@ def test_Player_start_playing(test_file):
     with open(level_path, encoding='utf-8') as level_file:
         sys.stdin = io.StringIO(level_file.readline().replace(',', '\n'))
         try:
-            default: dict[str, str] = {
-                            "forward": 'fF',
-                            "backward": 'bB',
-                            "rightward": 'rR',
-                            "leftward": 'lL,'
-                            }
-            game_state: Player = Player(default, level_file, is_debug=True)
+            game_state: Player = Player(level_file, is_debug=True)
             final_state, moves_made, total_points = (
                 game_state.start_playing())
         except EOFError:

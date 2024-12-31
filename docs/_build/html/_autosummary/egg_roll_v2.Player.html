@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>egg_roll_v2.Player &#8212; Egg Roll 2: Electric Boogaloo  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="egg_roll_v2.clear_screen" href="egg_roll_v2.clear_screen.html" />
+    <link rel="prev" title="egg_roll_v2.Level" href="egg_roll_v2.Level.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="egg-roll-v2-player">
+<h1>egg_roll_v2.Player<a class="headerlink" href="#egg-roll-v2-player" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="egg_roll_v2.Player">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">egg_roll_v2.</span></span><span class="sig-name descname"><span class="pre">Player</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_io.TextIOWrapper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freedom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'backward':</span> <span class="pre">'bB',</span> <span class="pre">'forward':</span> <span class="pre">'fF',</span> <span class="pre">'leftward':</span> <span class="pre">'lL,',</span> <span class="pre">'rightward':</span> <span class="pre">'rR'}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#egg_roll_v2.Player" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is the controller and view handling all inputs and prints.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name_to_char</strong> – Takes in word directions and returns its character</p></li>
+<li><p><strong>char_to_name</strong> – Takes in character directions and returns its word</p></li>
+<li><p><strong>char_to_symbol</strong> – Takes in character directions and returns its symbol</p></li>
+<li><p><strong>degrees</strong> – This turns the player input into the characters
+Level.tilt can process</p></li>
+<li><p><strong>valids</strong> – String containing all valid inputs from degrees</p></li>
+<li><p><strong>file_name</strong> – The name of the level_file.in</p></li>
+<li><p><strong>moves_left</strong> – Decrements with each successful
+character or “undo” input. treated as
+infinite if equal to -1.</p></li>
+<li><p><strong>max_moves</strong> – The number of moves as in level_file.in</p></li>
+<li><p><strong>current_level</strong> – The main Level file interacted with</p></li>
+<li><p><strong>points</strong> – All points gained by so far</p></li>
+<li><p><strong>game_end</strong> – The Game Over screen is displayed once True</p></li>
+<li><p><strong>past_moves</strong> – Array of symbols to denote past successful inputs</p></li>
+<li><p><strong>past_levels</strong> – Array of past Level states for undo inputs</p></li>
+<li><p><strong>past_points</strong> – Array of past points for undo inputs</p></li>
+<li><p><strong>current_input</strong> – The input for processing to Level.tilt</p></li>
+<li><p><strong>debug</strong> – Enables printing of debug info and disables time.sleep if True</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="egg_roll_v2.Player.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_io.TextIOWrapper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freedom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'backward':</span> <span class="pre">'bB',</span> <span class="pre">'forward':</span> <span class="pre">'fF',</span> <span class="pre">'leftward':</span> <span class="pre">'lL,',</span> <span class="pre">'rightward':</span> <span class="pre">'rR'}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#egg_roll_v2.Player.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes all of the variables of the Player instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>level_file</strong> (<em>TextIOWrapper</em>) – The level_file to be read and processed</p></li>
+<li><p><strong>freedom</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Takes in a dictionary defining the accepted inputs,
+defaults to example control scheme (“fFbBrRlL”).</p></li>
+<li><p><strong>is_debug</strong> (<em>bool</em><em>, </em><em>optional</em>) – Makes debugging more convenient if True,
+defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Raised for levels with grids
+that don’t follow a TileSet</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#egg_roll_v2.Player.__init__" title="egg_roll_v2.Player.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(level_file[, freedom, is_debug])</p></td>
+<td><p>Initializes all of the variables of the Player instance.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_state</span></code>()</p></td>
+<td><p>Can be used to check Player.start_playing effects without having to wait for the return once the game is over.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_playing</span></code>()</p></td>
+<td><p>The main handling of user displays!</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">char_to_name</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">char_to_symbol</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">name_to_char</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Egg Roll 2: Electric Boogaloo</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="egg_roll_v2.html">egg_roll_v2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="egg_roll_v2.Level.html">egg_roll_v2.Level</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">egg_roll_v2.Player</a></li>
+<li class="toctree-l1"><a class="reference internal" href="egg_roll_v2.clear_screen.html">egg_roll_v2.clear_screen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="menu_v2.html">menu_v2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="menu_v2.Menu.html">menu_v2.Menu</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="egg_roll_v2.Level.html" title="previous chapter">egg_roll_v2.Level</a></li>
+      <li>Next: <a href="egg_roll_v2.clear_screen.html" title="next chapter">egg_roll_v2.clear_screen</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;egg_roll: 2024, Martin Mendoza C. M. and Brandon E. Sayo;
+egg_roll_v2: 2024, Brandon E. Sayo.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/_autosummary/egg_roll_v2.Player.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
