@@ -1,5 +1,7 @@
-# **[*#82*] CS11 Machine Problem 🥚**
-Submission of Group **#82** (*daegu_original*) from class WFJ/MUV1:\
+# **[*#82*] CS11 Machine Problem Extension🍳**
+Extended by **Sayo, Brandon E.** (2024-05352)
+
+Original submission by Group **#82** (*daegu_original*) from class WFJ/MUV1:\
 &nbsp;&nbsp;&nbsp;&nbsp;(2024-10322) **Mendoza, Martin C. M.**\
 &nbsp;&nbsp;&nbsp;&nbsp;(2024-05352) **Sayo, Brandon E.** 
 
@@ -20,7 +22,7 @@ Submission of Group **#82** (*daegu_original*) from class WFJ/MUV1:\
 The included files in the submission are laid out as:
 ```python
 .|
-├── menu.py                         # The main program for playing egg_roll_v2
+├── menu_v2.py                         # The main program for playing egg_roll_v2
 ├── egg_roll_v2.py                  # Bulk of the gameplay logic code
 |
 ├── levels|                         # Contains level files
