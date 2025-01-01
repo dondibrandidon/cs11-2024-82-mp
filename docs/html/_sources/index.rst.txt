@@ -10,7 +10,7 @@ Welcome to Egg Roll II: Electric Boogaloo's documentation!
    :maxdepth: 4
    :caption: Contents:
 
-   readme
+   includes
    modules
 
 Indices and tables
