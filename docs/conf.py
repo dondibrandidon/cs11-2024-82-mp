@@ -9,20 +9,17 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#
+
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('../'))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'Egg Roll 2: Electric Boogaloo'
-copyright = (
-    'egg_roll: 2024, Martin Mendoza C. M. and Brandon E. Sayo;\n'
-    'egg_roll_v2: 2024, Brandon E. Sayo'
-    )
-author = 'Martin Mendoza (2024-10322) and Brandon Sayo (Sayo, Brandon E.)'
+project = 'Egg Roll II: Electric Boogaloo'
+copyright = '2025, created by Martin C. M. Mendoza (2024-10322) and Brandon E. Sayo, extended by Brandon E. Sayo (2024-05352)'
+author = 'created by Martin C. M. Mendoza (2024-10322) and Brandon E. Sayo, extended by Brandon E. Sayo (2024-05352)'
 
 
 # -- General configuration ---------------------------------------------------
@@ -32,9 +29,12 @@ author = 'Martin Mendoza (2024-10322) and Brandon Sayo (Sayo, Brandon E.)'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
+    'myst_parser',
     ]
-autosummary_generate = True
+
+autodoc_member_order = 'bysource'
+
+myst_heading_anchors = 1
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -49,8 +49,8 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
-html_theme = 'alabaster'
+
+html_theme = 'scrolls'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

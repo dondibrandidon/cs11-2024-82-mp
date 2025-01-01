@@ -5,39 +5,39 @@ Original submission by Group **#82** (*daegu_original*) from class WFJ/MUV1:\
 &nbsp;&nbsp;&nbsp;&nbsp;(2024-10322) **Mendoza, Martin C. M.**\
 &nbsp;&nbsp;&nbsp;&nbsp;(2024-05352) **Sayo, Brandon E.** 
 
-
-## [📃] Table of Contents
-<!-- no toc -->
-1. [[📂] Files](#📂-files)
-2. [[🎯] Mechanics](#🎯-mechanics)
-3. [[🥚] How to Play](#🥚-how-to-play)
-4. [[💞] Features](#💞-features)
-5. [[🤓] Implementation](#🤓-implementation)
-6. [[🧪] Unit Testing](#🧪-unit-testing)
-7. [[🗺️] Levels](#🗺️-levels)
+## Table of Contents
+1. [📂 Files](#section1)
+2. [🎯 Mechanics](#section2)
+3. [🥚 How to Play](#section3)
+4. [💞 Features](#section4)
+5. [🤓 Implementation](#section5)
+6. [🧪 Unit Testing](#section6)
+7. [🗺️ Levels](#section7)
 
 
-## [📂] Files
+<a id="section1"></a>
+## 📂 Files
 
 The included files in the submission are laid out as:
-```python
+```
 .|
 ├── menu_v2.py                         # The main program for playing egg_roll_v2
-├── egg_roll_v2.py                  # Bulk of the gameplay logic code
+├── egg_roll_v2.py                     # Bulk of the gameplay logic code
 |
-├── levels|                         # Contains level files
-│   ├── valid_level.in              # Example valid level file
+├── levels|                            # Contains level files
+│   ├── valid_level.in                 # Example valid level file
 │   └── ...
 │
-├── test_er_v2.py                   # Unit testing program for egg_roll_v2.py
+├── test_er_v2.py                      # Unit testing program for egg_roll_v2.py
 |
-└── unit_testing_v2|                # More on this in "[🧪] Unit Testing"
-    ├── _test_Player_start_playing| # Folder containing test cases for game_state
-    └── _test_Level_tilt|           # Folder containing test cases for Level.tilt
+└── unit_testing_v2|                   # More on this in "🧪 Unit Testing"
+    ├── _test_Player_start_playing|    # Folder containing test cases for game_state
+    └── _test_Level_tilt|              # Folder containing test cases for Level.tilt
 ```
 
 
-## [🎯] Mechanics
+<a id="section2"></a>
+## 🎯 Mechanics
 
 <h3 style="text-align:center;"> ~ Welcome to EGG ROLL! ~ <br/>
 <br/>
@@ -99,7 +99,8 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
       > Originally, M.T. Nests could actually hold up to a dozen eggs at a time. This helped make nest maintenance easier and cheaper as it was split among 12 tenants. Although after a _bird flu_ epidemic<sup>[16]</sup> that put the entire plane on quarantine, the Lord Chicken<sup>[17]</sup>, passed a law that required nest manufacturers to allow for only one egg to fit per nest. Even after the end of the pandemic, progress in the field of Nestic Engineering<sup>[18]</sup> actually made single-type M.T. Nests a lot more affordable to the common nest owner.
 
 
-## [🥚] How to Play
+<a id="section3"></a>
+## 🥚 How to Play
 
 1. Opening the program: *Terminal*
    - First, go to the egg_roll release folder.
@@ -115,11 +116,16 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
    - Also highly recommended to `pip install` the module `termcolor` for much more colorful interfaces.
 
 2. Navigating: *Main Menu*
-   - To play, input an available valid level's full `file_name.in` from the selection.
-   - To quit the game, type `quit`, then `yes` to the prompt.
+   - To go to the **Levels** menu, type `levels`.
+     - To then play, input an available valid level's full `file_name.in` from the selection.
+   - To go to the **Controls** menu, type `controls`.
+     - To then change a control, type using the format `chosen_direction = 'valid_characters'`
+   - To return to the Main Menu from any of the sub-menus, type `back`.
+   - To quit the game, type `quit`, then `yes` to ensure quitting the program.
 
 3. Playing a level: *Level Interface*
-   - To move the eggs on the board, type a sequence of any valid characters:
+   - To move the eggs on the board, type a sequence of any valid characters,\
+   which by **default** are the following:
      - `F` or `f` to tilt the board forwards (*moving the eggs up*)
      - `B` or `b` to tilt the board backwards (*moving the eggs down*)
      - `L` or `l` to tilt the board leftwards   (*moving the eggs left*)
@@ -129,7 +135,8 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
    - To play the same level again after reaching the end, type the word `yes` to the retry prompt.
 
 
-## [💞] Features
+<a id="section4"></a>
+## 💞 Features
 
 - #### 📃 **Main Menu**
   A simple intuitive main menu, providing mayors with easy access to the list of levels they can play. The display allows level selection and program quitting.
@@ -147,7 +154,8 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
   The game accepts both emoji-based and text-based levels seemlesly. Advanced TileSet-swapping technology was implemented, although mixing the two tile sets will not work.
 
 
-## [🤓] Implementation
+<a id="section5"></a>
+## 🤓 Implementation
 
 1. *Implementing* `egg_roll_v2.py`\
    The main logic of the gameplay uses a Level class for the main player interaction logic.
@@ -208,14 +216,15 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
    Finally, unit testing was done with the help of `pytest`:
 
 
-## [🧪] Unit Testing
+<a id="section6"></a>
+## 🧪 Unit Testing
 
 ### **Overview**
 The `test_er_v2.py` script is designed to test the functionality of the `egg_roll_v2` module, specifically the `Level.tilt` and `Class.start_playing`/`Class.get_state` interactions. It utilizes the `pytest` framework to automate the unit testing.
 
 ### **Directory**
 The script uses the following directory structure for input test files:
-```python
+```
 .|unit_testing|
 │
 ├── _test_Level_tilt|
@@ -236,7 +245,7 @@ The script uses the following directory structure for input test files:
 
 ### **Functions**
 
-### > **`test_Level_tilt`**
+### **`test_Level_tilt`**
 - **Purpose**: Tests the `Level.tilt` method.
 - **Input**: Reads from test files in:
     `.|unit_testing|_test_Level_tilt`
@@ -264,7 +273,7 @@ expected_points: int
 expected_no_eggs: 0 | 1    # acts as bool
 ```
 
-### > **`test_Player_start_playing`**
+### **`test_Player_start_playing`**
 - **Purpose**: Simulates an interaction with `Player`.
 - **Input**: Reads from test files in:
     `.|unit_testing|_Player_start_playing`
@@ -277,7 +286,7 @@ expected_no_eggs: 0 | 1    # acts as bool
 
 File name: `test_file_name.in`
 
-> NOTE: This tests `Player.start_playing` specifically for `string_input`s that would be enough to "finish" the game so that `start_playing` would be able to `return` the final states properly. Because of this, `Player.get_state` was used for cases where used to handle `EOFError`s where the `string_input` was not enough.
+> NOTE: This tests `Player.start_playing` specifically for `string_input`s that would be enough to "finish" the game so that `start_playing` would be able to `return` the final states properly. Because of this, `Player.get_state` was used separately for cases where used to handle `EOFError`s where the `string_input` was not enough.
 
 ```
 string_input: str
@@ -296,7 +305,7 @@ expected_total_points: int
 ```
 
 ### **Test Levels**
-#### **in `_test_Level_tilt`**
+#### **`.|test_Level_tilt`**
 *(arranged alphabetically/how it would appear inside the folder)*
 
 1. **`ascii_`**
@@ -349,7 +358,7 @@ expected_total_points: int
     - For the `n` cases, the values tested were 2, 3, and 100.
 
       
-#### **in `_test_Player_start_playing`**
+#### **`.|test_Player_start_playing`**
 *(arranged alphabetically/how it would appear inside the folder)*
 
 1. **`ascii_`**  
@@ -390,8 +399,13 @@ expected_total_points: int
 11. **`with_invalids`**
     - Tests graceful handling of invalid inputs.
     - The invalid inputs are:
-      ```python
-      invalid_inputs = "thequickownoxjumpedovetheazydogTHEQUICKOWNOXJUMPEDOVETHEAZYDOG1234567890`-=[]\;',./~!@#$%^&*()_+{}|:"<>?"
+      ```
+      default_invalid_inputs = (
+         "thequick  own oxjumpedove the azydog"
+         "THEQUICK  OWN OXJUMPEDOVE THE AZYDOG"
+         "1234567890`'"
+         '-=[]\;,./~!@#$%^&*()_+{}|:"<>?'
+         )
       ```
 
 12. **`n`**
@@ -399,6 +413,8 @@ expected_total_points: int
 
 13. **`undo`**
     - Tests the `undo` input functionality.
+    - This can be done by adding an `undo` surrounded by `,`, the comma simulates a new-line.\
+      e.g. `"lf,undo,br"` simulates `"lf"`, [`Enter`], `"undo"`, [`Enter`] `"br"` (then the expected `\n`) in the test_file.in
 
 14. **`incomplete`**
     - Tests `Player.get_state`'s handling of incomplete `string_inputs`.
@@ -407,7 +423,8 @@ expected_total_points: int
 - Ensure that test files are properly formatted: `test_file_name.in`.
 
 
-## [🗺️] Levels
+<a id="section7"></a>
+## 🗺️ Levels
 
 1. **Example Level** (`example.in`)
    > The simple example level

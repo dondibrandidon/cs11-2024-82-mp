@@ -24,10 +24,14 @@ class Level:
 
     :cvar emoji_set: Set of tiles for emoji levels (🥚, 🟩, 🧱, 🍳, 🪹, 🪺, ✨)
     :type emoji_set: TileSet
-    :cvar ascii_set: Set of tiles for ascii levels (0, ., #, P, O, @, *)
-    :type ascii_set: :class: TileSet
+    :cvar ascii_set: Set of tiles for ASCII levels (0, ., #, P, O, @, \*)
+    :type ascii_set: TileSet
+    :cvar sea_set: Set of tiles for sea levels (⛵, 🟦, 🌴, 🌀, 🪹, 🪺, ✨)
+    :type sea_set: :TileSet
     :cvar themes: Set of all allowed TileSet
     :type themes: tuple[TileSet]
+    :cvar freedom: Dictionary of character to coordinate directions
+    :type freedom: tuple[str, Tuple[int, int]]
 
     :ivar grid: The 2D matrix filled with string representing the tiles
     :type grid: list[list[str]]
