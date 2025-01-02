@@ -18,8 +18,14 @@ sys.path.insert(0, os.path.abspath('../'))
 # -- Project information -----------------------------------------------------
 
 project = 'Egg Roll II: Electric Boogaloo'
-copyright = '2025, created by Martin C. M. Mendoza (2024-10322) and Brandon E. Sayo, extended by Brandon E. Sayo (2024-05352)'
-author = 'created by Martin C. M. Mendoza (2024-10322) and Brandon E. Sayo, extended by Brandon E. Sayo (2024-05352)'
+copyright = (
+    '2025, created by Martin C. M. Mendoza (2024-10322) and Brandon E. Sayo, '
+    'extended by Brandon E. Sayo (2024-05352)'
+    )
+author = (
+    'created by Martin C. M. Mendoza (2024-10322) and Brandon E. Sayo, '
+    'extended by Brandon E. Sayo (2024-05352)'
+    )
 
 
 # -- General configuration ---------------------------------------------------

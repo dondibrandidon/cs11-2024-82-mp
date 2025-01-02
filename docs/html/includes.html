@@ -54,9 +54,11 @@
 <li><a class="reference internal" href="#overview"><strong>Overview</strong></a></li>
 <li><a class="reference internal" href="#directory"><strong>Directory</strong></a></li>
 <li><a class="reference internal" href="#prerequisites"><strong>Prerequisites</strong></a></li>
-<li><a class="reference internal" href="#functions"><strong>Functions</strong></a></li>
+<li><a class="reference internal" href="#functions"><strong>Functions</strong></a><ul>
 <li><a class="reference internal" href="#test-level-tilt"><strong><code class="docutils literal notranslate"><span class="pre">test_Level_tilt</span></code></strong></a></li>
 <li><a class="reference internal" href="#test-player-start-playing"><strong><code class="docutils literal notranslate"><span class="pre">test_Player_start_playing</span></code></strong></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#test-levels"><strong>Test Levels</strong></a><ul>
 <li><a class="reference internal" href="#id1"><strong><code class="docutils literal notranslate"><span class="pre">.|test_Level_tilt</span></code></strong></a></li>
 <li><a class="reference internal" href="#id2"><strong><code class="docutils literal notranslate"><span class="pre">.|test_Player_start_playing</span></code></strong></a></li>
@@ -103,14 +105,20 @@
 ├── menu_v2.py                         # The main program for playing egg_roll_v2
 ├── egg_roll_v2.py                     # Bulk of the gameplay logic code
 |
+├── docs|
+│   ├── html
+│   │   ├── index.html                 # Welcome to the HTML documentation!
+│   │   └── ...
+│   └── ...
+│
 ├── levels|                            # Contains level files
 │   ├── valid_level.in                 # Example valid level file
 │   └── ...
 │
-├── test_er_v2.py                      # Unit testing program for egg_roll_v2.py
+├── test_units_v2.py                      # Unit testing program for egg_roll_v2.py
 |
 └── unit_testing_v2|                   # More on this in &quot;🧪 Unit Testing&quot;
-    ├── _test_Player_start_playing|    # Folder containing test cases for game_state
+    ├── _test_Player_start_playing|    # Folder containing test cases for Player.start_playing
     └── _test_Level_tilt|              # Folder containing test cases for Level.tilt
 </pre></div>
 </div>
@@ -278,14 +286,14 @@ which by <strong>default</strong> are the following:</p>
 <li><p class="rubric" id="move-undo">⌛ <strong>Move Undo</strong></p>
 <p>Mayors are able to undo any of the moves they’ve done at the cost of losing a chance to play another move.</p>
 </li>
-<li><p class="rubric" id="highscore-tracking">🎖️ <strong>Highscore Tracking</strong></p>
-<p>The Hall of Fame displays after finishing a level and before going back to the main menu. It tracks the top 5 mayors for each level. The cream of the crop are decided by the highest score, with ties broken by when it was accomplished. After all, the earliest bird catches the worm.</p>
+<li><p class="rubric" id="highscore-tracking">~~🎖️ <strong>Highscore Tracking~~</strong></p>
+<p>~~The Hall of Fame displays after finishing a level and before going back to the main menu. It tracks the top 5 mayors for each level. The cream of the crop are decided by the highest score, with ties broken by when it was accomplished. After all, the earliest bird catches the worm.~~</p>
 </li>
 <li><p class="rubric" id="restart">♻️ <strong>Restart</strong></p>
 <p>Allows the mayors to reset the current level and start from scratch, if they weren’t satisified with your previous run through the level. Useful if you’re trying to beat the highscore!</p>
 </li>
 <li><p class="rubric" id="tile-sets">📐 <strong>Tile Sets</strong></p>
-<p>The game accepts both emoji-based and text-based levels seemlesly. Advanced TileSet-swapping technology was implemented, although mixing the two tile sets will not work.</p>
+<p>The game accepts both emoji-based and text-based levels seemlesly. Advanced TileSet-swapping technology was implemented, although mixing the two tile sets will not work. Other than this, a test sea theme TileSet was also implemented as a proof of concept of other possible TileSets.</p>
 </li>
 </ul>
 <p><a id="section5"></a></p>
@@ -327,29 +335,47 @@ The main logic of the gameplay uses a Level class for the main player interactio
 </pre></div>
 </div>
 </li>
-<li><p><em>Implementing</em> <code class="docutils literal notranslate"><span class="pre">menu.py</span></code><br />
-Next, all of the main menu interface and highscore tracking is done in this file. A placeholder highscore file is immediately created for each level file found in the <code class="docutils literal notranslate"><span class="pre">.|levels</span></code> folder, which is handled by:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">generate_highscore_files</span><span class="p">(</span><span class="n">levels</span><span class="p">):</span>
+<li><p><em>Implementing</em> <code class="docutils literal notranslate"><span class="pre">menu_v2.py</span></code><br />
+Next, all of the different menu interfaces, controls settings, and highscore tracking is done in this module, specifically in the Menu class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Menu</span><span class="p">:</span>
    <span class="o">...</span>
 </pre></div>
 </div>
-<p>The highscore logging after a level is done by:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">highscore_handling</span><span class="p">(</span><span class="n">level_file</span><span class="p">,</span> <span class="n">score</span><span class="p">):</span>
-   <span class="o">...</span>
+<p>During initialization, a settings file is created for the controls, and highscore files are immediately created for each level file found in the <code class="docutils literal notranslate"><span class="pre">.|levels</span></code> folder. The main menu is then displayed using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+   <span class="k">def</span> <span class="nf">main_menu</span><span class="p">(</span><span class="n">levels</span><span class="p">):</span>
+      <span class="o">...</span>
 </pre></div>
 </div>
-<p>The main menu interface is run through:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">main_menu</span><span class="p">():</span>
-   <span class="o">...</span>
-</pre></div>
-</div>
-<p>This function displays the level select, calls game_state, and prompts the mayor if they want to play the level again.</p>
+<p>This function displays the menu select screen, which lead to the “Levels” and “Controls” menus.</p>
 </li>
-<li><p><em>Implementing everything</em><br />
-For this project, <code class="docutils literal notranslate"><span class="pre">Python3.12</span></code> was used in Sublime Text and VSCode.<br />
-Autodocumentation was done with the help of <code class="docutils literal notranslate"><span class="pre">Sphinx</span></code>.<br />
-The <code class="docutils literal notranslate"><span class="pre">mypy</span></code> module was used for type checking.<br />
-Finally, unit testing was done with the help of <code class="docutils literal notranslate"><span class="pre">pytest</span></code>:</p></li>
+<li><p><em>Implementing everything</em>\</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">python3.12</span></code> was used in Sublime Text and VSCode.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">termcolor</span></code> was used to display colored terminal text.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sphinx</span></code> was used for documentation, along with the extensions:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sphinx.ext.autodoc</span></code> to autodocument docstrings, and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">myst_parser</span></code> to parse Markdown.</p></li>
+<li><p>To generate autodocumentation, with Sphinx:</p>
+<ol class="arabic simple">
+<li><p>Go the main folder where <code class="docutils literal notranslate"><span class="pre">egg_roll_v2.py</span></code> and <code class="docutils literal notranslate"><span class="pre">menu_v2.py</span></code> are located.</p></li>
+<li><p>In the terminal, type <code class="docutils literal notranslate"><span class="pre">sphinx-build</span> <span class="pre">./docs</span> <span class="pre">./docs/html</span></code>.</p></li>
+<li><p>This will generate the <code class="docutils literal notranslate"><span class="pre">index.html</span></code> documentation file in <code class="docutils literal notranslate"><span class="pre">./docs/html</span></code>.</p></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mypy</span></code> was used to check type hint consistency.</p></li>
+<li><p>To check for PEP8 compliance:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">SublimeLinter</span></code> was used for Sublime Text, and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Flake8</span></code> was used for VSCode.</p></li>
+</ul>
+</li>
+<li><p>Finally, <code class="docutils literal notranslate"><span class="pre">pytest</span></code> was used for unit testing:</p></li>
+</ul>
+</li>
 </ol>
 <p><a id="section6"></a></p>
 </section>
@@ -364,12 +390,12 @@ Finally, unit testing was done with the help of <code class="docutils literal no
 <p>The script uses the following directory structure for input test files:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.|unit_testing|
 │
-├── _test_Level_tilt|
+├── test_Level_tilt|
 │   ├── test_case1.in
 │   ├── test_case2.in
 │   └── ...
 │
-└── _test_Player_start_playing|
+└── test_Player_start_playing|
     ├── test_case1.in
     ├── test_case2.in
     └── ...
@@ -387,13 +413,12 @@ Finally, unit testing was done with the help of <code class="docutils literal no
 </section>
 <section id="functions">
 <h4><strong>Functions</strong><a class="headerlink" href="#functions" title="Link to this heading">¶</a></h4>
-</section>
 <section id="test-level-tilt">
-<h4><strong><code class="docutils literal notranslate"><span class="pre">test_Level_tilt</span></code></strong><a class="headerlink" href="#test-level-tilt" title="Link to this heading">¶</a></h4>
+<h5><strong><code class="docutils literal notranslate"><span class="pre">test_Level_tilt</span></code></strong><a class="headerlink" href="#test-level-tilt" title="Link to this heading">¶</a></h5>
 <ul class="simple">
 <li><p><strong>Purpose</strong>: Tests the <code class="docutils literal notranslate"><span class="pre">Level.tilt</span></code> method.</p></li>
 <li><p><strong>Input</strong>: Reads from test files in:
-<code class="docutils literal notranslate"><span class="pre">.|unit_testing|_test_Level_tilt</span></code></p></li>
+<code class="docutils literal notranslate"><span class="pre">.|unit_testing|test_Level_tilt</span></code></p></li>
 <li><p><strong>Assertions:</strong></p>
 <ul>
 <li><p>Final grid matches expected grid.</p></li>
@@ -406,26 +431,26 @@ Finally, unit testing was done with the help of <code class="docutils literal no
 <p>File name: <code class="docutils literal notranslate"><span class="pre">test_file_name.in</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">level_rows</span><span class="p">:</span> <span class="nb">int</span>
 <span class="n">moves_left</span><span class="p">:</span> <span class="nb">int</span>
-<span class="n">row_1</span><span class="p">:</span> <span class="nb">str</span>                 <span class="c1"># the initial grid state</span>
+<span class="n">row_1</span><span class="p">:</span> <span class="nb">str</span>                    <span class="c1"># the initial grid state</span>
 <span class="n">row_2</span><span class="p">:</span> <span class="nb">str</span>
 <span class="o">...</span>
 <span class="n">row_n</span><span class="p">:</span> <span class="nb">str</span>
-<span class="n">valid_character_input</span><span class="p">:</span> <span class="nb">str</span> <span class="c1"># validation happens in game_state not here</span>
-<span class="n">row_1</span><span class="p">:</span> <span class="nb">str</span>                 <span class="c1"># the expected final state</span>
+<span class="n">valid_character_input</span><span class="p">:</span> <span class="nb">str</span>    <span class="c1"># validation happens in Player.start_playing not here</span>
+<span class="n">row_1</span><span class="p">:</span> <span class="nb">str</span>                    <span class="c1"># the expected final state</span>
 <span class="n">row_2</span><span class="p">:</span> <span class="nb">str</span>
 <span class="o">...</span>
 <span class="n">row_n</span><span class="p">:</span> <span class="nb">str</span>
 <span class="n">expected_points</span><span class="p">:</span> <span class="nb">int</span>
-<span class="n">expected_no_eggs</span><span class="p">:</span> <span class="mi">0</span> <span class="o">|</span> <span class="mi">1</span>    <span class="c1"># acts as bool</span>
+<span class="n">expected_no_eggs</span><span class="p">:</span> <span class="mi">0</span> <span class="o">|</span> <span class="mi">1</span>       <span class="c1"># acts as bool</span>
 </pre></div>
 </div>
 </section>
 <section id="test-player-start-playing">
-<h4><strong><code class="docutils literal notranslate"><span class="pre">test_Player_start_playing</span></code></strong><a class="headerlink" href="#test-player-start-playing" title="Link to this heading">¶</a></h4>
+<h5><strong><code class="docutils literal notranslate"><span class="pre">test_Player_start_playing</span></code></strong><a class="headerlink" href="#test-player-start-playing" title="Link to this heading">¶</a></h5>
 <ul class="simple">
 <li><p><strong>Purpose</strong>: Simulates an interaction with <code class="docutils literal notranslate"><span class="pre">Player</span></code>.</p></li>
 <li><p><strong>Input</strong>: Reads from test files in:
-<code class="docutils literal notranslate"><span class="pre">.|unit_testing|_Player_start_playing</span></code></p></li>
+<code class="docutils literal notranslate"><span class="pre">.|unit_testing|Player_start_playing</span></code></p></li>
 <li><p><strong>Assertions:</strong></p>
 <ul>
 <li><p>Final grid matches expected grid.</p></li>
@@ -439,7 +464,7 @@ Finally, unit testing was done with the help of <code class="docutils literal no
 <blockquote>
 <div><p>NOTE: This tests <code class="docutils literal notranslate"><span class="pre">Player.start_playing</span></code> specifically for <code class="docutils literal notranslate"><span class="pre">string_input</span></code>s that would be enough to “finish” the game so that <code class="docutils literal notranslate"><span class="pre">start_playing</span></code> would be able to <code class="docutils literal notranslate"><span class="pre">return</span></code> the final states properly. Because of this, <code class="docutils literal notranslate"><span class="pre">Player.get_state</span></code> was used separately for cases where used to handle <code class="docutils literal notranslate"><span class="pre">EOFError</span></code>s where the <code class="docutils literal notranslate"><span class="pre">string_input</span></code> was not enough.</p>
 </div></blockquote>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">string_input</span><span class="p">:</span> <span class="nb">str</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">string_input</span><span class="p">:</span> <span class="nb">str</span>          <span class="c1"># see &quot;undo&quot; under Test Levels (12. undo) for testing undo inputs</span>
 <span class="n">level_rows</span><span class="p">:</span> <span class="nb">int</span>
 <span class="n">moves_left</span><span class="p">:</span> <span class="nb">int</span>
 <span class="n">row_1</span><span class="p">:</span> <span class="nb">str</span>                 <span class="c1"># the initial grid state</span>
@@ -455,15 +480,15 @@ Finally, unit testing was done with the help of <code class="docutils literal no
 </pre></div>
 </div>
 </section>
+</section>
 <section id="test-levels">
 <h4><strong>Test Levels</strong><a class="headerlink" href="#test-levels" title="Link to this heading">¶</a></h4>
 <section id="id1">
 <h5><strong><code class="docutils literal notranslate"><span class="pre">.|test_Level_tilt</span></code></strong><a class="headerlink" href="#id1" title="Link to this heading">¶</a></h5>
-<p><em>(arranged alphabetically/how it would appear inside the folder)</em></p>
 <ol class="arabic simple">
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">ascii_</span></code></strong></p>
 <ul class="simple">
-<li><p>Tests the levels in <code class="docutils literal notranslate"><span class="pre">ASCII</span></code> format for the monospace format.</p></li>
+<li><p>Tests the levels in <code class="docutils literal notranslate"><span class="pre">ASCII</span></code> format for the ASCII TileSet.</p></li>
 </ul>
 </li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">basic_level</span></code></strong></p>
@@ -542,11 +567,10 @@ Finally, unit testing was done with the help of <code class="docutils literal no
 </section>
 <section id="id2">
 <h5><strong><code class="docutils literal notranslate"><span class="pre">.|test_Player_start_playing</span></code></strong><a class="headerlink" href="#id2" title="Link to this heading">¶</a></h5>
-<p><em>(arranged alphabetically/how it would appear inside the folder)</em></p>
-<ol class="arabic">
+<ol class="arabic simple">
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">ascii_</span></code></strong></p>
 <ul class="simple">
-<li><p>Tests the levels in <code class="docutils literal notranslate"><span class="pre">ASCII</span></code> format for the monospace format.</p></li>
+<li><p>Tests the levels in <code class="docutils literal notranslate"><span class="pre">ASCII</span></code> format for the ASCII TileSet.</p></li>
 </ul>
 </li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">basic_level</span></code></strong></p>
@@ -562,7 +586,7 @@ Finally, unit testing was done with the help of <code class="docutils literal no
 </li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">collision_nxn</span></code></strong></p>
 <ul class="simple">
-<li><p>Tests the collision physics of an <code class="docutils literal notranslate"><span class="pre">n</span></code> x <code class="docutils literal notranslate"><span class="pre">n</span></code> block of eggs with walls.</p></li>
+<li><p>Tests the collision of an <code class="docutils literal notranslate"><span class="pre">n</span></code> x <code class="docutils literal notranslate"><span class="pre">n</span></code> block of eggs with walls.</p></li>
 <li><p>An early bug was eggs “eating” each other, in cases like this.</p></li>
 </ul>
 </li>
@@ -578,6 +602,11 @@ Finally, unit testing was done with the help of <code class="docutils literal no
 <li><p>Simulates a condition when an egg interacts with a pan.</p></li>
 </ul>
 </li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">incomplete</span></code></strong></p>
+<ul class="simple">
+<li><p>Tests <code class="docutils literal notranslate"><span class="pre">Player.get_state</span></code>’s handling of incomplete <code class="docutils literal notranslate"><span class="pre">string_inputs</span></code>.</p></li>
+</ul>
+</li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">no_wall_stuck_egg</span></code></strong></p>
 <ul class="simple">
 <li><p>Tests how eggs behave in a 1 x 1 grid with no surrounding walls.</p></li>
@@ -589,14 +618,22 @@ Finally, unit testing was done with the help of <code class="docutils literal no
 <li><p>Simulates a condition where an egg goes in an empty nest while having leftover moves.</p></li>
 </ul>
 </li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">repeating</span></code></strong></p>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">repeating</span></code></strong></p></li>
+</ol>
 <ul class="simple">
 <li><p>Tests how eggs behave with repeated inputs.</p></li>
 </ul>
-</li>
+<ol class="arabic" start="11">
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">test_all_directions</span></code></strong></p>
 <ul class="simple">
 <li><p>Tests all the movements.</p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">undo</span></code></strong></p>
+<ul class="simple">
+<li><p>Tests the <code class="docutils literal notranslate"><span class="pre">undo</span></code> input functionality.</p></li>
+<li><p>This can be done by adding an <code class="docutils literal notranslate"><span class="pre">undo</span></code> surrounded by <code class="docutils literal notranslate"><span class="pre">,</span></code> (the comma simulates a new-line).<br />
+i.e. <code class="docutils literal notranslate"><span class="pre">&quot;lf,undo,br&quot;</span></code> simulates <code class="docutils literal notranslate"><span class="pre">&quot;lf&quot;</span></code>, [<code class="docutils literal notranslate"><span class="pre">Enter</span></code>], <code class="docutils literal notranslate"><span class="pre">&quot;undo&quot;</span></code>, [<code class="docutils literal notranslate"><span class="pre">Enter</span></code>] <code class="docutils literal notranslate"><span class="pre">&quot;br&quot;</span></code>, then the expected <code class="docutils literal notranslate"><span class="pre">\n</span></code> in the test_file.in</p></li>
 </ul>
 </li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">with_invalids</span></code></strong></p>
@@ -617,18 +654,6 @@ Finally, unit testing was done with the help of <code class="docutils literal no
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">n</span></code></strong></p>
 <ul class="simple">
 <li><p>For the <code class="docutils literal notranslate"><span class="pre">n</span></code> cases, the values tested were 2, and 3.</p></li>
-</ul>
-</li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">undo</span></code></strong></p>
-<ul class="simple">
-<li><p>Tests the <code class="docutils literal notranslate"><span class="pre">undo</span></code> input functionality.</p></li>
-<li><p>This can be done by adding an <code class="docutils literal notranslate"><span class="pre">undo</span></code> surrounded by <code class="docutils literal notranslate"><span class="pre">,</span></code>, the comma simulates a new-line.<br />
-e.g. <code class="docutils literal notranslate"><span class="pre">&quot;lf,undo,br&quot;</span></code> simulates <code class="docutils literal notranslate"><span class="pre">&quot;lf&quot;</span></code>, [<code class="docutils literal notranslate"><span class="pre">Enter</span></code>], <code class="docutils literal notranslate"><span class="pre">&quot;undo&quot;</span></code>, [<code class="docutils literal notranslate"><span class="pre">Enter</span></code>] <code class="docutils literal notranslate"><span class="pre">&quot;br&quot;</span></code> (then the expected <code class="docutils literal notranslate"><span class="pre">\n</span></code>) in the test_file.in</p></li>
-</ul>
-</li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">incomplete</span></code></strong></p>
-<ul class="simple">
-<li><p>Tests <code class="docutils literal notranslate"><span class="pre">Player.get_state</span></code>’s handling of incomplete <code class="docutils literal notranslate"><span class="pre">string_inputs</span></code>.</p></li>
 </ul>
 </li>
 </ol>
@@ -655,6 +680,11 @@ e.g. <code class="docutils literal notranslate"><span class="pre">&quot;lf,undo,
 <div><p>A text-based version of the example level with infinite moves</p>
 </div></blockquote>
 </li>
+<li><p><strong>Sea-based Example Level</strong> (<code class="docutils literal notranslate"><span class="pre">sea_example.in</span></code>)</p>
+<blockquote>
+<div><p>A sea-based version of the example level</p>
+</div></blockquote>
+</li>
 <li><p><strong>ULTIMATE MAZE</strong> (<code class="docutils literal notranslate"><span class="pre">ultimate_maze.in</span></code>)</p>
 <blockquote>
 <div><p>Maze semi-inspired by the tomb of the mask, it’s fun :)</p>
@@ -662,12 +692,13 @@ e.g. <code class="docutils literal notranslate"><span class="pre">&quot;lf,undo,
 </li>
 <li><p><strong>Nested oops</strong> (<code class="docutils literal notranslate"><span class="pre">nested_oops.in</span></code>)</p>
 <blockquote>
-<div><p>Very compact puzzle, hope “Nested oops” doesn’t take too much time XD</p>
+<div><p>Compact puzzle, these “Nested oops” might take some time XD</p>
 </div></blockquote>
 </li>
 <li><p><em><strong>CS11 2024 WFJ</strong></em> (<code class="docutils literal notranslate"><span class="pre">cs11_2024_wfj.in</span></code>)</p>
 <blockquote>
-<div><p>A small tribute to our CS11 lecturers, thank you sirs!</p>
+<div><p>A small tribute to our CS11 lecturers, thank you sirs!
+Happy New Year!</p>
 </div></blockquote>
 </li>
 </ol>

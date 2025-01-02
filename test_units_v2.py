@@ -59,7 +59,7 @@ expected_no_eggs: 0 | 1    # acts as bool
                 )
         ]
     )
-def test_Level_tilt(test_file):
+def test_Level_tilt(test_file: str) -> None:
     with open(
             (
                 "."
@@ -132,7 +132,7 @@ expected_total_points: int
                 )
         ]
     )
-def test_Player_start_playing(test_file):
+def test_Player_start_playing(test_file: str) -> None:
     level_path = (
         "."
         + os.sep
@@ -174,7 +174,7 @@ def test_Player_start_playing(test_file):
         assert expected_total_points == total_points
 
 
-def main():
+def main() -> None:
     for test_file in [
             file
             for file

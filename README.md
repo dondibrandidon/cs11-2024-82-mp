@@ -24,14 +24,20 @@ The included files in the submission are laid out as:
 ├── menu_v2.py                         # The main program for playing egg_roll_v2
 ├── egg_roll_v2.py                     # Bulk of the gameplay logic code
 |
+├── docs|
+│   ├── html
+│   │   ├── index.html                 # Please go here to the HTML documentation! README is also there!
+│   │   └── ...
+│   └── ...
+│
 ├── levels|                            # Contains level files
 │   ├── valid_level.in                 # Example valid level file
 │   └── ...
 │
-├── test_er_v2.py                      # Unit testing program for egg_roll_v2.py
+├── test_units_v2.py                      # Unit testing program for egg_roll_v2.py
 |
 └── unit_testing_v2|                   # More on this in "🧪 Unit Testing"
-    ├── _test_Player_start_playing|    # Folder containing test cases for game_state
+    ├── _test_Player_start_playing|    # Folder containing test cases for Player.start_playing
     └── _test_Level_tilt|              # Folder containing test cases for Level.tilt
 ```
 
@@ -144,14 +150,14 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
 - #### ⌛ **Move Undo**
   Mayors are able to undo any of the moves they've done at the cost of losing a chance to play another move.
 
-- #### 🎖️ **Highscore Tracking**
-  The Hall of Fame displays after finishing a level and before going back to the main menu. It tracks the top 5 mayors for each level. The cream of the crop are decided by the highest score, with ties broken by when it was accomplished. After all, the earliest bird catches the worm.
+- #### ~~🎖️ **Highscore Tracking~~**
+  ~~The Hall of Fame displays after finishing a level and before going back to the main menu. It tracks the top 5 mayors for each level. The cream of the crop are decided by the highest score, with ties broken by when it was accomplished. After all, the earliest bird catches the worm.~~
 
 - #### ♻️ **Restart**
   Allows the mayors to reset the current level and start from scratch, if they weren't satisified with your previous run through the level. Useful if you're trying to beat the highscore!
 
 - #### 📐 **Tile Sets**
-  The game accepts both emoji-based and text-based levels seemlesly. Advanced TileSet-swapping technology was implemented, although mixing the two tile sets will not work.
+  The game accepts both emoji-based and text-based levels seemlesly. Advanced TileSet-swapping technology was implemented, although mixing the two tile sets will not work. Other than this, a test sea theme TileSet was also implemented as a proof of concept of other possible TileSets.
 
 
 <a id="section5"></a>
@@ -191,29 +197,35 @@ As of today, you are the proud mayor of <i>ChickenCity</i> tasked to give all of
    def argument_handling():
       ...
    ```
-2. *Implementing* `menu.py`\
-   Next, all of the main menu interface and highscore tracking is done in this file. A placeholder highscore file is immediately created for each level file found in the `.|levels` folder, which is handled by:
+2. *Implementing* `menu_v2.py`\
+   Next, all of the different menu interfaces, controls settings, and highscore tracking is done in this module, specifically in the Menu class:
    ```python
-   def generate_highscore_files(levels):
+   class Menu:
       ...
    ```
-   The highscore logging after a level is done by:
+   During initialization, a settings file is created for the controls, and highscore files are immediately created for each level file found in the `.|levels` folder. The main menu is then displayed using:
    ```python
-   def highscore_handling(level_file, score):
-      ...
+   ...
+      def main_menu(levels):
+         ...
    ```
-   The main menu interface is run through:
-   ```python
-   def main_menu():
-      ...
-   ```
-   This function displays the level select, calls game_state, and prompts the mayor if they want to play the level again.
+   This function displays the menu select screen, which lead to the "Levels" and "Controls" menus.
 
 3. *Implementing everything*\
-   For this project, `Python3.12` was used in Sublime Text and VSCode.\
-   Autodocumentation was done with the help of `Sphinx`.\
-   The `mypy` module was used for type checking.\
-   Finally, unit testing was done with the help of `pytest`:
+   - `python3.12` was used in Sublime Text and VSCode.
+   - `termcolor` was used to display colored terminal text.
+   - `sphinx` was used for documentation, along with the extensions:
+     - `sphinx.ext.autodoc` to autodocument docstrings, and
+     - `myst_parser` to parse Markdown.
+     - To generate autodocumentation, with Sphinx:
+         1. Go the main folder where `egg_roll_v2.py` and `menu_v2.py` are located.
+         2. In the terminal, type `sphinx-build ./docs ./docs/html`.
+         3. This will generate the `index.html` documentation file in `./docs/html`.
+   - `mypy` was used to check type hint consistency.
+   - To check for PEP8 compliance:
+     - `SublimeLinter` was used for Sublime Text, and
+     - `Flake8` was used for VSCode.
+   - Finally, `pytest` was used for unit testing:
 
 
 <a id="section6"></a>
@@ -227,12 +239,12 @@ The script uses the following directory structure for input test files:
 ```
 .|unit_testing|
 │
-├── _test_Level_tilt|
+├── test_Level_tilt|
 │   ├── test_case1.in
 │   ├── test_case2.in
 │   └── ...
 │
-└── _test_Player_start_playing|
+└── test_Player_start_playing|
     ├── test_case1.in
     ├── test_case2.in
     └── ...
@@ -245,10 +257,10 @@ The script uses the following directory structure for input test files:
 
 ### **Functions**
 
-### **`test_Level_tilt`**
+#### **`test_Level_tilt`**
 - **Purpose**: Tests the `Level.tilt` method.
 - **Input**: Reads from test files in:
-    `.|unit_testing|_test_Level_tilt`
+    `.|unit_testing|test_Level_tilt`
 - **Assertions:**
   - Final grid matches expected grid.
   - Point increment matches expected points.
@@ -260,23 +272,23 @@ File name: `test_file_name.in`
 ```
 level_rows: int
 moves_left: int
-row_1: str                 # the initial grid state
+row_1: str                    # the initial grid state
 row_2: str
 ...
 row_n: str
-valid_character_input: str # validation happens in game_state not here
-row_1: str                 # the expected final state
+valid_character_input: str    # validation happens in Player.start_playing not here
+row_1: str                    # the expected final state
 row_2: str  
 ...
 row_n: str  
 expected_points: int
-expected_no_eggs: 0 | 1    # acts as bool
+expected_no_eggs: 0 | 1       # acts as bool
 ```
 
-### **`test_Player_start_playing`**
+#### **`test_Player_start_playing`**
 - **Purpose**: Simulates an interaction with `Player`.
 - **Input**: Reads from test files in:
-    `.|unit_testing|_Player_start_playing`
+    `.|unit_testing|Player_start_playing`
 - **Assertions:**
   - Final grid matches expected grid.
   - List of moves matches expected moves.
@@ -289,7 +301,7 @@ File name: `test_file_name.in`
 > NOTE: This tests `Player.start_playing` specifically for `string_input`s that would be enough to "finish" the game so that `start_playing` would be able to `return` the final states properly. Because of this, `Player.get_state` was used separately for cases where used to handle `EOFError`s where the `string_input` was not enough.
 
 ```
-string_input: str
+string_input: str          # see "undo" under Test Levels (12. undo) for testing undo inputs
 level_rows: int
 moves_left: int
 row_1: str                 # the initial grid state
@@ -306,10 +318,9 @@ expected_total_points: int
 
 ### **Test Levels**
 #### **`.|test_Level_tilt`**
-*(arranged alphabetically/how it would appear inside the folder)*
 
 1. **`ascii_`**
-   - Tests the levels in `ASCII` format for the monospace format.
+   - Tests the levels in `ASCII` format for the ASCII TileSet.
 
 2. **`basic_level`**
    - Tests all basic functions of a level (tilt, movement, scoring).
@@ -347,22 +358,21 @@ expected_total_points: int
 11. **`stuck`**
     - Tests how the egg confined by walls will behave when made to move.
 
-11. **`ver_n_egg`**
+12. **`ver_n_egg`**
     - Tests the movements of `n` vertically adjacent eggs across different movements.
     - Simulates how `n` vertically adjacent eggs would behave.
 
-12. **`_pan`**
+13. **`_pan`**
     - This is tested in conjunction with the `hor` and `ver` cases for multiple eggs rolling into a pan in one turn.
 
-13. **`n`**
+14. **`n`**
     - For the `n` cases, the values tested were 2, 3, and 100.
 
       
 #### **`.|test_Player_start_playing`**
-*(arranged alphabetically/how it would appear inside the folder)*
 
 1. **`ascii_`**  
-   - Tests the levels in `ASCII` format for the monospace format.
+   - Tests the levels in `ASCII` format for the ASCII TileSet.
 
 2. **`basic_level`**  
    - Tests all basic functions of a level (tilt, movement, scoring).  
@@ -372,7 +382,7 @@ expected_total_points: int
    - Tests how eggs behave when moved in 2x2 and 3x3 formations.  
 
 4. **`collision_nxn`**  
-   - Tests the collision physics of an `n` x `n` block of eggs with walls.
+   - Tests the collision of an `n` x `n` block of eggs with walls.
    - An early bug was eggs "eating" each other, in cases like this.
 
 5. **`egg_in_nest`**  
@@ -383,20 +393,28 @@ expected_total_points: int
    - Tests the interaction and scoring function of when an egg goes in a pan.  
    - Simulates a condition when an egg interacts with a pan.  
 
-7. **`no_wall_stuck_egg`**  
+7. **`incomplete`**
+    - Tests `Player.get_state`'s handling of incomplete `string_inputs`.
+
+8. **`no_wall_stuck_egg`**  
    - Tests how eggs behave in a 1 x 1 grid with no surrounding walls.  
 
-8. **`plus_remaining_moves`**  
+9. **`plus_remaining_moves`**  
    - Tests how the number of remaining moves is computed into the score when an egg goes in an empty nest.  
    - Simulates a condition where an egg goes in an empty nest while having leftover moves.  
 
-9. **`repeating`**  
+10. **`repeating`**  
    - Tests how eggs behave with repeated inputs.  
 
-10. **`test_all_directions`**  
+11. **`test_all_directions`**  
     - Tests all the movements.  
 
-11. **`with_invalids`**
+12. **`undo`**
+    - Tests the `undo` input functionality.
+    - This can be done by adding an `undo` surrounded by `,` (the comma simulates a new-line).\
+      i.e. `"lf,undo,br"` simulates `"lf"`, [`Enter`], `"undo"`, [`Enter`] `"br"`, then the expected `\n` in the test_file.in
+
+13. **`with_invalids`**
     - Tests graceful handling of invalid inputs.
     - The invalid inputs are:
       ```
@@ -408,17 +426,10 @@ expected_total_points: int
          )
       ```
 
-12. **`n`**
+14. **`n`**
     - For the `n` cases, the values tested were 2, and 3.
 
-13. **`undo`**
-    - Tests the `undo` input functionality.
-    - This can be done by adding an `undo` surrounded by `,`, the comma simulates a new-line.\
-      e.g. `"lf,undo,br"` simulates `"lf"`, [`Enter`], `"undo"`, [`Enter`] `"br"` (then the expected `\n`) in the test_file.in
 
-14. **`incomplete`**
-    - Tests `Player.get_state`'s handling of incomplete `string_inputs`.
-    
 ### *Notes*
 - Ensure that test files are properly formatted: `test_file_name.in`.
 
@@ -432,11 +443,15 @@ expected_total_points: int
 2. **Text-based Example Level** (`ascii_example.in`)
    > A text-based version of the example level with infinite moves
 
-2. **ULTIMATE MAZE** (`ultimate_maze.in`)
+3. **Sea-based Example Level** (`sea_example.in`)
+   > A sea-based version of the example level
+
+4. **ULTIMATE MAZE** (`ultimate_maze.in`)
    > Maze semi-inspired by the tomb of the mask, it's fun :)
 
-3. **Nested oops** (`nested_oops.in`)
-   > Very compact puzzle, hope "Nested oops" doesn't take too much time XD
+5. **Nested oops** (`nested_oops.in`)
+   > Compact puzzle, these "Nested oops" might take some time XD
 
-4. ***CS11 2024 WFJ*** (`cs11_2024_wfj.in`)
+6. ***CS11 2024 WFJ*** (`cs11_2024_wfj.in`)
    > A small tribute to our CS11 lecturers, thank you sirs!
+   > Happy New Year!

@@ -17,9 +17,14 @@ class Menu:
     :ivar freedom: Returns set valid characters for each word drection
     :type freedom: dict[str, str]
     """
-    directions = ["forward", "backward", "rightward", "leftward"]
+    directions: tuple[str, str, str, str] = (
+        "forward",
+        "backward",
+        "rightward",
+        "leftward",
+        )
 
-    def __init__(self, is_debug=False):
+    def __init__(self, is_debug: bool = False) -> None:
         """Initializes all of the variables of the Menu instance.
 
         :param is_debug: Makes debugging more convenient if True,
@@ -65,6 +70,8 @@ lL
 """)
         except FileNotFoundError:
             raise FileNotFoundError
+
+        super().__init__()
 
     def _update_level_list(self) -> None:
         """Updates the array of levels by checking the folder."""
@@ -360,7 +367,7 @@ _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   █▓▓▒░   _|_\\  _|_\\
                 time.sleep(2 * (not self.debug))
         return None
 
-    def _game_menu(self, selected_level) -> None:
+    def _game_menu(self, selected_level: str) -> None:
         """Handles the menu for displaying Player.start_playing"""
         repeat: str = "yes"
         while repeat.lower() == "yes":

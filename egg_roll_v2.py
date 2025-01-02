@@ -9,7 +9,8 @@ from copy import deepcopy
 
 @dataclass
 class TileSet:
-    """This stores the characters used to process the grid."""
+    """This stores the characters used to process `grid` in
+    :class:`~egg_roll_v2.Level`."""
     egg_key: str
     grass_key: str
     wall_key: str
@@ -21,17 +22,7 @@ class TileSet:
 
 class Level:
     """This class is the model handling all logic involving the grid.
-
-    :cvar emoji_set: Set of tiles for emoji levels (🥚, 🟩, 🧱, 🍳, 🪹, 🪺, ✨)
-    :type emoji_set: TileSet
-    :cvar ascii_set: Set of tiles for ASCII levels (0, ., #, P, O, @, \*)
-    :type ascii_set: TileSet
-    :cvar sea_set: Set of tiles for sea levels (⛵, 🟦, 🌴, 🌀, 🪹, 🪺, ✨)
-    :type sea_set: :TileSet
-    :cvar themes: Set of all allowed TileSet
-    :type themes: tuple[TileSet]
-    :cvar freedom: Dictionary of character to coordinate directions
-    :type freedom: tuple[str, Tuple[int, int]]
+    Each instance generates with the following:
 
     :ivar grid: The 2D matrix filled with string representing the tiles
     :type grid: list[list[str]]
@@ -39,12 +30,12 @@ class Level:
     :type rows: int
     :ivar cols: The maximum row length of the grid
     :type cols: int
+    :ivar key: The TileSet dataclass of the characters used by the grid
+    :type key: :class: TileSet
     :ivar eggs: The mutable array of egg coordinates in the grid
     :type eggs: list[tuple[int, int]]
     :ivar gaps: The immutable array of all the gaps in a non-square grid
     :type gaps: tuple[tuple[int, int]]
-    :ivar key: The TileSet dataclass of the characters used by the grid
-    :type key: :class: TileSet
     """
 
     emoji_set: TileSet = TileSet(
@@ -74,8 +65,15 @@ class Level:
         full_key='🪺',
         magic_key='☁️',
         )
-    themes = (emoji_set, ascii_set, sea_set)
-    freedom = {'f': (-1, 0), 'b': (1, 0), 'r': (0, 1), 'l': (0, -1)}
+    #: This is the set of all allowed :class:`~egg_roll_v2.TileSet` .
+    themes: tuple[TileSet, TileSet, TileSet] = (emoji_set, ascii_set, sea_set)
+    #: This dictionary converts character directions to coordinate increments.
+    freedom: dict[str, tuple[int, int]] = {
+        'f': (-1, 0),
+        'b': (1, 0),
+        'r': (0, 1),
+        'l': (0, -1),
+        }
 
     def __init__(
             self,
@@ -96,6 +94,21 @@ class Level:
         self.rows: int = len(self.grid)
         self.cols: int = max(len(row) for row in self.grid)
 
+        tiles: set[str] = set(char for row in self.grid for char in row)
+
+        # This checks for the right TileSet:
+        for theme in Level.themes:
+            if all(
+                    tile in astuple(theme)
+                    for tile in tiles
+                    if tile != ' '
+                    ):
+                hold_key: TileSet = theme
+        try:
+            self.key: TileSet = hold_key
+        except NameError:
+            raise ValueError(f"Invalid map! *{tiles=}")
+
         self.eggs: list[tuple[int, int]] = []
         gaps_holder: list[tuple[int, int]] = []
         # This traverses the grid to populate eggs and gaps:
@@ -113,23 +126,7 @@ class Level:
                     gaps_holder.append((i, j))
         self.gaps = tuple(gaps_holder)
 
-        tiles: set[str] = set(char for row in self.grid for char in row)
-
-        # This checks for the right TileSet:
-        for theme in Level.themes:
-            if all(
-                    tile in astuple(theme)
-                    for tile in tiles
-                    if tile != ' '
-                    ):
-                hold_key: TileSet = theme
-        try:
-            self.key: TileSet = hold_key
-        except NameError:
-            raise ValueError(f"Invalid map! *{tiles=}")
-
         super().__init__()
-        return None
 
     def __str__(self) -> str:
         return '\n'.join(tuple(''.join(row) for row in self.grid))
@@ -146,7 +143,7 @@ class Level:
     def get_key(self) -> TileSet:
         return self.key
 
-    def _outside(self, i, j) -> bool:
+    def _outside(self, i: int, j: int) -> bool:
         """Given a coordinate,
         returns whether the it is within the grid.
 
@@ -380,7 +377,8 @@ class Player:
         self.past_moves: list[str] = []
         self.past_levels: list[Level] = [deepcopy(self.current_level)]
         self.past_points: list[int] = [self.points]
-        return None
+
+        super().__init__()
 
     def _set_current_input(self) -> None:
         """Prompts for desired input"""
