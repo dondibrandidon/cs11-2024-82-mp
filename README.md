@@ -34,7 +34,7 @@ The included files in the submission are laid out as:
 │   ├── valid_level.in                 # Example valid level file
 │   └── ...
 │
-├── test_units_v2.py                      # Unit testing program for egg_roll_v2.py
+├── test_units_v2.py                   # Unit testing program for egg_roll_v2.py
 |
 └── unit_testing_v2|                   # More on this in "🧪 Unit Testing"
     ├── _test_Player_start_playing|    # Folder containing test cases for Player.start_playing
