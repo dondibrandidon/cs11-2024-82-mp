@@ -45,20 +45,113 @@
         
   <section id="module-test_units_v2">
 <span id="test-units-v2-unit-tester"></span><h1>test_units_v2 (Unit Tester)<a class="headerlink" href="#module-test_units_v2" title="Link to this heading">¶</a></h1>
+<p>The <cite>test_units_v2</cite> module tests the functions with logic
+that can be unit tested:
+<a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Level" title="egg_roll_v2.Level"><code class="xref py py-class docutils literal notranslate"><span class="pre">Level</span></code></a>’s <a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Level.tilt" title="egg_roll_v2.Level.tilt"><code class="xref py py-func docutils literal notranslate"><span class="pre">tilt()</span></code></a>
+and
+<a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Player" title="egg_roll_v2.Player"><code class="xref py py-class docutils literal notranslate"><span class="pre">Player</span></code></a>’s <a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Player.start_playing" title="egg_roll_v2.Player.start_playing"><code class="xref py py-func docutils literal notranslate"><span class="pre">start_playing()</span></code></a>.</p>
+<p>To summarize expected inputs and outputs:</p>
+<p>For an instance of <a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Level" title="egg_roll_v2.Level"><code class="xref py py-class docutils literal notranslate"><span class="pre">Level</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">test_level</span><span class="p">:</span> <span class="n">Level</span> <span class="o">=</span> <span class="n">Level</span><span class="p">(</span><span class="n">grid</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="o">...</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>For the use of the <a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Level" title="egg_roll_v2.Level"><code class="xref py py-class docutils literal notranslate"><span class="pre">Level</span></code></a>
+function <a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Level.tilt" title="egg_roll_v2.Level.tilt"><code class="xref py py-func docutils literal notranslate"><span class="pre">tilt()</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">debug_logs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>           <span class="c1"># not checked</span>
+<span class="n">temporary_points</span><span class="p">:</span> <span class="nb">int</span>
+<span class="n">animation_frames</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>     <span class="c1"># not checked</span>
+<span class="n">eggs_are_left</span><span class="p">:</span> <span class="nb">bool</span>
+
+<span class="n">char_input</span><span class="p">:</span> <span class="nb">str</span>
+<span class="k">assert</span> <span class="n">char_input</span> <span class="ow">in</span> <span class="s2">&quot;fblr&quot;</span>
+
+<span class="n">debug_logs</span><span class="p">,</span> <span class="n">temporary_points</span><span class="p">,</span> <span class="n">animation_frames</span><span class="p">,</span> <span class="n">eggs_are_left</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">test_level</span><span class="o">.</span><span class="n">tilt</span><span class="p">(</span>
+                            <span class="n">char</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                            <span class="n">moves_left</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                            <span class="p">)</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>For an instance of <a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Player" title="egg_roll_v2.Player"><code class="xref py py-class docutils literal notranslate"><span class="pre">Player</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">test_file</span><span class="p">:</span> <span class="n">TextIOWrapper</span>
+<span class="n">game_state</span><span class="p">:</span> <span class="n">Player</span> <span class="o">=</span> <span class="n">Player</span><span class="p">(</span><span class="n">test_file</span><span class="p">,</span> <span class="n">is_debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For the use of the <a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Player" title="egg_roll_v2.Player"><code class="xref py py-class docutils literal notranslate"><span class="pre">Player</span></code></a>
+function <a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Player.start_playing" title="egg_roll_v2.Player.start_playing"><code class="xref py py-func docutils literal notranslate"><span class="pre">start_playing()</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">final_state</span><span class="p">:</span> <span class="n">Level</span>
+<span class="n">moves_made</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="n">total_points</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="n">final_state</span><span class="p">,</span> <span class="n">moves_made</span><span class="p">,</span> <span class="n">total_points</span> <span class="o">=</span> <span class="n">game_state</span><span class="o">.</span><span class="n">start_playing</span><span class="p">()</span>
+
+<span class="c1"># Alternatively for incomplete inputs:</span>
+<span class="n">final_state</span><span class="p">,</span> <span class="n">moves_made</span><span class="p">,</span> <span class="n">total_points</span> <span class="o">=</span> <span class="n">game_state</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>As for the actual test functions:</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="test_units_v2.test_Level_tilt">
 <span class="sig-prename descclassname"><span class="pre">test_units_v2.</span></span><span class="sig-name descname"><span class="pre">test_Level_tilt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#test_units_v2.test_Level_tilt" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This tests the logic of <a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Level" title="egg_roll_v2.Level"><code class="xref py py-class docutils literal notranslate"><span class="pre">Level</span></code></a> specifically
+with its handling of <a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Level.tilt" title="egg_roll_v2.Level.tilt"><code class="xref py py-func docutils literal notranslate"><span class="pre">tilt()</span></code></a>.</p>
+<p>An example <a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Level.tilt" title="egg_roll_v2.Level.tilt"><code class="xref py py-func docutils literal notranslate"><span class="pre">tilt()</span></code></a> unit test is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">level_rows</span><span class="p">:</span> <span class="nb">int</span>
+<span class="n">moves_left</span><span class="p">:</span> <span class="nb">int</span>
+<span class="n">row_1</span><span class="p">:</span> <span class="nb">str</span>                    <span class="c1"># the initial grid state</span>
+<span class="n">row_2</span><span class="p">:</span> <span class="nb">str</span>
+<span class="o">...</span>
+<span class="n">row_n</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">valid_character_input</span><span class="p">:</span> <span class="nb">str</span>    <span class="c1"># expects character in &quot;fblr&quot;</span>
+<span class="n">row_1</span><span class="p">:</span> <span class="nb">str</span>                    <span class="c1"># the expected final state</span>
+<span class="n">row_2</span><span class="p">:</span> <span class="nb">str</span>
+<span class="o">...</span>
+<span class="n">row_n</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">expected_points</span><span class="p">:</span> <span class="nb">int</span>
+<span class="n">expected_no_eggs</span><span class="p">:</span> <span class="mi">0</span> <span class="o">|</span> <span class="mi">1</span>       <span class="c1"># acts as bool</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>test_file</strong> (<em>str</em>) – The file name of the unit test to be tested</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="test_units_v2.test_Player_start_playing">
 <span class="sig-prename descclassname"><span class="pre">test_units_v2.</span></span><span class="sig-name descname"><span class="pre">test_Player_start_playing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#test_units_v2.test_Player_start_playing" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This tests the logic of <a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Player" title="egg_roll_v2.Player"><code class="xref py py-class docutils literal notranslate"><span class="pre">Player</span></code></a> specifically
+with its handling of <a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Player.start_playing" title="egg_roll_v2.Player.start_playing"><code class="xref py py-func docutils literal notranslate"><span class="pre">start_playing()</span></code></a>.</p>
+<p>An example <a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Player.start_playing" title="egg_roll_v2.Player.start_playing"><code class="xref py py-func docutils literal notranslate"><span class="pre">start_playing()</span></code></a> unit test is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">string_input</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">level_rows</span><span class="p">:</span> <span class="nb">int</span>
+<span class="n">moves_left</span><span class="p">:</span> <span class="nb">int</span>
+<span class="n">row_1</span><span class="p">:</span> <span class="nb">str</span>                 <span class="c1"># the initial grid state</span>
+<span class="n">row_2</span><span class="p">:</span> <span class="nb">str</span>
+<span class="o">...</span>
+<span class="n">row_n</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">row_1</span><span class="p">:</span> <span class="nb">str</span>                 <span class="c1"># the expected final state</span>
+<span class="n">row_2</span><span class="p">:</span> <span class="nb">str</span>
+<span class="o">...</span>
+<span class="n">row_n</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">expected_moves</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">expected_total_points</span><span class="p">:</span> <span class="nb">int</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>test_file</strong> (<em>str</em>) – The file name of the unit test to be tested</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="test_units_v2.main">
 <span class="sig-prename descclassname"><span class="pre">test_units_v2.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#test_units_v2.main" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This handles non-<cite>pytest</cite> testing.</p>
+</dd></dl>
 
 </section>
 

@@ -55,6 +55,7 @@
 <li><a class="reference internal" href="#egg_roll_v2.Level.get_rows"><code class="docutils literal notranslate"><span class="pre">Level.get_rows()</span></code></a></li>
 <li><a class="reference internal" href="#egg_roll_v2.Level.get_cols"><code class="docutils literal notranslate"><span class="pre">Level.get_cols()</span></code></a></li>
 <li><a class="reference internal" href="#egg_roll_v2.Level.get_key"><code class="docutils literal notranslate"><span class="pre">Level.get_key()</span></code></a></li>
+<li><a class="reference internal" href="#egg_roll_v2.Level._outside"><code class="docutils literal notranslate"><span class="pre">Level._outside()</span></code></a></li>
 <li><a class="reference internal" href="#egg_roll_v2.Level.tilt"><code class="docutils literal notranslate"><span class="pre">Level.tilt()</span></code></a></li>
 </ul>
 </li>
@@ -62,11 +63,18 @@
 <li><a class="reference internal" href="#egg_roll_v2.Player.name_to_char"><code class="docutils literal notranslate"><span class="pre">Player.name_to_char</span></code></a></li>
 <li><a class="reference internal" href="#egg_roll_v2.Player.char_to_name"><code class="docutils literal notranslate"><span class="pre">Player.char_to_name</span></code></a></li>
 <li><a class="reference internal" href="#egg_roll_v2.Player.char_to_symbol"><code class="docutils literal notranslate"><span class="pre">Player.char_to_symbol</span></code></a></li>
+<li><a class="reference internal" href="#egg_roll_v2.Player._set_current_input"><code class="docutils literal notranslate"><span class="pre">Player._set_current_input()</span></code></a></li>
+<li><a class="reference internal" href="#egg_roll_v2.Player._exit_scenario"><code class="docutils literal notranslate"><span class="pre">Player._exit_scenario()</span></code></a></li>
+<li><a class="reference internal" href="#egg_roll_v2.Player._undo_scenario"><code class="docutils literal notranslate"><span class="pre">Player._undo_scenario()</span></code></a></li>
+<li><a class="reference internal" href="#egg_roll_v2.Player._character_scenario"><code class="docutils literal notranslate"><span class="pre">Player._character_scenario()</span></code></a></li>
+<li><a class="reference internal" href="#egg_roll_v2.Player._print_interface"><code class="docutils literal notranslate"><span class="pre">Player._print_interface()</span></code></a></li>
+<li><a class="reference internal" href="#egg_roll_v2.Player._game_over"><code class="docutils literal notranslate"><span class="pre">Player._game_over()</span></code></a></li>
 <li><a class="reference internal" href="#egg_roll_v2.Player.get_state"><code class="docutils literal notranslate"><span class="pre">Player.get_state()</span></code></a></li>
 <li><a class="reference internal" href="#egg_roll_v2.Player.start_playing"><code class="docutils literal notranslate"><span class="pre">Player.start_playing()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#egg_roll_v2.clear_screen"><code class="docutils literal notranslate"><span class="pre">clear_screen()</span></code></a></li>
+<li><a class="reference internal" href="#egg_roll_v2.argument_handling"><code class="docutils literal notranslate"><span class="pre">argument_handling()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -124,17 +132,25 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">egg_roll_v2.</span></span><span class="sig-name descname"><span class="pre">Level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#egg_roll_v2.Level" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class is the model handling all logic involving the grid.
-Each instance generates with the following:</p>
+Each instance generates with the following attributes:</p>
 <dl class="field-list simple">
-<dt class="field-odd">Variables<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>grid</strong> – The 2D matrix filled with string representing the tiles</p></li>
-<li><p><strong>rows</strong> – The number of rows of the grid</p></li>
-<li><p><strong>cols</strong> – The maximum row length of the grid</p></li>
-<li><p><strong>key</strong> – The TileSet dataclass of the characters used by the grid</p></li>
-<li><p><strong>eggs</strong> – The mutable array of egg coordinates in the grid</p></li>
-<li><p><strong>gaps</strong> – The immutable array of all the gaps in a non-square grid</p></li>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>grid</strong> (<em>tuple</em><em>[</em><em>tuple</em><em>[</em><em>str</em><em>, </em><em>...</em><em>]</em><em>, </em><em>...</em><em>]</em>) – The grid of tiles to be processed</p>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>grid</strong> (<em>list</em><em>[</em><em>list</em><em>[</em><em>str</em><em>]</em><em>]</em>) – The 2D matrix filled with string representing the tiles</p></li>
+<li><p><strong>rows</strong> (<em>int</em>) – The number of rows of the grid</p></li>
+<li><p><strong>cols</strong> (<em>int</em>) – The maximum row length of the grid</p></li>
+<li><p><strong>key</strong> (<a class="reference internal" href="#egg_roll_v2.TileSet" title="egg_roll_v2.TileSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileSet</span></code></a>) – The <a class="reference internal" href="#egg_roll_v2.TileSet" title="egg_roll_v2.TileSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileSet</span></code></a>
+of the characters used by <cite>grid</cite></p></li>
+<li><p><strong>eggs</strong> (<em>list</em><em>[</em><em>tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em><em>]</em>) – The mutable array of egg coordinates in the grid</p></li>
+<li><p><strong>gaps</strong> (<em>tuple</em><em>[</em><em>tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em><em>]</em>) – The immutable array of all gap coordinates in a non-square grid</p></li>
 </ul>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – Raised for grids that don’t follow a
+<a class="reference internal" href="#egg_roll_v2.TileSet" title="egg_roll_v2.TileSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileSet</span></code></a></p>
 </dd>
 </dl>
 <dl class="py attribute">
@@ -185,15 +201,36 @@ Each instance generates with the following:</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="egg_roll_v2.Level._outside">
+<span class="sig-name descname"><span class="pre">_outside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#egg_roll_v2.Level._outside" title="Link to this definition">¶</a></dt>
+<dd><p>Given coordinates i and j,
+returns whether (i, j) is within <cite>grid</cite>, zero-indexed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i</strong> (<em>int</em>) – The row index</p></li>
+<li><p><strong>j</strong> (<em>int</em>) – The column index</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Returns whether (i, j) is within <cite>grid</cite></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="egg_roll_v2.Level.tilt">
 <span class="sig-name descname"><span class="pre">tilt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moves_left</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#egg_roll_v2.Level.tilt" title="Link to this definition">¶</a></dt>
 <dd><p>The main logical interaction with the player!
-Simulates a tilting of the board, which moves the eggs.</p>
+Simulates a tilting of the board, which usually moves <cite>eggs</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>degree</strong> (<em>str</em>) – A character in “fbrl” which determines direction.</p></li>
-<li><p><strong>moves_left</strong> (<em>int</em>) – Moves :class: Player has left,
+<li><p><strong>moves_left</strong> (<em>int</em>) – Moves <a class="reference internal" href="#egg_roll_v2.Player" title="egg_roll_v2.Player"><code class="xref py py-class docutils literal notranslate"><span class="pre">Player</span></code></a> has left,
 used to calculate points.</p></li>
 </ul>
 </dd>
@@ -201,8 +238,8 @@ used to calculate points.</p></li>
 <dd class="field-even"><p><strong>ValueError</strong> – Raised when :param: degree is not in “fbrl.”</p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Returns debugging logs, points gained or lost,
-array for grid animation, and “are there any eggs left?”</p>
+<dd class="field-odd"><p>Returns debugging logs, points gained or lost, array
+for grid animation, and whether there are any <cite>eggs</cite> left.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>tuple[list[str], int, tuple[str], bool]</p>
@@ -216,30 +253,43 @@ array for grid animation, and “are there any eggs left?”</p>
 <dt class="sig sig-object py" id="egg_roll_v2.Player">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">egg_roll_v2.</span></span><span class="sig-name descname"><span class="pre">Player</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TextIOWrapper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freedom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'backward':</span> <span class="pre">'bB',</span> <span class="pre">'forward':</span> <span class="pre">'fF',</span> <span class="pre">'leftward':</span> <span class="pre">'lL,',</span> <span class="pre">'rightward':</span> <span class="pre">'rR'}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#egg_roll_v2.Player" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>This class is the controller and view handling all inputs and prints.</p>
+<p>This class is the controller and view handling the gameplay.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name_to_char</strong> – Takes in word directions and returns its character</p></li>
-<li><p><strong>char_to_name</strong> – Takes in character directions and returns its word</p></li>
-<li><p><strong>char_to_symbol</strong> – Takes in character directions and returns its symbol</p></li>
-<li><p><strong>degrees</strong> – This turns the player input into the characters
-Level.tilt can process</p></li>
-<li><p><strong>valids</strong> – String containing all valid inputs from degrees</p></li>
-<li><p><strong>file_name</strong> – The name of the level_file.in</p></li>
-<li><p><strong>moves_left</strong> – Decrements with each successful
-character or “undo” input. treated as
-infinite if equal to -1.</p></li>
-<li><p><strong>max_moves</strong> – The number of moves as in level_file.in</p></li>
-<li><p><strong>current_level</strong> – The main Level file interacted with</p></li>
-<li><p><strong>points</strong> – All points gained by so far</p></li>
-<li><p><strong>game_end</strong> – The Game Over screen is displayed once True</p></li>
-<li><p><strong>past_moves</strong> – Array of symbols to denote past successful inputs</p></li>
-<li><p><strong>past_levels</strong> – Array of past Level states for undo inputs</p></li>
-<li><p><strong>past_points</strong> – Array of past points for undo inputs</p></li>
-<li><p><strong>current_input</strong> – The input for processing to Level.tilt</p></li>
-<li><p><strong>debug</strong> – Enables printing of debug info and disables time.sleep if True</p></li>
+<li><p><strong>level_file</strong> (<em>TextIOWrapper</em>) – The level file to be read and processed</p></li>
+<li><p><strong>freedom</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – The dictionary defining accepted inputs,
+defaults to example control scheme (“fFbBrRlL”).</p></li>
+<li><p><strong>is_debug</strong> (<em>bool</em><em>, </em><em>optional</em>) – Makes debugging more convenient if True,
+defaults to False</p></li>
 </ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>degrees</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) – This turns the player input into the characters
+<a class="reference internal" href="#egg_roll_v2.Level.tilt" title="egg_roll_v2.Level.tilt"><code class="xref py py-func docutils literal notranslate"><span class="pre">tilt()</span></code></a> can process</p></li>
+<li><p><strong>valids</strong> (<em>str</em>) – String containing all valid inputs from <cite>degrees</cite></p></li>
+<li><p><strong>file_name</strong> (<em>str</em>) – The name of the level file</p></li>
+<li><p><strong>moves_left</strong> (<em>int</em>) – Decrements with each successful
+character or “undo” input, treated as
+infinite if set to -1</p></li>
+<li><p><strong>max_moves</strong> (<em>int</em>) – The number of moves prescribed in level file</p></li>
+<li><p><strong>current_level</strong> – The main Level instance interacted with</p></li>
+<li><p><strong>points</strong> (<em>int</em>) – All points gained by so far</p></li>
+<li><p><strong>game_end</strong> (<em>bool</em>) – Starts False, the Game Over screen is displayed once True</p></li>
+<li><p><strong>past_moves</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Array of symbols to denote past successful inputs</p></li>
+<li><p><strong>past_levels</strong> (<em>list</em><em>[</em><a class="reference internal" href="#egg_roll_v2.Level" title="egg_roll_v2.Level"><em>Level</em></a><em>]</em>) – Array of past <a class="reference internal" href="#egg_roll_v2.Level" title="egg_roll_v2.Level"><code class="xref py py-class docutils literal notranslate"><span class="pre">Level</span></code></a>
+states for undo-ing</p></li>
+<li><p><strong>past_points</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – Array of past points for undo-ing</p></li>
+<li><p><strong>current_input</strong> (<em>str</em>) – The input for processing to
+<a class="reference internal" href="#egg_roll_v2.Level.tilt" title="egg_roll_v2.Level.tilt"><code class="xref py py-func docutils literal notranslate"><span class="pre">tilt()</span></code></a></p></li>
+<li><p><strong>debug</strong> (<em>bool</em>) – Enables printing of debug info and disables
+<cite>time.sleep()</cite> if True</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – Raised for <a class="reference internal" href="#egg_roll_v2.Level" title="egg_roll_v2.Level"><code class="xref py py-class docutils literal notranslate"><span class="pre">Level</span></code></a> with <cite>grid</cite>
+that doesn’t follow a <a class="reference internal" href="#egg_roll_v2.TileSet" title="egg_roll_v2.TileSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileSet</span></code></a></p>
 </dd>
 </dl>
 <dl class="py attribute">
@@ -258,13 +308,74 @@ infinite if equal to -1.</p></li>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="egg_roll_v2.Player._set_current_input">
+<span class="sig-name descname"><span class="pre">_set_current_input</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#egg_roll_v2.Player._set_current_input" title="Link to this definition">¶</a></dt>
+<dd><p>This prints the prompt asking for user input.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="egg_roll_v2.Player._exit_scenario">
+<span class="sig-name descname"><span class="pre">_exit_scenario</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#egg_roll_v2.Player._exit_scenario" title="Link to this definition">¶</a></dt>
+<dd><p>This is for the scenario of an <cite>exit</cite> input.
+Simple sets <cite>game_end</cite> to True.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="egg_roll_v2.Player._undo_scenario">
+<span class="sig-name descname"><span class="pre">_undo_scenario</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#egg_roll_v2.Player._undo_scenario" title="Link to this definition">¶</a></dt>
+<dd><p>This is for the scenario for an <cite>undo</cite> input.
+Note that the last state saved is the current state.</p>
+<p>If there are past states to undo to,
+this method sets the second to the last
+<a class="reference internal" href="#egg_roll_v2.Level" title="egg_roll_v2.Level"><code class="xref py py-class docutils literal notranslate"><span class="pre">Level</span></code></a> and <cite>int</cite>
+in <cite>past_levels</cite> and <cite>past_points</cite>
+to be <cite>current_level</cite> and the current <cite>points</cite>,
+respectively.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="egg_roll_v2.Player._character_scenario">
+<span class="sig-name descname"><span class="pre">_character_scenario</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#egg_roll_v2.Player._character_scenario" title="Link to this definition">¶</a></dt>
+<dd><p>This is for all other input scenarios.</p>
+<p>This class treats all input not <cite>exit</cite> nor <cite>undo</cite> as a series
+of multiple character inputs, which this methods processes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>char</strong> (<em>str</em>) – Character to be cross-checked with :ivar: degrees</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="egg_roll_v2.Player._print_interface">
+<span class="sig-name descname"><span class="pre">_print_interface</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#egg_roll_v2.Player._print_interface" title="Link to this definition">¶</a></dt>
+<dd><p>This handles printing of the main user interface:</p>
+<ol class="arabic simple">
+<li><p>The level file name currently being played</p></li>
+<li><p>The actual <a class="reference internal" href="#egg_roll_v2.Level" title="egg_roll_v2.Level"><code class="xref py py-class docutils literal notranslate"><span class="pre">Level</span></code></a> grid of tiles</p></li>
+<li><p>The controls as are in <cite>degrees</cite>, as well as <cite>undo</cite> and <cite>exit</cite></p></li>
+<li><p>The moves made so far</p></li>
+<li><p>The number of moves left</p></li>
+<li><p>The points collected so far</p></li>
+</ol>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="egg_roll_v2.Player._game_over">
+<span class="sig-name descname"><span class="pre">_game_over</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#egg_roll_v2.Player._game_over" title="Link to this definition">¶</a></dt>
+<dd><p>This handles the printing of the Game Over screen.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="egg_roll_v2.Player.get_state">
 <span class="sig-name descname"><span class="pre">get_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#egg_roll_v2.Level" title="egg_roll_v2.Level"><span class="pre">Level</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#egg_roll_v2.Player.get_state" title="Link to this definition">¶</a></dt>
-<dd><p>Can be used to check Player.start_playing effects
+<dd><p>Can be used to check the effects of the following
+<a class="reference internal" href="#egg_roll_v2.Player.start_playing" title="egg_roll_v2.Player.start_playing"><code class="xref py py-func docutils literal notranslate"><span class="pre">start_playing()</span></code></a> function
 without having to wait for the return once the game is over.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Returns the current current_level, past_moves, and points</p>
+<dd class="field-odd"><p>Returns the current values of
+<cite>current_level</cite>, <cite>past_moves</cite>, and <cite>points</cite></p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>tuple[<a class="reference internal" href="#egg_roll_v2.Level" title="egg_roll_v2.Level">Level</a>, tuple[str, …], int]</p>
@@ -275,7 +386,7 @@ without having to wait for the return once the game is over.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="egg_roll_v2.Player.start_playing">
 <span class="sig-name descname"><span class="pre">start_playing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#egg_roll_v2.Level" title="egg_roll_v2.Level"><span class="pre">Level</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#egg_roll_v2.Player.start_playing" title="Link to this definition">¶</a></dt>
-<dd><p>The main handling of user displays!</p>
+<dd><p>This where the main handling of all gameplay displays happens!</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Returns from self.get_state</p>
@@ -290,8 +401,22 @@ without having to wait for the return once the game is over.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="egg_roll_v2.clear_screen">
-<span class="sig-prename descclassname"><span class="pre">egg_roll_v2.</span></span><span class="sig-name descname"><span class="pre">clear_screen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#egg_roll_v2.clear_screen" title="Link to this definition">¶</a></dt>
-<dd><p>Clears the terminal screen, if any, while is_debug is False</p>
+<span class="sig-prename descclassname"><span class="pre">egg_roll_v2.</span></span><span class="sig-name descname"><span class="pre">clear_screen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#egg_roll_v2.clear_screen" title="Link to this definition">¶</a></dt>
+<dd><p>This is a standalone method for
+clearing the terminal screen, if any.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>is_debug</strong> (<em>bool</em><em>, </em><em>optional</em>) – Disables clear_screen action if True, defaults to False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="egg_roll_v2.argument_handling">
+<span class="sig-prename descclassname"><span class="pre">egg_roll_v2.</span></span><span class="sig-name descname"><span class="pre">argument_handling</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#egg_roll_v2.argument_handling" title="Link to this definition">¶</a></dt>
+<dd><p>This is a standalone function for handling file arguments.</p>
+<p>Uses default (“fFbBrRlL”) controls and
+does not support highscores functionality from <a class="reference internal" href="menu_v2.html#menu_v2.Menu" title="menu_v2.Menu"><code class="xref py py-class docutils literal notranslate"><span class="pre">Menu</span></code></a>.</p>
 </dd></dl>
 
 </section>

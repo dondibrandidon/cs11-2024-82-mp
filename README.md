@@ -278,9 +278,9 @@ row_2: str
 row_n: str
 valid_character_input: str    # validation happens in Player.start_playing not here
 row_1: str                    # the expected final state
-row_2: str  
+row_2: str
 ...
-row_n: str  
+row_n: str
 expected_points: int
 expected_no_eggs: 0 | 1       # acts as bool
 ```

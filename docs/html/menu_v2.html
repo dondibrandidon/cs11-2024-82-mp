@@ -37,6 +37,15 @@
 <li><a class="reference internal" href="#">menu_v2 (Main Menu Module)</a><ul>
 <li><a class="reference internal" href="#menu_v2.Menu"><code class="docutils literal notranslate"><span class="pre">Menu</span></code></a><ul>
 <li><a class="reference internal" href="#menu_v2.Menu.directions"><code class="docutils literal notranslate"><span class="pre">Menu.directions</span></code></a></li>
+<li><a class="reference internal" href="#menu_v2.Menu._update_level_list"><code class="docutils literal notranslate"><span class="pre">Menu._update_level_list()</span></code></a></li>
+<li><a class="reference internal" href="#menu_v2.Menu._update_freedom"><code class="docutils literal notranslate"><span class="pre">Menu._update_freedom()</span></code></a></li>
+<li><a class="reference internal" href="#menu_v2.Menu._update_settings_file"><code class="docutils literal notranslate"><span class="pre">Menu._update_settings_file()</span></code></a></li>
+<li><a class="reference internal" href="#menu_v2.Menu._generate_blank_highscore_files"><code class="docutils literal notranslate"><span class="pre">Menu._generate_blank_highscore_files()</span></code></a></li>
+<li><a class="reference internal" href="#menu_v2.Menu._update_highscore"><code class="docutils literal notranslate"><span class="pre">Menu._update_highscore()</span></code></a></li>
+<li><a class="reference internal" href="#menu_v2.Menu._print_logo"><code class="docutils literal notranslate"><span class="pre">Menu._print_logo()</span></code></a></li>
+<li><a class="reference internal" href="#menu_v2.Menu._levels_submenu"><code class="docutils literal notranslate"><span class="pre">Menu._levels_submenu()</span></code></a></li>
+<li><a class="reference internal" href="#menu_v2.Menu._controls_submenu"><code class="docutils literal notranslate"><span class="pre">Menu._controls_submenu()</span></code></a></li>
+<li><a class="reference internal" href="#menu_v2.Menu._game_submenu"><code class="docutils literal notranslate"><span class="pre">Menu._game_submenu()</span></code></a></li>
 <li><a class="reference internal" href="#menu_v2.Menu.main_menu"><code class="docutils literal notranslate"><span class="pre">Menu.main_menu()</span></code></a></li>
 </ul>
 </li>
@@ -53,14 +62,20 @@
 <dt class="sig sig-object py" id="menu_v2.Menu">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">menu_v2.</span></span><span class="sig-name descname"><span class="pre">Menu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#menu_v2.Menu" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>This is the class handling all Main Menu displays.</p>
+<p>This is the class handling all menu displays,
+and highscore functionalities.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Variables<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>directions</strong> – Word directions used for Controls menu</p></li>
-<li><p><strong>debug</strong> – Enables printing of debug info and disables time.sleep if True</p></li>
-<li><p><strong>level_list</strong> – Array containing all levels_file.in in .|levels|*</p></li>
-<li><p><strong>freedom</strong> – Returns set valid characters for each word drection</p></li>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>is_debug</strong> (<em>bool</em><em>, </em><em>optional</em>) – Makes debugging more convenient if True,
+defaults to False</p>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>debug</strong> (<em>bool</em>) – Enables printing of debug info and disables
+<cite>time.sleep()</cite> if True</p></li>
+<li><p><strong>level_list</strong> (<em>tuple</em><em>[</em><em>str</em><em>]</em>) – Array containing the names of all <cite>.in</cite> files in
+the <cite>.|levels</cite> folder when it was last checked</p></li>
+<li><p><strong>freedom</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) – Returns set valid characters for each word direction</p></li>
 </ul>
 </dd>
 </dl>
@@ -68,6 +83,76 @@
 <dt class="sig sig-object py" id="menu_v2.Menu.directions">
 <span class="sig-name descname"><span class="pre">directions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('forward',</span> <span class="pre">'backward',</span> <span class="pre">'rightward',</span> <span class="pre">'leftward')</span></em><a class="headerlink" href="#menu_v2.Menu.directions" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="menu_v2.Menu._update_level_list">
+<span class="sig-name descname"><span class="pre">_update_level_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#menu_v2.Menu._update_level_list" title="Link to this definition">¶</a></dt>
+<dd><p>This updates the array of level files
+by checking the contents of the <cite>.|levels</cite> folder.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="menu_v2.Menu._update_freedom">
+<span class="sig-name descname"><span class="pre">_update_freedom</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#menu_v2.Menu._update_freedom" title="Link to this definition">¶</a></dt>
+<dd><p>Updates the <cite>freedom</cite> dictionary
+by checking the <cite>.|controls.in</cite> file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="menu_v2.Menu._update_settings_file">
+<span class="sig-name descname"><span class="pre">_update_settings_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#menu_v2.Menu._update_settings_file" title="Link to this definition">¶</a></dt>
+<dd><p>Updates the <cite>.|controls.in</cite> file
+from the instance’s current <cite>freedom</cite> dictionary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="menu_v2.Menu._generate_blank_highscore_files">
+<span class="sig-name descname"><span class="pre">_generate_blank_highscore_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#menu_v2.Menu._generate_blank_highscore_files" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a <cite>_score_level_file.txt</cite> for each level in <cite>level_list</cite>.</p>
+<p>The format of a highscore file is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">player_score1</span><span class="p">:</span> <span class="nb">int</span>
+<span class="n">player_score_datetime1</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span>
+<span class="n">player_score_name1</span><span class="p">:</span> <span class="nb">str</span>
+<span class="o">...</span>
+<span class="n">player_score5</span><span class="p">:</span> <span class="nb">int</span>
+<span class="n">player_score_datetime5</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span>
+<span class="n">player_score_name5</span><span class="p">:</span> <span class="nb">str</span>
+</pre></div>
+</div>
+<p>Note that only the TOP 5 mayors are kept in memory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="menu_v2.Menu._update_highscore">
+<span class="sig-name descname"><span class="pre">_update_highscore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_played</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#menu_v2.Menu._update_highscore" title="Link to this definition">¶</a></dt>
+<dd><p>Updates the relevant <cite>_score_level_file.txt</cite> file
+from what <a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Player.start_playing" title="egg_roll_v2.Player.start_playing"><code class="xref py py-func docutils literal notranslate"><span class="pre">start_playing()</span></code></a> returns.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="menu_v2.Menu._print_logo">
+<span class="sig-name descname"><span class="pre">_print_logo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#menu_v2.Menu._print_logo" title="Link to this definition">¶</a></dt>
+<dd><p>This handles anytime the logo needs to be printed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="menu_v2.Menu._levels_submenu">
+<span class="sig-name descname"><span class="pre">_levels_submenu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#menu_v2.Menu._levels_submenu" title="Link to this definition">¶</a></dt>
+<dd><p>This handles the [Levels] menu.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="menu_v2.Menu._controls_submenu">
+<span class="sig-name descname"><span class="pre">_controls_submenu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#menu_v2.Menu._controls_submenu" title="Link to this definition">¶</a></dt>
+<dd><p>This handles the [Controls] menu.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="menu_v2.Menu._game_submenu">
+<span class="sig-name descname"><span class="pre">_game_submenu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selected_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#menu_v2.Menu._game_submenu" title="Link to this definition">¶</a></dt>
+<dd><p>This handles the menu for displaying
+<a class="reference internal" href="egg_roll_v2.html#egg_roll_v2.Player.start_playing" title="egg_roll_v2.Player.start_playing"><code class="xref py py-class docutils literal notranslate"><span class="pre">start_playing</span></code></a>.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="menu_v2.Menu.main_menu">

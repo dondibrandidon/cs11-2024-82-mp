@@ -5,3 +5,4 @@ egg\_roll\_v2 (Logic Module)
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

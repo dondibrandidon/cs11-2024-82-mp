@@ -2,9 +2,9 @@ import os
 import subprocess
 import sys
 import time
-from io import TextIOWrapper
-from dataclasses import dataclass, astuple
 from copy import deepcopy
+from dataclasses import dataclass, astuple
+from io import TextIOWrapper
 
 
 @dataclass
@@ -22,20 +22,27 @@ class TileSet:
 
 class Level:
     """This class is the model handling all logic involving the grid.
-    Each instance generates with the following:
+    Each instance generates with the following attributes:
+
+    :param grid: The grid of tiles to be processed
+    :type grid: tuple[tuple[str, ...], ...]
 
     :ivar grid: The 2D matrix filled with string representing the tiles
-    :type grid: list[list[str]]
+    :vartype grid: list[list[str]]
     :ivar rows: The number of rows of the grid
-    :type rows: int
+    :vartype rows: int
     :ivar cols: The maximum row length of the grid
-    :type cols: int
-    :ivar key: The TileSet dataclass of the characters used by the grid
-    :type key: :class: TileSet
+    :vartype cols: int
+    :ivar key: The :class:`~egg_roll_v2.TileSet`
+               of the characters used by `grid`
+    :vartype key: :class:`~egg_roll_v2.TileSet`
     :ivar eggs: The mutable array of egg coordinates in the grid
-    :type eggs: list[tuple[int, int]]
-    :ivar gaps: The immutable array of all the gaps in a non-square grid
-    :type gaps: tuple[tuple[int, int]]
+    :vartype eggs: list[tuple[int, int]]
+    :ivar gaps: The immutable array of all gap coordinates in a non-square grid
+    :vartype gaps: tuple[tuple[int, int]]
+
+    :raises ValueError: Raised for grids that don't follow a
+                        :class:`~egg_roll_v2.TileSet`
     """
 
     emoji_set: TileSet = TileSet(
@@ -79,12 +86,14 @@ class Level:
             self,
             grid: tuple[tuple[str, ...], ...],
             ) -> None:
-        """Initializes all of the variables of the Level instance.
+        """This initializes all of the attributes of
+        the :class:`~egg_roll_v2.Level` instance.
 
         :param grid: The grid of tiles to be processed
         :type grid: tuple[tuple[str, ...], ...]
 
-        :raises ValueError: Raised for grids that don't follow a TileSet
+        :raises ValueError: Raised for grids that don't follow a
+                            :class:`~egg_roll_v2.TileSet`
         """
         self.grid: list[list[str]] = list(
             list(char for char in row if char != '\n')
@@ -95,7 +104,6 @@ class Level:
         self.cols: int = max(len(row) for row in self.grid)
 
         tiles: set[str] = set(char for row in self.grid for char in row)
-
         # This checks for the right TileSet:
         for theme in Level.themes:
             if all(
@@ -125,10 +133,12 @@ class Level:
                 except IndexError:
                     gaps_holder.append((i, j))
         self.gaps = tuple(gaps_holder)
-
         super().__init__()
 
     def __str__(self) -> str:
+        """This returns a string with the format:
+        "str_row_0\nstr_row_1\n...str_row_n"
+        """
         return '\n'.join(tuple(''.join(row) for row in self.grid))
 
     def get_grid(self) -> list[list[str]]:
@@ -144,14 +154,14 @@ class Level:
         return self.key
 
     def _outside(self, i: int, j: int) -> bool:
-        """Given a coordinate,
-        returns whether the it is within the grid.
+        """Given coordinates i and j,
+        returns whether (i, j) is within `grid`, zero-indexed.
 
         :param i: The row index
         :type i: int
         :param j: The column index
         :type j: int
-        :return: Returns "is (i, j) in the grid?"
+        :return: Returns whether (i, j) is within `grid`
         :rtype: bool
         """
         return (
@@ -162,27 +172,27 @@ class Level:
     def tilt(self, degree: str, moves_left: int
              ) -> tuple[list[str], int, tuple[str, ...], bool]:
         """The main logical interaction with the player!
-        Simulates a tilting of the board, which moves the eggs.
+        Simulates a tilting of the board, which usually moves `eggs`.
 
         :param degree: A character in "fbrl" which determines direction.
         :type degree: str
-        :param moves_left: Moves :class: Player has left,
+        :param moves_left: Moves :class:`~egg_roll_v2.Player` has left,
                            used to calculate points.
         :type moves_left: int
 
         :raises ValueError: Raised when :param: degree is not in "fbrl."
 
-        :return: Returns debugging logs, points gained or lost,
-                 array for grid animation, and "are there any eggs left?"
+        :return: Returns debugging logs, points gained or lost, array
+                 for grid animation, and whether there are any `eggs` left.
         :rtype: tuple[list[str], int, tuple[str], bool]
         """
-        assert degree in "fbrl"  # sanity check
 
         try:
             i_velocity, j_velocity = Level.freedom[degree.lower()]
         except KeyError:
             raise ValueError(f"Level.tilt received {degree}")
 
+        debug_logs: list[str] = []
         increment_points: int = 0
         energy: int = 0 if moves_left == -1 else int(moves_left)
         tweens: list[str] = [str(self)]  # used to animate the eggs rolling
@@ -194,12 +204,10 @@ class Level:
         else:
             roll_eggs = sorted(self.eggs)[::-1]
 
-        # All eggs are set to "roll" in roll_eggs at first.
-        # Tilt is then considered finished,
-        # once all the eggs have "stopped" in wall_eggs.
+        # All `eggs` are set to "roll" in `roll_eggs` at first.
+        # The `tilt` action is then considered finished
+        # once all the `eggs` have "stopped" (no more eggs in `rolls_eggs`).
         wall_eggs: list[tuple[int, int]] = []
-
-        debug_logs: list[str] = []  # debug info
 
         while roll_eggs:
             for (i, j) in tuple(roll_eggs):
@@ -246,7 +254,6 @@ class Level:
                         )
             tweens.append(str(self))
 
-        # This re-sorts roll_eggs turned wall_eggs back to self.eggs:
         if degree in "fl":
             self.eggs = sorted(wall_eggs)
         elif degree in "br":
@@ -256,44 +263,52 @@ class Level:
 
 
 class Player:
-    """This class is the controller and view handling all inputs and prints.
+    """This class is the controller and view handling the gameplay.
 
-    :cvar name_to_char: Takes in word directions and returns its character
-    :type name_to_char: dict[str, str]
-    :cvar char_to_name: Takes in character directions and returns its word
-    :type char_to_name: dict[str, str]
-    :cvar char_to_symbol: Takes in character directions and returns its symbol
-    :type char_to_symbol: dict[str, str]
+    :param level_file: The level file to be read and processed
+    :type level_file: TextIOWrapper
+    :param freedom: The dictionary defining accepted inputs,
+                    defaults to example control scheme ("fFbBrRlL").
+    :type freedom: dict[str, str], optional
+    :param is_debug: Makes debugging more convenient if True,
+                        defaults to False
+    :type is_debug: bool, optional
 
     :ivar degrees: This turns the player input into the characters
-                   Level.tilt can process
-    :type degrees: dict[str, str]
-    :ivar valids: String containing all valid inputs from degrees
-    :type valids: str
-    :ivar file_name: The name of the level_file.in
-    :type file_name: str
+                   :func:`~egg_roll_v2.Level.tilt` can process
+    :vartype degrees: dict[str, str]
+    :ivar valids: String containing all valid inputs from `degrees`
+    :vartype valids: str
+    :ivar file_name: The name of the level file
+    :vartype file_name: str
     :ivar moves_left: Decrements with each successful
-                      character or "undo" input. treated as
-                      infinite if equal to -1.
-    :type moves_left: int
-    :ivar max_moves: The number of moves as in level_file.in
-    :type max_moves: int
-    :ivar current_level: The main Level file interacted with
-    :type current_level: :class: Level
+                      character or "undo" input, treated as
+                      infinite if set to -1
+    :vartype moves_left: int
+    :ivar max_moves: The number of moves prescribed in level file
+    :vartype max_moves: int
+    :ivar current_level: The main Level instance interacted with
+    :vartype current_level: :class: Level
     :ivar points: All points gained by so far
-    :type points: int
-    :ivar game_end: The Game Over screen is displayed once True
-    :type game_end: bool
+    :vartype points: int
+    :ivar game_end: Starts False, the Game Over screen is displayed once True
+    :vartype game_end: bool
     :ivar past_moves: Array of symbols to denote past successful inputs
-    :type past_moves: list[str]
-    :ivar past_levels: Array of past Level states for undo inputs
-    :type past_levels: list[Level]
-    :ivar past_points: Array of past points for undo inputs
-    :type past_points: list[int]
-    :ivar current_input: The input for processing to Level.tilt
-    :type current_input: str
-    :ivar debug: Enables printing of debug info and disables time.sleep if True
-    :type debug: bool
+    :vartype past_moves: list[str]
+    :ivar past_levels: Array of past :class:`~egg_roll_v2.Level`
+                       states for undo-ing
+    :vartype past_levels: list[Level]
+    :ivar past_points: Array of past points for undo-ing
+    :vartype past_points: list[int]
+    :ivar current_input: The input for processing to
+                         :func:`~egg_roll_v2.Level.tilt`
+    :vartype current_input: str
+    :ivar debug: Enables printing of debug info and disables
+                 `time.sleep()` if True
+    :vartype debug: bool
+
+    :raises ValueError: Raised for :class:`~egg_roll_v2.Level` with `grid`
+                        that doesn't follow a :class:`~egg_roll_v2.TileSet`
     """
 
     name_to_char: dict[str, str] = {
@@ -326,19 +341,20 @@ class Player:
                 },
             is_debug: bool = False
             ) -> None:
-        """Initializes all of the variables of the Player instance.
+        """This initializes all of the attributes of
+        the :class:`~egg_roll_v2.Player` instance.
 
-        :param level_file: The level_file to be read and processed
+        :param level_file: The level file to be read and processed
         :type level_file: TextIOWrapper
-        :param freedom: Takes in a dictionary defining the accepted inputs,
+        :param freedom: The dictionary defining accepted inputs,
                         defaults to example control scheme ("fFbBrRlL").
         :type freedom: dict[str, str], optional
         :param is_debug: Makes debugging more convenient if True,
-                         defaults to False
+                            defaults to False
         :type is_debug: bool, optional
 
-        :raises ValueError: Raised for levels with grids
-                            that don't follow a TileSet
+        :raises ValueError: Raised for :class:`~egg_roll_v2.Level` with `grid`
+                            that doesn't follow a :class:`~egg_roll_v2.TileSet`
         """
         num_of_rows: int = int(level_file.readline())
         moves_left_holder: str = level_file.readline().strip('\n')
@@ -372,16 +388,15 @@ class Player:
         self.game_end: bool = (self.moves_left == 0)
         self.current_input: tuple[str, ...] = ()
         self.debug: bool = is_debug
+        self.past_moves: list[str] = []
 
         # Variables for undo processing:
-        self.past_moves: list[str] = []
         self.past_levels: list[Level] = [deepcopy(self.current_level)]
         self.past_points: list[int] = [self.points]
-
         super().__init__()
 
     def _set_current_input(self) -> None:
-        """Prompts for desired input"""
+        """This prints the prompt asking for user input."""
         try:
             self.current_input = tuple(
                 str(char)
@@ -397,12 +412,23 @@ class Player:
         return None
 
     def _exit_scenario(self) -> None:
-        """Scenario for 'exit' input"""
+        """This is for the scenario of an `exit` input.
+        Simple sets `game_end` to True.
+        """
         self.game_end = True
         return None
 
     def _undo_scenario(self) -> None:
-        """Scenario for 'undo' input"""
+        """This is for the scenario for an `undo` input.
+        Note that the last state saved is the current state.
+
+        If there are past states to undo to,
+        this method sets the second to the last
+        :class:`~egg_roll_v2.Level` and `int`
+        in `past_levels` and `past_points`
+        to be `current_level` and the current `points`,
+        respectively.
+        """
         if len(self.past_levels) > 1:
             self.past_moves.append('⎌')
             ghost_grid: list[str] = str(self.past_levels.pop()).split('\n')
@@ -441,7 +467,10 @@ class Player:
         return None
 
     def _character_scenario(self, char: str) -> None:
-        """Scenario for all other inputs
+        """This is for all other input scenarios.
+
+        This class treats all input not `exit` nor `undo` as a series
+        of multiple character inputs, which this methods processes.
 
         :param char: Character to be cross-checked with :ivar: degrees
         :type char: str
@@ -488,7 +517,15 @@ class Player:
         return None
 
     def _print_interface(self) -> None:
-        """This handles printing of the main user interface."""
+        """This handles printing of the main user interface:
+
+            1. The level file name currently being played
+            2. The actual :class:`~egg_roll_v2.Level` grid of tiles
+            3. The controls as are in `degrees`, as well as `undo` and `exit`
+            4. The moves made so far
+            5. The number of moves left
+            6. The points collected so far
+        """
         print("<Currently playing from level file: ", end='')
         try:
             print(colored(f"{self.file_name}", attrs=["reverse"]), end='')
@@ -572,28 +609,30 @@ class Player:
         return None
 
     def get_state(self) -> tuple[Level, tuple[str, ...], int]:
-        """Can be used to check Player.start_playing effects
+        """Can be used to check the effects of the following
+        :func:`~egg_roll_v2.Player.start_playing` function
         without having to wait for the return once the game is over.
 
-        :return: Returns the current current_level, past_moves, and points
+        :return: Returns the current values of
+                 `current_level`, `past_moves`, and `points`
         :rtype: tuple[Level, tuple[str, ...], int]
         """
         return self.current_level, tuple(self.past_moves), self.points
 
     def start_playing(self) -> tuple[Level, tuple[str, ...], int]:
-        """The main handling of user displays!
+        """This where the main handling of all gameplay displays happens!
 
         :return: Returns from self.get_state
         :rtype: tuple[Level, tuple[str, ...], int]
         """
         while not self.game_end and self.moves_left != 0:
             if self.debug:  # debug info
-                print("# START OF UNDO CHECK")
+                print("# Start of Undo Check")
                 for i in range(len(self.past_levels)):
                     print(self.past_levels[i])
                     print(self.past_points[i])
                     print()
-                print("# END OF UNDO CHECK")
+                print("# End of Undo Check")
 
             clear_screen(self.debug)
             self._print_interface()
@@ -614,8 +653,13 @@ class Player:
         return self.get_state()
 
 
-def clear_screen(is_debug: bool) -> None:
-    """Clears the terminal screen, if any, while is_debug is False"""
+def clear_screen(is_debug: bool = False) -> None:
+    """This is a standalone method for
+    clearing the terminal screen, if any.
+
+    :param is_debug: Disables clear_screen action if True, defaults to False
+    :type is_debug: bool, optional
+    """
     if not is_debug:
         print()  # Newline to handle prints that don't end on line breaks
         if sys.stdout.isatty():
@@ -628,6 +672,59 @@ def clear_screen(is_debug: bool) -> None:
         print("# clear_screen called")  # debug info
 
 
+def argument_handling() -> None:
+    """This is a standalone function for handling file arguments.
+
+    Uses default ("fFbBrRlL") controls and
+    does not support highscores functionality from :class:`~menu_v2.Menu`.
+    """
+    print("<Welcome to EGG ROLL II!>")
+    print()
+    try:
+        while True:
+            with open(sys.argv[1], encoding='utf-8') as level_file:
+                try:
+                    game_state: Player = Player(
+                        level_file,
+                        is_debug=debug,
+                        )
+
+                    game_state.start_playing()
+
+                except FileNotFoundError:
+                    print(
+                        'File argument invalid!'
+                        'Please open game with valid file location...'
+                        )
+                    print()
+                    return None
+
+                repeat: str = input(
+                    'Type [Yes] to replay level, else exit game: '
+                    )
+                if repeat.lower() == 'yes':
+                    continue
+                else:
+                    break
+        print()
+        print(
+            '<'
+            'Thank you for playing egg_roll.py by '
+            'Martin Mendoza (2024-10322) & Brandon Sayo (2024-05352)!\n'
+            'extended to 2.0 by '
+            'Brandon Sayo (2024-05352)'
+            '>'
+            )
+        print()
+    except IndexError:
+        print(
+            'No file argument! '
+            'Please open file with valid file location argument...'
+            )
+    except Exception as e:
+        print(f"Unexpected exception: {e}")
+
+
 if __name__ == '__main__':
     debug = False
 
@@ -635,6 +732,7 @@ if __name__ == '__main__':
         print("# egg_roll.py DEBUG IS ON")
 
     try:
+        # "type: ignore"-ed since no mypy support
         from termcolor import colored  # type: ignore
         if debug:  # debug info
             print("# termcolor loaded")
@@ -642,53 +740,5 @@ if __name__ == '__main__':
         if debug:  # debug info
             print("# termcolor NOT loaded")
         pass
-
-    def argument_handling() -> None:
-        print("<Welcome to EGG ROLL!>")
-        print()
-        try:
-            while True:
-                with open(sys.argv[1], encoding='utf-8') as level_file:
-                    try:
-                        game_state: Player = Player(
-                            level_file,
-                            is_debug=debug,
-                            )
-
-                        game_state.start_playing()
-
-                    except FileNotFoundError:
-                        clear_screen(debug)
-                        print(
-                            'File argument invalid!'
-                            'Please open game with valid file location...'
-                            )
-                        print()
-                        return None
-
-                    repeat: str = input(
-                        'Type [Yes] to replay level, else exit game: '
-                        )
-                    if repeat.lower() == 'yes':
-                        continue
-                    else:
-                        break
-            print()
-            print(
-                '<'
-                'Thank you for playing egg_roll.py by '
-                'Martin Mendoza (2024-10322) & Brandon Sayo (2024-05352)!\n'
-                'extended to 2.0 by '
-                'Brandon Sayo (2024-05352)'
-                '>'
-                )
-            print()
-        except IndexError:
-            print(
-                'No file argument! '
-                'Please open file with valid file location argument...'
-                )
-        except Exception as e:
-            print(f"Unexpected exception: {e}")
 
     argument_handling()

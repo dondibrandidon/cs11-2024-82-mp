@@ -5,18 +5,23 @@ from egg_roll_v2 import clear_screen, Player, Level
 
 
 class Menu:
-    """This is the class handling all Main Menu displays.
+    """This is the class handling all menu displays,
+    and highscore functionalities.
 
-    :cvar directions: Word directions used for Controls menu
-    :type directions: tuple[str, str, str, str]
+    :param is_debug: Makes debugging more convenient if True,
+                     defaults to False
+    :type is_debug: bool, optional
 
-    :ivar debug: Enables printing of debug info and disables time.sleep if True
-    :type debug: bool
-    :ivar level_list: Array containing all levels_file.in in .|levels|*
-    :type level_list: tuple[str]
-    :ivar freedom: Returns set valid characters for each word drection
-    :type freedom: dict[str, str]
+    :ivar debug: Enables printing of debug info and disables
+                 `time.sleep()` if True
+    :vartype debug: bool
+    :ivar level_list: Array containing the names of all `.in` files in
+                      the `.|levels` folder when it was last checked
+    :vartype level_list: tuple[str]
+    :ivar freedom: Returns set valid characters for each word direction
+    :vartype freedom: dict[str, str]
     """
+
     directions: tuple[str, str, str, str] = (
         "forward",
         "backward",
@@ -25,7 +30,8 @@ class Menu:
         )
 
     def __init__(self, is_debug: bool = False) -> None:
-        """Initializes all of the variables of the Menu instance.
+        """This initializes all of the attributes of
+        the :class:`~menu_v2.Menu` instance.
 
         :param is_debug: Makes debugging more convenient if True,
                          defaults to False
@@ -70,11 +76,12 @@ lL
 """)
         except FileNotFoundError:
             raise FileNotFoundError
-
         super().__init__()
 
     def _update_level_list(self) -> None:
-        """Updates the array of levels by checking the folder."""
+        """This updates the array of level files
+        by checking the contents of the `.|levels` folder.
+        """
         try:
             self.level_list = tuple(
                     file
@@ -87,7 +94,9 @@ lL
             raise FileNotFoundError
 
     def _update_freedom(self) -> None:
-        """Updates the freedom dictionary by checking the controls.in file."""
+        """Updates the `freedom` dictionary
+        by checking the `.|controls.in` file.
+        """
         with open(
                 f".{os.sep}controls.in",
                 'r') as settings:
@@ -98,7 +107,9 @@ lL
         return None
 
     def _update_settings_file(self) -> None:
-        """Updates the controls.in file form the freedom dictionary."""
+        """Updates the `.|controls.in` file
+        from the instance's current `freedom` dictionary.
+        """
         with open(
                 f".{os.sep}controls.in",
                 'w') as settings:
@@ -109,9 +120,9 @@ lL
     def _generate_blank_highscore_files(
             self,
             ) -> None:
-        """Generates _score_level_file.txt for all levels in level_list.
+        """Generates a `_score_level_file.txt` for each level in `level_list`.
 
-        The format of a highscore file is as follows:
+        The format of a highscore file is as follows::
 
             player_score1: int
             player_score_datetime1: datetime.datetime
@@ -156,8 +167,8 @@ lL
             file_played: str,
             score: int,
             ) -> None:
-        """Updates the relevant _score_level_file.txt file
-        from what Player.start_playing returns.
+        """Updates the relevant `_score_level_file.txt` file
+        from what :func:`~egg_roll_v2.Player.start_playing` returns.
         """
         with open(
                 f'.'
@@ -258,7 +269,7 @@ lL
         return None
 
     def _print_logo(self) -> None:
-        """Handles anytime the logo needs to be printed."""
+        """This handles anytime the logo needs to be printed."""
         print("""\
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -269,13 +280,13 @@ _|        _\\    _|  _\\    _|    _|    _\\   █▓▓▒▒▒░  _|    _|
 _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   █▓▓▒░   _|_\\  _|_\\
                 |         |
             _|_|/     _|_|/
-
+                                          II: Electric Boogaloo
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\
 """)
         return None
 
-    def _levels_menu(self) -> None:
-        """Handles the [Levels] menu"""
+    def _levels_submenu(self) -> None:
+        """This handles the [Levels] menu."""
         choice: str = ''
         while choice.lower() != "back":
             clear_screen(self.debug)
@@ -299,15 +310,15 @@ _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   █▓▓▒░   _|_\\  _|_\\
                 choice = input("Enter a valid_level.in: ")
 
             if choice in self.level_list:
-                self._game_menu(choice)
+                self._game_submenu(choice)
             elif choice.lower() != "back":
                 print()
                 print("Invalid input...")
                 time.sleep(2 * (not self.debug))
         return None
 
-    def _controls_menu(self) -> None:
-        """Handles the [Controls] menu"""
+    def _controls_submenu(self) -> None:
+        """This handles the [Controls] menu."""
         choice: str = ''
         while choice.lower() != "back":
             clear_screen(self.debug)
@@ -367,8 +378,9 @@ _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   █▓▓▒░   _|_\\  _|_\\
                 time.sleep(2 * (not self.debug))
         return None
 
-    def _game_menu(self, selected_level: str) -> None:
-        """Handles the menu for displaying Player.start_playing"""
+    def _game_submenu(self, selected_level: str) -> None:
+        """This handles the menu for displaying
+        :class:`~egg_roll_v2.Player.start_playing`."""
         repeat: str = "yes"
         while repeat.lower() == "yes":
             clear_screen(self.debug)
@@ -456,9 +468,9 @@ _|_|_|_\\    _|_|_|    _|_|_|    _|     _\\   █▓▓▒░   _|_\\  _|_\\
                         print()
                         break
                 elif choice.lower() == "levels":
-                    self._levels_menu()
+                    self._levels_submenu()
                 elif choice.lower() == "controls":
-                    self._controls_menu()
+                    self._controls_submenu()
                 else:
                     continue
         return None
@@ -472,6 +484,7 @@ if __name__ == '__main__':
         print("# menu.py DEBUG IS ON")
 
     try:
+        # "type: ignore"-ed since no mypy support
         from termcolor import colored  # type: ignore
         if debug:  # debug info
             print("# termcolor loaded")

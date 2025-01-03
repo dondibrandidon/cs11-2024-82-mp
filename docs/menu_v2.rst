@@ -5,3 +5,4 @@ menu\_v2 (Main Menu Module)
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
