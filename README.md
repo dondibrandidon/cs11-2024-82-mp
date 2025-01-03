@@ -23,6 +23,7 @@ The included files in the submission are laid out as:
 .|
 ├── menu_v2.py                         # The main program for playing egg_roll_v2
 ├── egg_roll_v2.py                     # Bulk of the gameplay logic code
+├── check.sh                           # Batch script for updating documentation, and testing.
 |
 ├── docs|
 │   ├── html
